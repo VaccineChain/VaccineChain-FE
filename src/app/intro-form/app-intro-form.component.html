@@ -1,0 +1,61 @@
+<div class="intro-form" id="join-us-form contact-form">
+  <h4>Sydney's #1 Medical Treatment Service Center.</h4>
+
+  <div id="join-us-results"></div>
+  <!-- Form -->
+  <form (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <input type="text" name="first_name" [(ngModel)]="model.firstName"
+        id="first_name" class="form-control"
+        placeholder="First Name" required />
+    </div>
+    <div class="mb-3">
+      <input type="text" name="last_name" [(ngModel)]="model.lastName"
+        id="last_name" class="form-control"
+        placeholder="Last Name" required />
+    </div>
+    <div class="mb-3">
+      <input type="email" name="email" [(ngModel)]="model.email"
+        class="form-control" placeholder="Email" required />
+    </div>
+    <div class="mb-3">
+      <input type="text" name="phone" [(ngModel)]="model.phone" maxlength="15"
+        class="form-control" placeholder="Phone" required />
+    </div>
+    <div class="mb-3">
+      <input type="text" name="website" [(ngModel)]="model.website"
+        class="form-control" placeholder="Website" />
+    </div>
+    <button type="submit" class="btn btn-lg btn-danger w-100">
+      Make an Appointment
+    </button>
+  </form>
+
+  @if (sendingMessage) {
+  <div id="sendingMessage" class="statusMessage">
+    <p><i class="fa fa-spin fa-cog"></i> Sending your message. Please
+      wait...</p>
+  </div>
+  }
+
+  @if (successMessage) {
+  <div id="successMessage" class="successmessage">
+    <p><span class="success-ico"></span> Thanks for sending your message! We'll
+      get back to you shortly.</p>
+  </div>
+  }
+
+  @if (failureMessage) {
+  <div id="failureMessage" class="errormessage">
+    <p><span class="error-ico"></span> There was a problem sending your message.
+      Please try again.</p>
+  </div>
+  }
+
+  @if (incompleteMessage) {
+  <div id="incompleteMessage" class="statusMessage">
+    <p><i class="fa fa-warning"></i> Please complete all the fields in the form
+      before sending.</p>
+  </div>
+  }
+</div>
