@@ -5,11 +5,12 @@ import { AppStatsComponent } from './stats/app-stats.component';
 import { AppFeaturesComponent } from './features/app-features.component';
 import { AppServicesComponent } from './services/app-services.component';
 import { AppFooterComponent } from './footer/app-footer.component';
+import { AppTestimonialsComponent } from './testimonials/app-testimonials.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [AppHeaderComponent, AppIntroFormComponent, AppStatsComponent, AppFeaturesComponent, AppServicesComponent, AppFooterComponent],
+  imports: [AppHeaderComponent, AppIntroFormComponent, AppStatsComponent, AppTestimonialsComponent, AppFeaturesComponent, AppServicesComponent, AppFooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

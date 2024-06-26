@@ -286,3 +286,11 @@ $(document).ready(function() {
 
 });
 
+// FOOTER JS
+(function($) {
+
+	"use strict";
+
+	$('[data-toggle="tooltip"]').tooltip()
+
+})(jQuery);
