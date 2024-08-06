@@ -34,7 +34,7 @@
             "styles": [
               "src/styles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "public/assets/css/style.css",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "public/assets/css/ilmosys-icon.css",
               "public/assets/css/icons/fontawesome/css/style.css",
               "public/assets/css/icons/style.css",
@@ -42,6 +42,7 @@
               "public/assets/js/vendors/swipebox/css/swipebox.min.css"
             ],
             "scripts": [
+              "node_modules/apexcharts/dist/apexcharts.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "public/assets/js/jquery.js",
               "public/assets/js/main.js",

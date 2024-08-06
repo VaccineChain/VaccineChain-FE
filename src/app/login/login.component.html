@@ -1,0 +1,50 @@
+<div class="global-margin-padding-reset box-sizing-reset font-reset">
+  <section class="section-container">
+    <div class="form-container">
+      <div class="user-container signin-box">
+        <div class="image-box"><img src="assets/images/services/2.jpg" alt="" /></div>
+        <div class="form-box">
+          <form action="" onsubmit="return false;">
+            <h2>Sign In</h2>
+            <input type="text" name="" placeholder="Username" />
+            <input type="password" name="" placeholder="Password" />
+            <div class="button-3">
+              <a href="/admin" class="button3"  rel="noopener">Login</a>
+            </div>
+            <p class="signup-text">
+              Don't have an account ?
+              <a href="#" class="toggle-link">Contact us.</a>
+            </p>
+          </form>
+        </div>
+      </div>
+      <div class="user-container signup-box">
+        <div class="form-box">
+          <form action="" onsubmit="return false;">
+            <h2>Create an account</h2>
+            <input type="text" name="" placeholder="Username" />
+            <input type="email" name="" placeholder="Email Address" />
+            <input type="password" name="" placeholder="Create Password" />
+            <input type="password" name="" placeholder="Confirm Password" />
+            <input type="submit" name="" value="Sign Up" />
+            <p class="signup-text">
+              Already have an account ?
+              <a href="#" class="toggle-link">Sign in.</a>
+            </p>
+          </form>
+        </div>
+        <div class="image-box"><img src="https://raw.githubusercontent.com/WoojinFive/CSS_Playground/master/Responsive%20Login%20and%20Registration%20Form/img2.jpg" alt="" /></div>
+      </div>
+    </div>
+  </section>
+  <script>
+    const toggleLinks = document.querySelectorAll('.toggle-link');
+    toggleLinks.forEach(link => {
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        const container = document.querySelector('.form-container');
+        container.classList.toggle('active');
+      });
+    });
+  </script>
+</div>

@@ -1,0 +1,117 @@
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Logs</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a
+            routerLink="/admin/dashboard">Home</a></li>
+        <li class="breadcrumb-item active">Logs</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+  <!-- Page Content -->
+  <div id="page-content-wrapper empty">
+    <div class="container-fluid">
+      <div class="row dashboard mt-4 mb-5">
+        <div id="cust-wrap">
+          <div class="text-end mb-3 me-2 add_icon">
+            <button class="btn-add slide" data-bs-toggle="modal" data-bs-target="#createLogModal">
+              <i class="bi bi-plus-circle"></i>
+              Add new
+            </button>
+          </div>
+
+          <table class="custom-table-fill container_admin">
+            <thead>
+              <tr class="custom-tr">
+                <th class="col-2 custom-th text-left">Vaccine ID</th>
+                <th class="col-2 custom-th text-left">Device ID</th>
+                <th class="col-2 custom-th text-left">View Logs</th>
+              </tr>
+            </thead>
+            <tbody class="custom-table-hover" *ngFor="let temp of connected">
+              <td class="col-2 custom-td text-left">{{temp.Vaccine.VaccineId}}</td>
+              <td class="col-2 custom-td text-left">{{temp.Device.DeviceId}}</td>
+              <td class="col-2 custom-td text-left view_temperature">
+                <button class="btn btn-danger" (click)="viewLogs(temp.Vaccine)" data-bs-toggle="modal" data-bs-target="#logModal">
+                  <i class="bi bi-eye ms-0"></i>
+                </button>
+              </td>
+            </tbody>
+          </table>
+          <div class="empty">
+            <div class="eyes">
+              <div class="eye">
+                <div class="ball"></div>
+              </div>
+
+              <div class="eye">
+                <div class="ball"></div>
+              </div>
+
+              <h5 class="title_empty">No logs available</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /#page-content-wrapper -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="createLogModal" tabindex="-1"
+    aria-labelledby="createLogModalLabel" aria-hidden="true">
+    <div
+      class="modal-dialog modal-lg modal-dialog-centered custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createLog">Create new Log</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body popup-body animation_body">
+          <!-- Nội dung logs sẽ được cập nhật ở đây -->
+          <div class="form" id="login">
+            <div class="form__input-group d-flex">
+              <i class="bi bi-cpu"></i>
+              <input type="text" class="form__input" autofocus
+                placeholder="Device ID" id="deviceInput">
+            </div>
+            <div class="form__input-group d-flex">
+              <i class="bi bi-hdd-rack-fill"></i>
+              <input type="text" class="form__input" autofocus
+                placeholder="Vaccine ID" id="vaccineInput">
+            </div>
+            <a>
+              <button class="btn_save_change btn form__button">Save
+                Change</button>
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal -->
+
+
+  <!-- Modal LOG -->
+<div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="logModalLabel" aria-hidden="true">
+  <div class="modal-dialog custom-modal-dialog modal-lg modal-dialog-centered ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logModalLabel">View Logs</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body popup-body">
+        <!-- Nội dung logs sẽ được cập nhật ở đây -->
+        <app-line></app-line>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</main>

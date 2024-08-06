@@ -1,33 +1,16 @@
 <div class="intro-form" id="join-us-form contact-form">
-  <h4>Sydney's #1 Medical Treatment Service Center.</h4>
+  <h4>Find Information About Your Vaccine.</h4>
 
   <div id="join-us-results"></div>
   <!-- Form -->
-  <form (ngSubmit)="onSubmit()">
+  <form id="search_vaccine" [formGroup]="searchForm" (ngSubmit)="submit()">
     <div class="mb-3">
-      <input type="text" name="first_name" [(ngModel)]="model.firstName"
-        id="first_name" class="form-control"
-        placeholder="First Name" required />
-    </div>
-    <div class="mb-3">
-      <input type="text" name="last_name" [(ngModel)]="model.lastName"
-        id="last_name" class="form-control"
-        placeholder="Last Name" required />
-    </div>
-    <div class="mb-3">
-      <input type="email" name="email" [(ngModel)]="model.email"
-        class="form-control" placeholder="Email" required />
-    </div>
-    <div class="mb-3">
-      <input type="text" name="phone" [(ngModel)]="model.phone" maxlength="15"
-        class="form-control" placeholder="Phone" required />
-    </div>
-    <div class="mb-3">
-      <input type="text" name="website" [(ngModel)]="model.website"
-        class="form-control" placeholder="Website" />
+      <input type="text" formControlName="vaccineId" [class.is-invalid]="vaccineId.invalid && vaccineId.touched"
+        id="vaccineId" class="form-control"
+        placeholder="Enter vaccine id ..." required />
     </div>
     <button type="submit" class="btn btn-lg btn-danger w-100">
-      Make an Appointment
+      Search
     </button>
   </form>
 

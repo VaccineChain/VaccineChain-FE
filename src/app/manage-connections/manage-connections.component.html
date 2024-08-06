@@ -1,0 +1,128 @@
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Manage Connections</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a
+            routerLink="/admin/dashboard">Home</a></li>
+        <li class="breadcrumb-item active">Manage Connections</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+  <!-- Page Content -->
+  <div id="page-content-wrapper empty">
+    <div class="container-fluid">
+      <div class="d-block dashboard mt-4 mb-5">
+        <div class="row" id="cust-wrap">
+          <div class="col-6 scroll-table">
+            <table class="custom-table-fill container_admin">
+              <thead>
+                <tr class="custom-tr">
+                  <th class="col-2 custom-th text-left">Vaccine ID</th>
+                  <th class="col-2 custom-th text-left">Device ID</th>
+                  <th class="col-2 custom-th text-left">Option</th>
+                </tr>
+              </thead>
+              <tbody class="custom-table-hover"
+                *ngFor="let connection of connections">
+                <td
+                  class="col-2 custom-td text-left">{{connection.Vaccine.VaccineId}}</td>
+                <td
+                  class="col-2 custom-td text-left">{{connection.Device.DeviceId}}</td>
+                <td class="col-2 custom-td text-left view_temperature">
+                  <div class="d-flex">
+                    <button class="btn btn-success me-1"
+                      (click)="deleteConnect(connection.Vaccine.VaccineId, connection.Device.DeviceId)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                    <button class="btn btn-danger">
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+                  </div>
+                </td>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-6 form_add">
+            <h2 class="title">CREATE NEW CONNECT</h2>
+            <!-- Nội dung logs sẽ được cập nhật ở đây -->
+            <form class="form" id="login" [formGroup]="connectForm"
+              (ngSubmit)="submit()">
+              <div class="form__input-group d-flex">
+                <i class="bi bi-cpu"></i>
+                <div class="w-100">
+                  <select class="form__input" id="deviceInput"
+                    [class.is-invalid]="deviceId.invalid && deviceId.touched"
+                    formControlName="deviceId">
+                    <option value disabled selected>Choose Device Id</option>
+                    <option *ngFor="let type of devices" [value]="type">{{ type
+                      }}</option>
+                  </select>
+                  <div *ngIf="deviceId?.invalid && deviceId?.touched"
+                    class="invalid-feedback">
+                    <small *ngIf="deviceId?.errors?.['required']">Please select
+                      a device Id</small>
+                  </div>
+                </div>
+              </div>
+              <div class="form__input-group d-flex">
+                <i class="bi bi-hdd-rack-fill"></i>
+                <div class="w-100">
+                  <select class="form__input" id="vaccineInput"
+                    [class.is-invalid]="vaccineId.invalid && vaccineId.touched"
+                    formControlName="vaccineId">
+                    <option value disabled selected>Choose Vaccine Id</option>
+                    <option *ngFor="let type of vaccines" [value]="type">{{ type
+                      }}</option>
+                  </select>
+                  <div *ngIf="vaccineId?.invalid && vaccineId?.touched"
+                    class="invalid-feedback">
+                    <small *ngIf="vaccineId?.errors?.['required']">Please select
+                      a vaccine Id</small>
+                  </div>
+                </div>
+              </div>
+              <button class="btn_save_change btn form__button" type="submit">
+                Save Change
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="empty">
+          <div class="eyes">
+            <div class="eye">
+              <div class="ball"></div>
+            </div>
+
+            <div class="eye">
+              <div class="ball"></div>
+            </div>
+
+            <h5 class="title_empty">No logs available</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /#page-content-wrapper -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="createLogModal" tabindex="-1"
+    aria-labelledby="createLogModalLabel" aria-hidden="true">
+    <div
+      class="modal-dialog modal-lg modal-dialog-centered custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createLog">Create new Log</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body popup-body animation_body">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal -->
+</main>

@@ -1,0 +1,144 @@
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Manage Device</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a
+            routerLink="/admin/dashboard">Home</a></li>
+        <li class="breadcrumb-item active">Manage Device</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <div class="row dashboard mt-4 mb-5">
+        <div id="cust-wrap">
+          <div class="text-end mb-3 me-2 add_icon">
+            <button class="btn-add slide" data-bs-toggle="modal"
+              (click)="openAddDeviceModal()"
+              data-bs-target="#deviceModal">
+              <i class="bi bi-plus-circle"></i>
+              Add new
+            </button>
+          </div>
+
+          <table class="custom-table-fill container_admin">
+            <thead>
+              <tr class="custom-tr">
+                <th class="col-2 custom-th text-left">Device ID</th>
+                <th class="col-2 custom-th text-left">Location</th>
+                <th class="col-2 custom-th text-left">Sensor Type</th>
+                <th class="col-2 custom-th text-left">Option</th>
+              </tr>
+            </thead>
+            <tbody class="custom-table-hover">
+              <tr class="custom-tr" *ngFor="let item of devices">
+                <td class="col-2 custom-td text-left">{{item.DeviceId}}</td>
+                <td class="col-2 custom-td text-left">{{item.Location}}</td>
+                <td class="col-2 custom-td text-left"
+                  *ngIf="item.SensorType == 1 || item.SensorType == 0">Temperature Sensor</td>
+                <td class="col-2 custom-td text-left"
+                  *ngIf="item.SensorType == 2">Humidity Sensor</td>
+                <td class="col-2 custom-td text-left"
+                  *ngIf="item.SensorType == 3">Light Sensor</td>
+                <td class="col-2 custom-td text-left view_temperature">
+                  <div class="d-flex">
+                    <button class="btn btn-success me-1"
+                        (click)="deleteDevice(item.DeviceId)">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                      <button class="btn btn-danger" data-bs-toggle="modal"
+                        data-bs-target="#deviceModal"
+                        (click)="openEditDeviceModal(item)">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /#page-content-wrapper -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="deviceModal" tabindex="-1"
+    aria-labelledby="deviceModalLabel" aria-hidden="true">
+    <div
+      class="modal-dialog custom-modal-dialog modal-lg modal-dialog-centered ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deviceModalLabel">{{popupTitle}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body popup-body">
+          <!-- Nội dung logs sẽ được cập nhật ở đây -->
+          <form form [formGroup]="deviceForm"
+          (ngSubmit)="submit()" class="form" id="login">
+            <div class="form__input-group d-flex">
+              <i class="bi bi-cpu"></i>
+              <div class="w-100">
+                <input type="text" class="form__input" autofocus
+                  placeholder="Device ID" id="deviceIdInput"
+                  [class.is-invalid]="deviceId.invalid && deviceId.touched"
+                  formControlName="deviceId">
+                <div
+                  *ngIf="deviceId?.invalid && deviceId?.touched"
+                  class="invalid-feedback">
+                  <small *ngIf="deviceId?.errors?.['required']">
+                    Please enter Device ID
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="form__input-group d-flex" >
+              <i class="bi bi-geo-alt"></i>
+              <div class="w-100">
+                <input type="text" class="form__input" autofocus
+                  placeholder="Location" id="locationInput"
+                  [class.is-invalid]="location.invalid && location.touched"
+                  formControlName="location">
+                <div
+                  *ngIf="location?.invalid && location?.touched"
+                  class="invalid-feedback">
+                  <small *ngIf="location?.errors?.['required']">
+                    Please enter Location
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="form__input-group d-flex">
+              <i class="bi bi-hdd-rack-fill"></i>
+              <div class="w-100">
+                <select class="form__input" id="sensorTypeInput"
+                        [class.is-invalid]="sensorType.invalid && sensorType.touched"
+                        formControlName="sensorType">
+                  <option value="" disabled selected>Choose Sensor Type</option>
+                  <option *ngFor="let type of sensorTypes" [value]="type">{{ type }}</option>
+                </select>
+                <div *ngIf="sensorType?.invalid && sensorType?.touched" class="invalid-feedback">
+                  <small *ngIf="sensorType?.errors?.['required']">Please select a Sensor Type</small>
+                </div>
+              </div>
+            </div>
+
+            <a>
+              <button class="btn_save_change btn form__button" type="submit">Save
+                Change</button>
+            </a>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+            data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>

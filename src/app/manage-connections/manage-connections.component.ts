@@ -1,0 +1,165 @@
+import { Component, OnInit } from '@angular/core';
+import { ToastService } from '../services/toast.service';
+import { LogService } from '../services/api/log.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Log } from '../models/log';
+import { AppApexChartLineComponent } from '../component/apexchart/line/line.component';
+import { NgFor, NgIf, NgSwitch } from '@angular/common';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { handleToastErrors } from '../utils';
+import Swal from 'sweetalert2';
+import { VaccineService } from '../services/api/vaccine.service';
+import { DeviceService } from '../services/api/device.service';
+
+@Component({
+  selector: 'app-manage-connections',
+  standalone: true,
+  imports: [NgFor, NgIf, NgSwitch, AppApexChartLineComponent, ReactiveFormsModule],
+  templateUrl: './manage-connections.component.html',
+  styleUrl: './manage-connections.component.scss'
+})
+export class ManageConnectionsComponent implements OnInit {
+  connectForm!: FormGroup;
+  logs: Log[] = [];
+  connections: Log[] = [];
+  devices: string[] = [];
+  vaccines: string[] = [];
+
+
+  constructor(
+    private logService: LogService,
+    private vaccineService: VaccineService,
+    private deviceService: DeviceService,
+    private showToast: ToastService,
+    private modalService: NgbModal
+  ) { }
+
+  ngOnInit(): void {
+    this.loadConnections();
+    this.initForm();
+  }
+
+  initForm() {
+    this.connectForm = new FormGroup({
+      vaccineId: new FormControl('', Validators.required),
+      deviceId: new FormControl('', Validators.required),
+    });
+  }
+
+  get vaccineId() {
+    return this.connectForm.get('vaccineId') as FormControl;
+  }
+
+  get deviceId() {
+    return this.connectForm.get('deviceId') as FormControl;
+  }
+
+  loadConnections() {
+    // Get all vaccines and get only id to set in vaccine dropdown
+    this.vaccineService.getVaccines().subscribe({
+      next: (response) => {
+        this.vaccines = response.map((v) => v.VaccineId);
+      },
+      error: (response: any) => {
+        this.showToast.showErrorMessage(
+          'Error',
+          response.error?.message ||
+          'Something went wrong. Please try again later'
+        );
+      },
+    });
+
+    // Get all devices and get only id to set in device dropdown
+    this.deviceService.getDevices().subscribe({
+      next: (response) => {
+        this.devices = response.map((d) => d.DeviceId);
+      },
+      error: (response: any) => {
+        this.showToast.showErrorMessage(
+          'Error',
+          response.error?.message ||
+          'Something went wrong. Please try again later'
+        );
+      },
+    });
+
+    this.logService.getLogs().subscribe({
+      next: (response: Log[]) => {
+        this.connections = response;
+      },
+      error: (response: any) => {
+        this.showToast.showErrorMessage(
+          'Error',
+          response.error?.message ||
+          'Something went wrong. Please try again later'
+        );
+      },
+    });
+  }
+
+  submit(): void {
+    if (this.connectForm.invalid) {
+      console.log("Invalid form");
+      this.showToast.showWarningMessage(
+        'Warning',
+        'Please complete all fields'
+      );
+      return;
+    }
+
+    console.log(this.connectForm.value);
+    this.logService.createLog(this.connectForm.value).subscribe({
+      next: (response) => {
+        this.showToast.showSuccessMessage(
+          'Success',
+          'Create connection successfully'
+        );
+        this.connections.push(response);
+        // CLEAR FORM
+        this.connectForm.reset();
+      },
+      error: (response: any) => {
+        handleToastErrors(this.showToast, response);
+      },
+    });
+  }
+
+  viewLogs(vaccineId: string) {
+    this.logs = new Array<Log>();
+  }
+
+  deleteConnect(vaccineId: string, deviceId: string) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `Do you really want to delete vaccine ${vaccineId}? This process cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.logService.deleteLog(deviceId, vaccineId).subscribe({
+          next: () => {
+            Swal.fire(
+              'Deleted!',
+              'The vaccine has been deleted.',
+              'success'
+            );
+            this.loadConnections(); // Refresh the vaccine list
+          },
+          error: (error: any) => {
+            Swal.fire(
+              'Error!',
+              'There was an error deleting the vaccine.',
+              'error'
+            );
+            console.error(error);
+          }
+        });
+      }
+    });
+  }
+
+}
+

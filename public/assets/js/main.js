@@ -1,7 +1,6 @@
 $(document).ready(function() {
     "use strict";
 
-
     /* ==========================
 	   JOIN-US FORM
 	=============================*/
@@ -285,6 +284,34 @@ $(document).ready(function() {
     });
 
 });
+////////////////////   EMPTY   ////////////////////////////
+// Ensure the DOM is fully loaded before executing the script
+document.addEventListener('DOMContentLoaded', function() {
+  let balls = document.getElementsByClassName("ball");
+
+  document.onmousemove = function(event) {
+      // Get the horizontal and vertical coordinates of the mouse
+      let x = event.clientX * 100 / window.innerWidth + "%";
+      let y = event.clientY * 100 / window.innerHeight + "%";
+
+      for(let i = 0; i < balls.length; i++) {
+          balls[i].style.left = x;
+          balls[i].style.top = y;
+          balls[i].style.transform = `translate(-${x}, -${y})`;
+      }
+  };
+});
+
+
+////////////////////   FORM   ////////////////////////////
+let box = new gsap.timeline();
+
+box.from(".animation_body", { width: "0%", stagger: 0.4, duration: 1.5 });
+box.from(".form__title", { opacity: 0, y: -30 });
+box.from(".form__input-group input", { opacity: 0, stagger: 0.3 });
+
+box.from(".form__button ", { opacity: 0, y: 20 });
+
 
 // FOOTER JS
 (function($) {
@@ -294,3 +321,4 @@ $(document).ready(function() {
 	$('[data-toggle="tooltip"]').tooltip()
 
 })(jQuery);
+
