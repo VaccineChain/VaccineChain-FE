@@ -1,4 +1,5 @@
-import { Component, ViewChild } from "@angular/core";
+import { Vaccine } from './../../../models/vaccine';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 
 import {
   ChartComponent,
@@ -12,7 +13,9 @@ import {
   ApexLegend,
   NgApexchartsModule
 } from "ng-apexcharts";
-import { series } from "./data";
+import { ToastService } from "../../../services/toast.service";
+import { StatisticLogService } from "../../../services/api/statistic-log.service";
+import { statisticAreaChart } from '../../../models/statisticAreaChart';
 
 
 export type ChartOptions = {
@@ -36,43 +39,88 @@ export type ChartOptions = {
   styleUrls: ['./line.component.scss']
 })
 
-export class AppApexChartLineComponent {
+export class AppApexChartLineComponent implements OnChanges {
+  @Input() vaccineId!: string | undefined;
   @ViewChild("chart") chart!: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
+  public chartOptions: Partial<ChartOptions> = {};
+  value!: number[];
+  dates!: string[];
+  name!: string[];
+  apiData: statisticAreaChart[] = [];
 
-  constructor() {
+  constructor(
+    private showToast: ToastService,
+    private statisticLogService: StatisticLogService,
+
+  ) { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['vaccineId'] && changes['vaccineId'].currentValue) {
+      this.statisticLogs(changes['vaccineId'].currentValue);
+    }
+  }
+
+  statisticLogs(Vaccine: string) {
+    this.statisticLogService.GetStatisticsForAreaChart(Vaccine).subscribe({
+      next: (response: statisticAreaChart[]) => {
+        console.log(response);
+        this.apiData = response;
+        this.initChart();
+      },
+      error: (response: any) => {
+        this.showToast.showErrorMessage(
+          "Error",
+          response.error?.message ||
+          "Something went wrong. Please try again later"
+        );
+      }
+    });
+  }
+
+  initChart() {
+    // Xử lý dữ liệu
+    const seriesData = this.apiData.map(device => {
+      return {
+        name: device.DeviceId,
+        data: device.SensorValue.map(entry => ({
+          x: new Date(entry.Timestamp).getTime(),
+          y: entry.Value
+        }))
+      };
+    });
+
+    // Lấy danh sách các ngày từ dữ liệu
+    const dates = [...new Set(this.apiData.flatMap(device => device.SensorValue.map(entry => entry.Timestamp)))];
+
+    // Cập nhật các tùy chọn cho biểu đồ
     this.chartOptions = {
-      series: [
-        {
-          name: "STOCK ABC",
-          data: series.monthDataSeries1.prices
-        }
-      ],
+      series: seriesData,
       chart: {
         type: "area",
         height: 350,
         zoom: {
-          enabled: false
+          enabled: true
         }
       },
       dataLabels: {
         enabled: false
       },
       stroke: {
-        curve: "straight"
+        curve: "smooth"
       },
-
       title: {
-        text: "Fundamental Analysis of Stocks",
+        text: "Detailed Log Overview for Vaccine VAC001",
         align: "left"
       },
       subtitle: {
-        text: "Price Movements",
+        text: "Complete log history and analysis for this vaccine",
         align: "left"
       },
-      labels: series.monthDataSeries1.dates,
       xaxis: {
-        type: "datetime"
+        type: "datetime",
+        labels: {
+          format: "dd/MM/yy HH:mm"
+        }
       },
       yaxis: {
         opposite: true
@@ -83,3 +131,5 @@ export class AppApexChartLineComponent {
     };
   }
 }
+
+

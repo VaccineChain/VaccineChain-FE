@@ -22,8 +22,6 @@ export class VaccineService {
   }
 
   updateVaccines(vaccine: Vaccine) {
-    console.log(vaccine);
-
     return this.http.put<Vaccine>(`/api/Vaccines/${vaccine.VaccineId}`, vaccine);
   }
 

@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+
   // User Status Chart
   var ctxUserStatus = document.getElementById('userStatusChart').getContext('2d');
   var userStatusChart = new Chart(ctxUserStatus, {

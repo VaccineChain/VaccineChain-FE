@@ -1,0 +1,170 @@
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Manage Doses</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a
+            routerLink="/admin/dashboard">Home</a></li>
+        <li class="breadcrumb-item active">Manage Doses</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <div class="row dashboard mt-4 mb-5">
+        <div id="cust-wrap">
+          <div class="text-end mb-3 me-2 add_icon">
+            <button class="btn-add slide" data-bs-toggle="modal"
+              (click)="openAddDosesModal()"
+              data-bs-target="#doseModal">
+              <i class="bi bi-plus-circle"></i>
+              Add new
+            </button>
+          </div>
+
+          <table class="custom-table-fill container_admin">
+            <thead>
+              <tr class="custom-tr">
+                <th class="col-2 custom-th text-left">Dose Number</th>
+                <th class="col-2 custom-th text-left">Date Administered</th>
+                <th class="col-2 custom-th text-left">Location Administered</th>
+                <th class="col-2 custom-th text-left">Administrator</th>
+                <th class="col-2 custom-th text-left">Vaccine ID</th>
+                <th class="col-2 custom-th text-left">Option</th>
+              </tr>
+            </thead>
+            <tbody class="custom-table-hover">
+              <tr class="custom-tr" *ngFor="let item of doses">
+                <td class="col-2 custom-td text-left">{{item.DoseNumber}}</td>
+                <td
+                  class="col-2 custom-td text-left">{{item.DateAdministered}}</td>
+                <td
+                  class="col-2 custom-td text-left">{{item.LocationAdministered}}</td>
+                <td
+                  class="col-2 custom-td text-left">{{item.Administrator}}</td>
+                <td class="col-2 custom-td text-left">{{item.VaccineId}}</td>
+                <td class="col-2 custom-td text-left view_temperature">
+                  <div class="d-flex">
+                    <button class="btn btn-success me-1"
+                      (click)="deleteDose(item.DoseNumber)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                    <button class="btn btn-danger" data-bs-toggle="modal"
+                      data-bs-target="#doseModal"
+                      (click)="openEditDoseModal(item)">
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /#page-content-wrapper -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="doseModal" tabindex="-1"
+    aria-labelledby="doseModalLabel" aria-hidden="true">
+    <div
+      class="modal-dialog custom-modal-dialog modal-lg modal-dialog-centered ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="doseModalLabel">{{popupTitle}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body popup-body">
+          <!-- Nội dung logs sẽ được cập nhật ở đây -->
+          <form form [formGroup]="doseForm"
+            (ngSubmit)="submit()" class="form" id="login">
+            <div class="form__input-group d-flex">
+              <i class="bi bi-cpu"></i>
+              <div class="w-100">
+                <input type="text" class="form__input" autofocus
+                  placeholder="Dose Number" id="doseNumberInput"
+                  [class.is-invalid]="doseNumber.invalid && doseNumber.touched"
+                  formControlName="doseNumber">
+                <div
+                  *ngIf="doseNumber?.invalid && doseNumber?.touched"
+                  class="invalid-feedback">
+                  <small *ngIf="doseNumber?.errors?.['required']">
+                    Please enter Dose Number
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="form__input-group d-flex">
+              <i class="bi bi-geo-alt"></i>
+              <div class="w-100">
+                <input type="text" class="form__input" autofocus
+                  placeholder="Location Administered"
+                  id="locationAdministeredInput"
+                  [class.is-invalid]="locationAdministered.invalid && locationAdministered.touched"
+                  formControlName="locationAdministered">
+                <div
+                  *ngIf="locationAdministered?.invalid && locationAdministered?.touched"
+                  class="invalid-feedback">
+                  <small *ngIf="locationAdministered?.errors?.['required']">
+                    Please enter Location Administered
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="form__input-group d-flex">
+              <i class="bi bi-hdd-rack-fill"></i>
+              <div class="w-100">
+                <input type="text" class="form__input" autofocus
+                  placeholder="Administrator" id="administratorInput"
+                  [class.is-invalid]="administrator.invalid && administrator.touched"
+                  formControlName="administrator">
+                <div
+                  *ngIf="administrator?.invalid && administrator?.touched"
+                  class="invalid-feedback">
+                  <small *ngIf="administrator?.errors?.['required']">
+                    Please enter Administrator
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="form__input-group d-flex">
+              <i class="bi bi-hdd-rack-fill"></i>
+              <div class="w-100">
+                <select class="form__input" id="vaccineIdInput"
+                  [class.is-invalid]="vaccineId.invalid && vaccineId.touched"
+                  formControlName="vaccineId">
+                  <option value disabled selected>Choose Vaccine ID</option>
+                  <option *ngFor="let id of vaccineIds" [value]="id">{{ id
+                    }}</option>
+                </select>
+                <div *ngIf="vaccineId?.invalid && vaccineId?.touched"
+                  class="invalid-feedback">
+                  <small *ngIf="vaccineId?.errors?.['required']">Please
+                    select a Vaccine ID</small>
+                </div>
+              </div>
+            </div>
+
+            <a>
+              <button class="btn_save_change btn form__button"
+                type="submit">Save
+                Change</button>
+            </a>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+            data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>

@@ -1,3 +1,5 @@
+import { FormatDateService } from './../services/format-date.service';
+import { StatisticLogService } from './../services/api/statistic-log.service';
 import { Component, OnInit } from '@angular/core';
 import { VaccineService } from '../services/api/vaccine.service';
 import { ToastService } from '../services/toast.service';
@@ -11,17 +13,20 @@ import { Device } from '../models/device';
 import { Vaccine } from '../models/vaccine';
 import Swal from 'sweetalert2';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { statisticLogsByVaccineId } from '../models/statisticLogsByVaccineId';
 
 @Component({
   selector: 'app-manage-vaccine',
   standalone: true,
-  imports: [NgFor, NgIf, AppApexChartLineComponent, ReactiveFormsModule],
+  imports: [RouterLink, NgFor, NgIf, AppApexChartLineComponent, ReactiveFormsModule],
   templateUrl: './manage-vaccine.component.html',
   styleUrl: './manage-vaccine.component.scss'
 })
 export class ManageVaccineComponent implements OnInit {
   vaccines: Vaccine[] = []
   logs: Log[] = [];
+  statisticLog!: statisticLogsByVaccineId;
   popupTitle: string = '';
   vaccineForm!: FormGroup;
   isEditMode: boolean = false;
@@ -29,6 +34,8 @@ export class ManageVaccineComponent implements OnInit {
   constructor(
     private vaccineService: VaccineService,
     private showToast: ToastService,
+    private statisticLogService: StatisticLogService,
+    private formatDateService: FormatDateService
   ) { }
 
   ngOnInit(): void {
@@ -69,7 +76,6 @@ export class ManageVaccineComponent implements OnInit {
   loadVaccines() {
     this.vaccineService.getVaccines().subscribe({
       next: (response: Vaccine[]) => {
-        console.log(response);
         this.vaccines = response;
       },
       error: (response: any) => {
@@ -131,28 +137,38 @@ export class ManageVaccineComponent implements OnInit {
   }
 
   viewLogs(vaccineId: string) {
-    const device: Device = {
-      DeviceId: 'DEV001',
-      Location: 'Device 1',
-      SensorType: 1,
-    };
+    this.popupTitle = 'View Logs for Vaccine ID: ' + vaccineId;
 
-    const vaccine: Vaccine = {
-      VaccineId: vaccineId,
-      VaccineName: 'Vaccine 1',
-      Manufacturer: 'Manufacturer 1',
-      BatchNumber: 'Batch 1',
-      ExpirationDate: new Date().toISOString(),
-    };
+    this.statisticLogService.GetStatisticLog(vaccineId).subscribe({
+      next: (response: statisticLogsByVaccineId) => {
+        //2024-08-03T16:46:17.6803832 converse and get only date in DateRangeStart
+        response.DateRangeStart = this.formatDateService.toDateString(response.DateRangeStart);
+        response.DateRangeEnd = this.formatDateService.toDateString(response.DateRangeEnd);
 
-    this.logs = new Array<Log>();
-    this.logs.push({
-      Device: device,
-      Vaccine: vaccine,
-      Value: 2.5,
-      Unit: 'C',
-      Timestamp: new Date().toISOString(),
-      Status: 1,
+        // DateLowestValue and TimeLowestValue
+        response.DateLowestValue = this.formatDateService.toDateString(response.TimeLowestValue);
+        response.DateHighestValue = this.formatDateService.toDateString(response.TimeHighestValue);
+
+        this.statisticLog = response;
+        this.statisticLog.TimeLowestValue = this.formatDateService.toTimeString(response.TimeLowestValue);
+        this.statisticLog.TimeHighestValue = this.formatDateService.toTimeString(response.TimeHighestValue);
+      },
+      error: (response: any) => {
+        console.log("🚀 ~ ManageVaccineComponent ~ this.statisticLogService.GetStatisticLog ~ response:", response)
+        // Show error message not found when 404 status
+        if (response.status === 404) {
+          this.showToast.showWarningMessage(
+            'Warning',
+            'This vaccine has no logs yet'
+          );
+        } else {
+          this.showToast.showErrorMessage(
+            'Error',
+            response.error?.message ||
+            'Something went wrong. Please try again later'
+          );
+        }
+      },
     });
   }
 

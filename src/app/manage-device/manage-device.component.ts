@@ -1,3 +1,4 @@
+import { RouterLink } from '@angular/router';
 import { DeviceService } from './../services/api/device.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastService } from '../services/toast.service';
@@ -11,7 +12,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 @Component({
   selector: 'app-manage-device',
   standalone: true,
-  imports: [NgFor, NgIf, AppApexChartLineComponent, ReactiveFormsModule],
+  imports: [RouterLink, NgFor, NgIf, AppApexChartLineComponent, ReactiveFormsModule],
   templateUrl: './manage-device.component.html',
   styleUrl: './manage-device.component.scss'
 })

@@ -30,4 +30,15 @@ export class LogService {
     });
     return this.http.delete<Log>('/api/Logs', { params });
   }
+
+  isExistConnection(deviceId: string, vaccineId: string) {
+    const params = new HttpParams({
+      fromObject: {
+        deviceId: deviceId,
+        vaccineId: vaccineId,
+      },
+    });
+
+    return this.http.post<Log>('/api/Logs/GetExistConnection', params);
+  }
 }

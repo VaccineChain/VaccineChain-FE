@@ -7,10 +7,11 @@ import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';
 import { ManageVaccineComponent } from './manage-vaccine/manage-vaccine.component';
 import { ManageDeviceComponent } from './manage-device/manage-device.component';
-import { ManageLogComponent } from './manage-log/manage-log.component';
 import { ManageConnectionsComponent } from './manage-connections/manage-connections.component';
 import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
+import { SearchResultComponent } from './search-result/search-result.component';
+import { ManageDosesComponent } from './manage-doses/manage-doses.component';
 
 export const routes: Routes = [
   {
@@ -21,18 +22,20 @@ export const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'about', component: AboutComponent },
       { path: 'contact', component: ContactComponent },
-      { path: 'login', component: LoginComponent },
+      { path: 'search-result', component: SearchResultComponent},
     ]
   },
   {
     path: 'admin', component: AdminComponent, children: [
-      // {path: '',  component: ManageVaccineComponent},
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'vaccines', component: ManageVaccineComponent },
+      { path: 'doses', component: ManageDosesComponent },
       { path: 'devices', component: ManageDeviceComponent },
       { path: 'connections', component: ManageConnectionsComponent},
       { path: 'profile', component: ProfileComponent },
     ]
   },
+  { path: 'login', component: LoginComponent },
+
 ];

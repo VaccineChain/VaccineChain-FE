@@ -10,11 +10,12 @@ import { handleToastErrors } from '../utils';
 import Swal from 'sweetalert2';
 import { VaccineService } from '../services/api/vaccine.service';
 import { DeviceService } from '../services/api/device.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-manage-connections',
   standalone: true,
-  imports: [NgFor, NgIf, NgSwitch, AppApexChartLineComponent, ReactiveFormsModule],
+  imports: [RouterLink, NgFor, NgIf, NgSwitch, AppApexChartLineComponent, ReactiveFormsModule],
   templateUrl: './manage-connections.component.html',
   styleUrl: './manage-connections.component.scss'
 })
@@ -107,7 +108,16 @@ export class ManageConnectionsComponent implements OnInit {
       return;
     }
 
-    console.log(this.connectForm.value);
+    const isExit = this.connections.find((connection) => connection.Device.DeviceId === this.connectForm.value.deviceId && connection.Vaccine.VaccineId === this.connectForm.value.vaccineId);
+
+    if (isExit) {
+      this.showToast.showWarningMessage(
+        'Warning',
+        'Connection already exists'
+      );
+      return;
+    }
+
     this.logService.createLog(this.connectForm.value).subscribe({
       next: (response) => {
         this.showToast.showSuccessMessage(

@@ -7,11 +7,12 @@ import { LogService } from '../services/api/log.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Log } from '../models/log';
 import { Vaccine } from '../models/vaccine';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-manage-log',
   standalone: true,
-  imports: [NgFor, NgIf, NgSwitch, AppApexChartLineComponent],
+  imports: [RouterLink, NgFor, NgIf, NgSwitch, AppApexChartLineComponent],
   templateUrl: './manage-log.component.html',
   styleUrl: './manage-log.component.scss'
 })
