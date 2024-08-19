@@ -14,7 +14,7 @@ export class VaccineService {
   }
 
   getVaccineById(id: string) {
-    return this.http.get<Vaccine>(`/api/Vaccines/${id}`);
+    return this.http.get<Vaccine>(`https://localhost:7241/api/Vaccines/${id}`);
   }
 
   createVaccine(vaccine: Vaccine) {

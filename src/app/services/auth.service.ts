@@ -4,6 +4,8 @@ import { StorageService } from './storage.service';
 import { Router } from '@angular/router';
 import { Token } from '../models/user';
 import { UserInfo } from '../models/profile';
+import { Login } from '../models/login';
+import { Log } from '../models/log';
 
 const ACCESS_KEY = 'ACCESS_TOKEN';
 const USER_KEY = 'USER_DATA';
@@ -19,11 +21,8 @@ export class AuthService {
     private router: Router
   ) {}
 
-  login(email: string, password: string) {
-    return this.http.post<Token>('/api/auth/login', {
-      email,
-      password,
-    });
+  login(loginData: Login) {
+    return this.http.post<Login>('https://localhost:7241/api/Users/login', loginData);
   }
 
   resetPassword(data: unknown) {

@@ -9,6 +9,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
   styleUrl: './contact.component.scss'
 })
 export class ContactComponent {
-  center: google.maps.LatLngLiteral = { lat: 24, lng: 12 };
-  zoom = 4;
+  center: google.maps.LatLngLiteral = { lat: 10.0289431, lng: 105.7774714 };
+  zoom = 19.65;
 }

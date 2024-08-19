@@ -5,17 +5,17 @@ import { ToastService } from '../services/toast.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { handleToastErrors } from '../utils';
 import { LogService } from '../services/api/log.service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-intro-form',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [RouterLink, FormsModule, ReactiveFormsModule],
   templateUrl: './app-intro-form.component.html',
   styleUrl: './app-intro-form.component.scss'
 })
 export class AppIntroFormComponent implements OnInit {
   searchForm!: FormGroup;
-
   sendingMessage = true;
   successMessage = true;
   failureMessage = true;
@@ -31,9 +31,8 @@ export class AppIntroFormComponent implements OnInit {
 
   constructor(
     private vaccineService : VaccineService,
-    private logService: LogService,
+    private router: Router,
     private showToast: ToastService,
-    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -50,17 +49,19 @@ export class AppIntroFormComponent implements OnInit {
   }
 
   submit() : void {
+    var vaccineId = this.searchForm.value.vaccineId;
 
-    console.log(this.searchForm.value);
-    this.vaccineService.getVaccineById(this.searchForm.value).subscribe({
+    if(vaccineId == '') {
+      this.showToast.showWarningMessage('Warning', 'Please enter a vaccine ID');
+      return;
+    }
+
+    this.vaccineService.getVaccineById(vaccineId).subscribe({
       next: (response) => {
-        this.showToast.showSuccessMessage(
-          'Success',
-          'Create connection successfully'
-        );
-        console.log(response);
-        // CLEAR FORM
         this.searchForm.reset();
+        console.log(response);
+        // Chuyển hướng đến SearchResultComponent với vaccineId
+        this.router.navigate(['/result'], { queryParams: { vaccineId: vaccineId } });
       },
       error: (response: any) => {
         handleToastErrors(this.showToast, response);

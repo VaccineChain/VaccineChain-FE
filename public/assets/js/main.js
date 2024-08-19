@@ -1,5 +1,51 @@
 $(document).ready(function() {
     "use strict";
+    // See more button
+    const seeMoreButton = document.getElementById('seeMoreButton');
+    const chartContainer = document.getElementById('chartContainer');
+
+    if (!seeMoreButton) {
+      console.error('Button element with ID "seeMoreButton" not found.');
+      return;
+    }
+
+    if (!chartContainer) {
+      console.error('Chart container element with ID "chartContainer" not found.');
+      return;
+    }
+
+    seeMoreButton.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent default button behavior
+      chartContainer.style.display = 'block'; // Show the chart
+      seeMoreButton.style.display = 'none'; // Hide the button
+      console.log('Button clicked, chart displayed.');
+    });
+
+
+    // Search Vaccine Form
+
+    const form = document.getElementById('search_vaccine');
+    const button = form.querySelector('.btn-loading');
+    const buttonText = button.querySelector('span');
+
+    form.addEventListener('submit', (event) => {
+      button.classList.add('animation');
+      button.disabled = true;
+      buttonText.style.top = '-' + buttonText.offsetHeight + 'px';
+
+      setTimeout(() => {
+        button.classList.add('active');
+      }, 600);
+
+      setTimeout(() => {
+        button.classList.remove('animation');
+        button.disabled = false;
+        buttonText.style.top = '0';
+      }, 3000);
+
+      // Optional: Stop form submission for demonstration
+      event.preventDefault();
+    });
 
     /* ==========================
 	   JOIN-US FORM

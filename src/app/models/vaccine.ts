@@ -4,4 +4,5 @@ export interface Vaccine {
   Manufacturer: string,
   BatchNumber: string,
   ExpirationDate: string,
+  CreatedAt: string,
 }

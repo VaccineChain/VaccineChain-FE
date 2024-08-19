@@ -82,22 +82,6 @@
           <!-- Nội dung logs sẽ được cập nhật ở đây -->
           <form form [formGroup]="doseForm"
             (ngSubmit)="submit()" class="form" id="login">
-            <div class="form__input-group d-flex">
-              <i class="bi bi-cpu"></i>
-              <div class="w-100">
-                <input type="text" class="form__input" autofocus
-                  placeholder="Dose Number" id="doseNumberInput"
-                  [class.is-invalid]="doseNumber.invalid && doseNumber.touched"
-                  formControlName="doseNumber">
-                <div
-                  *ngIf="doseNumber?.invalid && doseNumber?.touched"
-                  class="invalid-feedback">
-                  <small *ngIf="doseNumber?.errors?.['required']">
-                    Please enter Dose Number
-                  </small>
-                </div>
-              </div>
-            </div>
 
             <div class="form__input-group d-flex">
               <i class="bi bi-geo-alt"></i>
@@ -112,23 +96,6 @@
                   class="invalid-feedback">
                   <small *ngIf="locationAdministered?.errors?.['required']">
                     Please enter Location Administered
-                  </small>
-                </div>
-              </div>
-            </div>
-
-            <div class="form__input-group d-flex">
-              <i class="bi bi-hdd-rack-fill"></i>
-              <div class="w-100">
-                <input type="text" class="form__input" autofocus
-                  placeholder="Administrator" id="administratorInput"
-                  [class.is-invalid]="administrator.invalid && administrator.touched"
-                  formControlName="administrator">
-                <div
-                  *ngIf="administrator?.invalid && administrator?.touched"
-                  class="invalid-feedback">
-                  <small *ngIf="administrator?.errors?.['required']">
-                    Please enter Administrator
                   </small>
                 </div>
               </div>
@@ -152,11 +119,9 @@
               </div>
             </div>
 
-            <a>
-              <button class="btn_save_change btn form__button"
+            <button class="btn_save_change btn form__button"
                 type="submit">Save
                 Change</button>
-            </a>
           </form>
         </div>
         <div class="modal-footer">

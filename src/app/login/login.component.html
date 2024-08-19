@@ -1,50 +1,178 @@
-<div class="global-margin-padding-reset box-sizing-reset font-reset">
-  <section class="section-container">
-    <div class="form-container">
-      <div class="user-container signin-box">
-        <div class="image-box"><img src="assets/images/services/2.jpg" alt="" /></div>
-        <div class="form-box">
-          <form action="" onsubmit="return false;">
-            <h2>Sign In</h2>
-            <input type="text" name="" placeholder="Username" />
-            <input type="password" name="" placeholder="Password" />
-            <div class="button-3">
-              <a href="/admin" class="button3"  rel="noopener">Login</a>
-            </div>
-            <p class="signup-text">
-              Don't have an account ?
-              <a href="#" class="toggle-link">Contact us.</a>
-            </p>
-          </form>
+<div id="auth-container" class="auth-container"
+  [ngClass]="{'sign-in': isSignIn, 'sign-up': !isSignIn}">
+  <!-- FORM SECTION -->
+  <div class="auth-row">
+    <!-- SIGN UP -->
+    <div class="auth-col align-items-center flex-col sign-up">
+      <!-- BACK TO HOME -->
+      <div class="auth-form-wrapper">
+        <div class="back-to-home">
+          <p>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="1em"
+              height="1em"
+              viewBox="0 0 2048 2048"><path fill="currentColor"
+                d="M960 0q133 0 255 34t230 96t194 150t150 195t97 229t34 256q0 133-34 255t-96 230t-150 194t-195 150t-229 97t-256 34q-133 0-255-34t-230-96t-194-150t-150-195t-97-229T0 960q0-133 34-255t96-230t150-194t195-150t229-97T960 0m0 1792q115 0 221-30t198-84t169-130t130-168t84-199t30-221q0-115-30-221t-84-198t-130-169t-168-130t-199-84t-221-30q-115 0-221 30t-198 84t-169 130t-130 168t-84 199t-30 221q0 115 30 221t84 198t130 169t168 130t199 84t221 30M727 896h681v128H727l278 274l-90 92l-434-430l434-430l90 92z" /></svg>
+            <a routerLink="/home">
+              Back to home
+            </a>
+          </p>
         </div>
       </div>
-      <div class="user-container signup-box">
-        <div class="form-box">
-          <form action="" onsubmit="return false;">
-            <h2>Create an account</h2>
-            <input type="text" name="" placeholder="Username" />
-            <input type="email" name="" placeholder="Email Address" />
-            <input type="password" name="" placeholder="Create Password" />
-            <input type="password" name="" placeholder="Confirm Password" />
-            <input type="submit" name="" value="Sign Up" />
-            <p class="signup-text">
-              Already have an account ?
-              <a href="#" class="toggle-link">Sign in.</a>
-            </p>
-          </form>
+      <div class="form-wrapper align-items-center">
+        <div class="auth-form sign-up">
+          <div class="input-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+              viewBox="0 0 24 24"><path
+                d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2S7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z"
+                fill="currentColor" /></svg> <input type="auth-text"
+              placeholder="Username">
+          </div>
+          <div class="input-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+              viewBox="0 0 24 24"><path fill="currentColor"
+                d="M20 4H6c-1.103 0-2 .897-2 2v5h2V8l6.4 4.8a1.001 1.001 0 0 0 1.2 0L20 8v9h-8v2h8c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2m-7 6.75L6.666 6h12.668z" /><path
+                fill="currentColor"
+                d="M2 12h7v2H2zm2 3h6v2H4zm3 3h4v2H7z" /></svg> <input
+              type="email" placeholder="Email">
+          </div>
+          <div class="input-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+              viewBox="0 0 24 24"><path
+                d="M20 12c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5S7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"
+                fill="currentColor" /></svg>
+            <input type="password" placeholder="Password">
+          </div>
+
+          <div class="input-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+              viewBox="0 0 16 16"><path fill="currentColor"
+                d="M10.529 1.764a2.621 2.621 0 1 1 3.707 3.707l-.514.514a3 3 0 0 0-1.4-.871L9.75 2.543zM8.5 8a3 3 0 0 1 2.361-2.932L9.043 3.25L2.657 9.635a2.96 2.96 0 0 0-.772 1.355l-.87 3.386a.5.5 0 0 0 .61.608l3.385-.869a2.95 2.95 0 0 0 1.354-.772L7 12.707V10a2 2 0 0 1 1.5-1.937zm1 0v1H9a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-.5V8a2 2 0 1 0-4 0m1 1V8a1 1 0 1 1 2 0v1zm1 2.25a.75.75 0 1 1 0 1.5a.75.75 0 0 1 0-1.5" /></svg>
+            <input type="password"
+              placeholder="Confirm password">
+          </div>
+          <button>
+            Sign up
+          </button>
+          <p>
+            <span>
+              Already have an account?
+            </span>
+            <b (click)="toggle()" class="pointer">
+              Sign in here
+            </b>
+          </p>
         </div>
-        <div class="image-box"><img src="https://raw.githubusercontent.com/WoojinFive/CSS_Playground/master/Responsive%20Login%20and%20Registration%20Form/img2.jpg" alt="" /></div>
       </div>
     </div>
-  </section>
-  <script>
-    const toggleLinks = document.querySelectorAll('.toggle-link');
-    toggleLinks.forEach(link => {
-      link.addEventListener('click', function(event) {
-        event.preventDefault();
-        const container = document.querySelector('.form-container');
-        container.classList.toggle('active');
-      });
-    });
-  </script>
+    <!-- END SIGN UP -->
+    <!-- SIGN IN -->
+    <div class="auth-col align-items-center flex-col sign-in">
+      <form id="login_form" [formGroup]="loginForm" (ngSubmit)="submit()" class="form-wrapper align-items-center">
+        <div class="auth-form sign-in">
+          <div class="input-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+              viewBox="0 0 24 24"><path
+                d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2S7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z"
+                fill="currentColor" /></svg>
+                <input type="auth-text" formControlName="email" [class.is-invalid]="email.invalid && email.touched" placeholder="Email">
+          </div>
+          <div class="input-group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+              viewBox="0 0 24 24"><path
+                d="M20 12c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5S7 4.243 7 7v3H6c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-8zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7z"
+                fill="currentColor" /></svg>
+                <input type="password" formControlName="password" [class.is-invalid]="password.invalid && password.touched" placeholder="Password">
+          </div>
+          <button>
+            Sign in
+          </button>
+          <p>
+            <b>
+              Forgot password?
+            </b>
+          </p>
+          <p>
+            <span>
+              Don't have an account?
+            </span>
+            <b (click)="toggle()" class="pointer">
+              Sign up here
+            </b>
+          </p>
+        </div>
+      </form>
+
+      @if (sendingMessage) {
+        <div id="sendingMessage" class="statusMessage">
+          <p><i class="fa fa-spin fa-cog"></i> Sending your message. Please
+            wait...</p>
+        </div>
+        }
+
+        @if (successMessage) {
+        <div id="successMessage" class="successmessage">
+          <p><span class="success-ico"></span> Thanks for sending your message! We'll
+            get back to you shortly.</p>
+        </div>
+        }
+
+        @if (failureMessage) {
+        <div id="failureMessage" class="errormessage">
+          <p><span class="error-ico"></span> There was a problem sending your message.
+            Please try again.</p>
+        </div>
+        }
+
+        @if (incompleteMessage) {
+        <div id="incompleteMessage" class="statusMessage">
+          <p><i class="fa fa-warning"></i> Please complete all the fields in the form
+            before sending.</p>
+        </div>
+        }
+      <!-- BACK TO HOME -->
+      <div class="auth-form-wrapper">
+        <div class="back-to-home">
+          <p>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="1em"
+              height="1em"
+              viewBox="0 0 2048 2048"><path fill="currentColor"
+                d="M960 0q133 0 255 34t230 96t194 150t150 195t97 229t34 256q0 133-34 255t-96 230t-150 194t-195 150t-229 97t-256 34q-133 0-255-34t-230-96t-194-150t-150-195t-97-229T0 960q0-133 34-255t96-230t150-194t195-150t229-97T960 0m0 1792q115 0 221-30t198-84t169-130t130-168t84-199t30-221q0-115-30-221t-84-198t-130-169t-168-130t-199-84t-221-30q-115 0-221 30t-198 84t-169 130t-130 168t-84 199t-30 221q0 115 30 221t84 198t130 169t168 130t199 84t221 30M727 896h681v128H727l278 274l-90 92l-434-430l434-430l90 92z" /></svg>
+            <a routerLink="/home">
+              Back to home
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- END SIGN IN -->
+  </div>
+  <!-- END FORM SECTION -->
+  <!-- CONTENT SECTION -->
+  <div class="auth-row content-row">
+    <!-- SIGN IN CONTENT -->
+    <div class="auth-col align-items-center flex-col">
+      <div class="auth-text sign-in">
+        <h2>
+          Welcome to <br> Vaccine Chain
+        </h2>
+      </div>
+      <div class="img sign-in">
+        <img src="assets/images/login.png" alt="login">
+      </div>
+    </div>
+    <!-- END SIGN IN CONTENT -->
+    <!-- SIGN UP CONTENT -->
+    <div class="auth-col align-items-center flex-col">
+      <div class="img sign-up">
+      </div>
+      <div class="auth-text sign-up">
+        <h2>
+          Join with <br> Vaccine Chain
+        </h2>
+
+      </div>
+    </div>
+    <!-- END SIGN UP CONTENT -->
+  </div>
+  <!-- END CONTENT SECTION -->
 </div>

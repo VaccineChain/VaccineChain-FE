@@ -31,6 +31,7 @@
                 <th class="col-2 custom-th text-left">Batch Number</th>
                 <th class="col-2 custom-th text-left">Manufacturer</th>
                 <th class="col-2 custom-th text-left">Expiration Date</th>
+                <th class="col-2 custom-th text-left">Created At</th>
                 <th class="col-2 custom-th text-left">View Logs</th>
                 <th class="col-2 custom-th text-left">Option</th>
               </tr>
@@ -43,6 +44,8 @@
                 <td class="col-2 custom-td text-left">{{item.Manufacturer}}</td>
                 <td
                   class="col-2 custom-td text-left">{{item.ExpirationDate}}</td>
+                <td
+                  class="col-2 custom-td text-left">{{item.CreatedAt}}</td>
                 <td class="col-2 custom-td text-left view_temperature">
                   <button class="btn btn-warning"
                     (click)="viewLogs(item.VaccineId)" data-bs-toggle="modal"
@@ -206,48 +209,55 @@
             <div class="row m-3" id="show_more">
               <div class="container_log">
                 <div class="col-6">
-                    <div class="card_log">
-                        <div class="d-flex">
-                            <h6 class="title">Time Range:</h6>
-                            <p class="description">
-                                From {{statisticLog?.DateRangeStart}} to {{statisticLog?.DateRangeEnd}}
-                            </p>
-                        </div>
+                  <div class="card_log">
+                    <div class="d-flex">
+                      <h6 class="title">Time Range:</h6>
+                      <p class="description">
+                        From {{statisticLog?.DateRangeStart}} to
+                        {{statisticLog?.DateRangeEnd}}
+                      </p>
                     </div>
+                  </div>
 
-                    <div class="card_log">
-                        <div class="d-flex">
-                            <h6 class="title">Number of Temperature Records:</h6>
-                            <p class="description">
-                                A total of {{statisticLog?.NumberRecords}} temperature readings (every 3 minutes).
-                            </p>
-                        </div>
+                  <div class="card_log">
+                    <div class="d-flex">
+                      <h6 class="title">Number of Temperature Records:</h6>
+                      <p class="description">
+                        A total of {{statisticLog?.NumberRecords}} temperature
+                        readings (every 3 minutes).
+                      </p>
                     </div>
+                  </div>
                 </div>
 
                 <div class="card_log col-6 height_temperature">
-                    <div class="d-flex my-auto">
-                        <h6 class="title">Average temperature:</h6>
-                        <p class="description">
-                          {{statisticLog?.AverageValue}}°C
-                        </p>
-                    </div>
+                  <div class="d-flex my-auto">
+                    <h6 class="title">Average temperature:</h6>
+                    <p class="description">
+                      {{statisticLog?.AverageValue}}°C
+                    </p>
+                  </div>
 
-                    <div class="d-flex my-auto">
-                        <h6 class="title">Highest temperature: </h6>
-                        <p class="description">
-                          {{statisticLog?.HighestValue}}°C (recorded on {{statisticLog?.DateHighestValue}} at {{statisticLog?.TimeHighestValue}})
-                        </p>
-                    </div>
+                  <div class="d-flex my-auto">
+                    <h6 class="title">Highest temperature: </h6>
+                    <p class="description">
+                      {{statisticLog?.HighestValue}}°C (recorded on
+                      {{statisticLog?.DateHighestValue}} at
+                      {{statisticLog?.TimeHighestValue}})
+                    </p>
+                  </div>
 
-                    <div class="d-flex my-auto">
-                        <h6 class="title">Lowest temperature: </h6>
-                        <p class="description">
-                          {{statisticLog?.LowestValue}}°C (recorded on {{statisticLog?.DateLowestValue}} at {{statisticLog?.TimeLowestValue}})
-                        </p>
-                    </div>
+                  <div class="d-flex my-auto">
+                    <h6 class="title">Lowest temperature: </h6>
+                    <p class="description">
+                      {{statisticLog?.LowestValue}}°C (recorded on
+                      {{statisticLog?.DateLowestValue}} at
+                      {{statisticLog?.TimeLowestValue}})
+                    </p>
+                  </div>
+
                 </div>
-            </div>
+              </div>
             </div>
           </div>
           <div class="modal-footer">
