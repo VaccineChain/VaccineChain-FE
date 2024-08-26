@@ -12,9 +12,10 @@ import { AppApexChartLineComponent } from '../component/apexchart/line/line.comp
 import { Device } from '../models/device';
 import { Vaccine } from '../models/vaccine';
 import Swal from 'sweetalert2';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { statisticLogsByVaccineId } from '../models/statisticLogsByVaccineId';
+import { handleToastErrors } from '../utils';
 
 @Component({
   selector: 'app-manage-vaccine',
@@ -30,6 +31,14 @@ export class ManageVaccineComponent implements OnInit {
   popupTitle: string = '';
   vaccineForm!: FormGroup;
   isEditMode: boolean = false;
+  searchForm!: FormGroup;
+  selectSearchOption: any = [
+    { id: 1, name: 'Vaccine ID' },
+    { id: 2, name: 'Vaccine Name' }
+  ];
+  searchValue: string = '';
+  currentSearchUrl: string | null = null;
+  showClearButton = false;
 
   constructor(
     private vaccineService: VaccineService,
@@ -41,6 +50,7 @@ export class ManageVaccineComponent implements OnInit {
   ngOnInit(): void {
     this.loadVaccines();
     this.initForm();
+    this.createSearchForm();
   }
 
   initForm() {
@@ -56,27 +66,38 @@ export class ManageVaccineComponent implements OnInit {
   get vaccineId() {
     return this.vaccineForm.get('vaccineId') as FormControl;
   }
-
   get vaccineName() {
     return this.vaccineForm.get('vaccineName') as FormControl;
   }
-
   get manufacturer() {
     return this.vaccineForm.get('manufacturer') as FormControl;
   }
-
   get batchNumber() {
     return this.vaccineForm.get('batchNumber') as FormControl;
   }
-
   get expirationDate() {
     return this.vaccineForm.get('expirationDate') as FormControl;
+  }
+
+  createSearchForm() {
+    this.searchForm = new FormGroup({
+      searchType: new FormControl(1, Validators.required),
+      searchKeyword: new FormControl('', Validators.required)
+    });
+  }
+
+  get searchType() {
+    return this.searchForm.get('searchType') as FormControl;
+  }
+  get searchKeyword() {
+    return this.searchForm.get('searchKeyword') as FormControl
   }
 
   loadVaccines() {
     this.vaccineService.getVaccines().subscribe({
       next: (response: Vaccine[]) => {
         this.vaccines = response;
+        this.clearSearch();
       },
       error: (response: any) => {
         this.showToast.showErrorMessage(
@@ -106,6 +127,59 @@ export class ManageVaccineComponent implements OnInit {
       expirationDate: vaccine.ExpirationDate,
     });
     this.vaccineForm.controls['vaccineId'].disable();
+  }
+
+  onSearch() {
+    var type = this.searchForm.value.searchType;
+    var value = this.searchForm.value.searchKeyword;
+
+    if(value == '') {
+      const message = type == '1' ? 'Please enter a vaccine ID' : 'Please enter a vaccine name';
+      this.showToast.showWarningMessage('Warning', message);
+      return;
+    }
+    this.searchValue = value;
+
+    if (type == '1') {
+      this.searchByVaccineId(value);
+    } else if (type == '2') {
+      this.searchByVaccineName(value);
+    }
+  }
+
+  searchByVaccineId(vaccineId : string) {
+    this.vaccineService.getVaccineById(vaccineId).subscribe({
+      next: (response) => {
+        this.vaccines = [response];
+        this.currentSearchUrl = `Search vaccine Id: ${vaccineId}`;
+      },
+      error: (response: any) => {
+        handleToastErrors(this.showToast, response);
+      },
+    });
+  }
+
+  searchByVaccineName(vaccineName: string) {
+    this.vaccineService.getVaccineByName(vaccineName).subscribe({
+      next: (response) => {
+        this.vaccines = response;
+        this.currentSearchUrl = `Search vaccine Name: ${vaccineName}`;
+      },
+      error: (response: any) => {
+        handleToastErrors(this.showToast, response);
+      },
+    });
+  }
+
+  onInputChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.showClearButton = input.value.length > 0;
+  }
+
+  clearSearch() {
+    this.searchForm.get('searchKeyword')?.reset(); // Xóa giá trị trong ô input
+    this.showClearButton = false; // Ẩn nút xóa
+    this.currentSearchUrl = null;
   }
 
   submit(): void {

@@ -455,4 +455,79 @@ td.text-right {
   justify-content: center;
 }
 
+// SEARCH BAR
+.search{
+  width: 80% !important;
+  margin: 0 0 20px 100px;
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+  .search select {
+      padding: 10px;
+      border: none;
+      outline: none;
+      width: 20%;
+      cursor: pointer;
+  }
+.search input{
+  width: 90% !important;
+  height: 30px;
+  padding: 0;
+  border: none;
+  outline:none;
+  margin-left: 10px;
+}
+.search button{
+  width: 10%;
+  padding: 0;
+  border: none;
+  outline:none;
+  font-size: 25px;
+  margin: auto;
+  margin-right: 0;
+  color: rgb(139, 139, 139);
+  background: white;
 
+}
+@media only screen and (max-width: 600px) {
+  .search {
+      width: 100%;
+      flex-wrap: wrap;
+  }
+  .search select {
+      width: 100%;
+  }
+}
+
+.btn_nav {
+  background-color: white;
+  border: none;
+  color:#899bbd;
+  text-decoration: underline;
+  font-weight: 600;
+  font-family: "Roboto", sans-serif;
+  letter-spacing: 1px;
+}
+
+.btn_clear{
+  background-color: white;
+  border: none;
+  color:#ed1a25;
+
+}
+
+.btn-clear{
+  position: absolute;
+  text-align: center;
+  right: 315px;
+  width: 55px !important;
+}
+
+.margin{
+  margin: 30px 100px 20px 0;
+}

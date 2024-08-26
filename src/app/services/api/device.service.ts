@@ -14,9 +14,12 @@ export class DeviceService {
   }
 
   getDeviceById(id: string) {
-    return this.http.get<Device>(`/api/Devices/${id}`);
+    return this.http.get<Device>(`/api/Devices/GetById?deviceId=${id}`);
   }
 
+  getDeviceByName(name: string) {
+    return this.http.get<Device[]>(`/api/Devices/GetById?deviceName=${name}`);
+  }
   createDevice(Device: Device) {
     return this.http.post<Device>('/api/Devices', Device);
   }

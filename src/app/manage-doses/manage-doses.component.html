@@ -15,13 +15,51 @@
     <div class="container-fluid">
       <div class="row dashboard mt-4 mb-5">
         <div id="cust-wrap">
-          <div class="text-end mb-3 me-2 add_icon">
-            <button class="btn-add slide" data-bs-toggle="modal"
-              (click)="openAddDosesModal()"
-              data-bs-target="#doseModal">
-              <i class="bi bi-plus-circle"></i>
-              Add new
-            </button>
+          <div
+            class="d-flex justify-content-between align-items-center margin">
+            <form [formGroup]="searchForm" (ngSubmit)="onSearch()"
+              class="search d-flex align-items-center">
+              <select id="searchType" name="searchType" class="form-select me-2"
+                formControlName="searchType" required>
+                <option [value]="item.id"
+                  *ngFor="let item of selectSearchOption">{{item.name}}</option>
+              </select>
+              <input type="text" id="searchInput" name="searchKeyword"
+                placeholder="Search..." class="form-control me-2"
+                formControlName="searchKeyword" required value="{{searchValue}}"
+                (input)="onInputChange($event)">
+
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i>
+              </button>
+
+              <!-- Nút xóa (Clear Button) -->
+              <button *ngIf="showClearButton" type="button"
+                class="btn-clear"
+                (click)="loadDoses()">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </form>
+            <div class="text-end mb-3 me-2 add_icon">
+              <button class="btn-add slide" data-bs-toggle="modal"
+                (click)="openAddDosesModal()"
+                data-bs-target="#doseModal">
+                <i class="bi bi-plus-circle"></i>
+                Add new
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="doses.length == 0" class="d-block" :class="d-none" class="empty">
+            <div class="eyes d-flex">
+              <div class="eye">
+                <div class="ball"></div>
+              </div>
+              <div class="eye">
+                <div class="ball"></div>
+              </div>
+            </div>
+            <h5 class="title_empty">No logs available</h5>
           </div>
 
           <table class="custom-table-fill container_admin">
@@ -120,8 +158,8 @@
             </div>
 
             <button class="btn_save_change btn form__button"
-                type="submit">Save
-                Change</button>
+              type="submit">Save
+              Change</button>
           </form>
         </div>
         <div class="modal-footer">

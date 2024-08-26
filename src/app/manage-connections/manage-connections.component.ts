@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import { VaccineService } from '../services/api/vaccine.service';
 import { DeviceService } from '../services/api/device.service';
 import { RouterLink } from '@angular/router';
+import { Connection } from '../models/connection';
 
 @Component({
   selector: 'app-manage-connections',
@@ -22,17 +23,18 @@ import { RouterLink } from '@angular/router';
 export class ManageConnectionsComponent implements OnInit {
   connectForm!: FormGroup;
   logs: Log[] = [];
-  connections: Log[] = [];
+  connections: Connection[] = [];
   devices: string[] = [];
   vaccines: string[] = [];
-
+  isLightMode = true;
+  form_title = 'Create Connection';
+  form_button = 'Save';
 
   constructor(
     private logService: LogService,
     private vaccineService: VaccineService,
     private deviceService: DeviceService,
     private showToast: ToastService,
-    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -86,6 +88,7 @@ export class ManageConnectionsComponent implements OnInit {
 
     this.logService.getLogs().subscribe({
       next: (response: Log[]) => {
+        console.log(response);
         this.connections = response;
       },
       error: (response: any) => {
@@ -134,10 +137,6 @@ export class ManageConnectionsComponent implements OnInit {
     });
   }
 
-  viewLogs(vaccineId: string) {
-    this.logs = new Array<Log>();
-  }
-
   deleteConnect(vaccineId: string, deviceId: string) {
     Swal.fire({
       title: 'Are you sure?',
@@ -171,5 +170,21 @@ export class ManageConnectionsComponent implements OnInit {
     });
   }
 
+
+  toggleTheme(): void {
+    this.isLightMode = !this.isLightMode;
+    const mainContent = document.getElementById("main_swap");
+    if (this.isLightMode) {
+      mainContent?.classList.remove('main_swap--dark');
+      mainContent?.classList.add('main_swap--light');
+      this.form_title = 'Create Connection';
+      this.form_button = 'Save';
+    } else {
+      mainContent?.classList.remove('main_swap--light');
+      mainContent?.classList.add('main_swap--dark');
+      this.form_title = 'Search Connection';
+      this.form_button = 'Search';
+    }
+  }
 }
 

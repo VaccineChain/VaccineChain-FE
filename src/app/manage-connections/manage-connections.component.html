@@ -13,9 +13,21 @@
   <!-- Page Content -->
   <div id="page-content-wrapper empty">
     <div class="container-fluid">
-      <div class="d-block dashboard mt-4 mb-5">
-        <div class="row" id="cust-wrap">
-          <div class="col-6 scroll-table">
+      <div class="row dashboard mt-4 mb-5">
+        <div id="cust-wrap" class="row">
+          <div class="col-12 col-md-6 scroll-table">
+            <div *ngIf="connections.length == 0" class="d-block" :class="d-none"
+              class="empty">
+              <div class="eyes d-flex">
+                <div class="eye">
+                  <div class="ball"></div>
+                </div>
+                <div class="eye">
+                  <div class="ball"></div>
+                </div>
+              </div>
+              <h5 class="title_empty">No logs available</h5>
+            </div>
             <table class="custom-table-fill container_admin">
               <thead>
                 <tr class="custom-tr">
@@ -44,8 +56,28 @@
               </tbody>
             </table>
           </div>
-          <div class="col-6 form_add">
-            <h2 class="title">CREATE NEW CONNECT</h2>
+          <div class="col-12 col-md-6 form_add">
+            <div class="swap_title mt-5 mt-md-0 d-flex">
+              <div class="title">
+                <h2 class="title">{{form_title}}</h2>
+              </div>
+              <div class="swap">
+                <section class="main_swap main_swap--light" id="main_swap">
+                  <button type="button" id="switch" (click)="toggleTheme()"
+                    title="Change to add">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="bxs-sun"
+                      width="1em" height="1em" viewBox="0 0 24 24"><path
+                        fill="currentColor"
+                        d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z" /></svg>
+                    <span class="btn-switch"></span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="bxs-moon"
+                      width="1em" height="1em" viewBox="0 0 24 24"><path
+                        fill="currentColor"
+                        d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5l-1.5 1.5l-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16A6.5 6.5 0 0 1 3 9.5A6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14S14 12 14 9.5S12 5 9.5 5" /></svg>
+                  </button>
+                </section>
+              </div>
+            </div>
             <!-- Nội dung logs sẽ được cập nhật ở đây -->
             <form class="form" id="login" [formGroup]="connectForm"
               (ngSubmit)="submit()">
@@ -84,22 +116,9 @@
                 </div>
               </div>
               <button class="btn_save_change btn form__button" type="submit">
-                Save Change
+                {{form_button}}
               </button>
             </form>
-          </div>
-        </div>
-        <div class="empty">
-          <div class="eyes">
-            <div class="eye">
-              <div class="ball"></div>
-            </div>
-
-            <div class="eye">
-              <div class="ball"></div>
-            </div>
-
-            <h5 class="title_empty">No logs available</h5>
           </div>
         </div>
       </div>

@@ -1,5 +1,7 @@
+import { Vaccine } from "./vaccine";
+
 export interface statisticLogsByVaccineId {
-  VaccineId: string,
+  Vaccine: Vaccine,
   DeviceId: Array<string>,
   AverageValue: number,
   HighestValue: number,

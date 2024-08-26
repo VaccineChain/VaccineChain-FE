@@ -8,6 +8,7 @@ import { AppApexChartLineComponent } from '../component/apexchart/line/line.comp
 import { Device } from '../models/device';
 import Swal from 'sweetalert2';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { handleToastErrors } from '../utils';
 
 @Component({
   selector: 'app-manage-device',
@@ -24,6 +25,13 @@ export class ManageDeviceComponent implements OnInit {
   deviceForm!: FormGroup;
   isEditMode: boolean = false;
   sensorTypes: string[] = ['Temperature Sensor', 'Humidity Sensor', 'Light Sensor']; // example sensor types
+  searchForm!: FormGroup;
+  selectSearchOption: any = [
+    { id: 1, name: 'Device ID' },
+  ];
+  searchValue: string = '';
+  currentSearchUrl: string | null = null;
+  showClearButton = false;
 
 
   constructor(
@@ -35,6 +43,21 @@ export class ManageDeviceComponent implements OnInit {
   ngOnInit(): void {
     this.loadDevices();
     this.initForm();
+    this.createSearchForm();
+  }
+
+  createSearchForm() {
+    this.searchForm = new FormGroup({
+      searchType: new FormControl(1, Validators.required),
+      searchKeyword: new FormControl('', Validators.required)
+    });
+  }
+
+  get searchType() {
+    return this.searchForm.get('searchType') as FormControl;
+  }
+  get searchKeyword() {
+    return this.searchForm.get('searchKeyword') as FormControl
   }
 
   initForm() {
@@ -56,7 +79,6 @@ export class ManageDeviceComponent implements OnInit {
   get sensorType() {
     return this.deviceForm.get('sensorType') as FormControl;
   }
-
 
   loadDevices() {
     this.deviceService.getDevices().subscribe({
@@ -154,4 +176,46 @@ export class ManageDeviceComponent implements OnInit {
       }
     });
   }
+
+  onSearch() {
+    var type = this.searchForm.value.searchType;
+    var value = this.searchForm.value.searchKeyword;
+
+    if(value == '') {
+      const message = type == '1' ? 'Please enter a vaccine ID' : 'Please enter a vaccine name';
+      this.showToast.showWarningMessage('Warning', message);
+      return;
+    }
+    this.searchValue = value;
+
+    if (type == '1') {
+      this.searchByDeviceId(value);
+    }
+  }
+
+  searchByDeviceId(deviceId : string) {
+    this.deviceService.getDeviceById(deviceId).subscribe({
+      next: (response) => {
+        this.devices = [response];
+        this.currentSearchUrl = `Search Device Id: ${deviceId}`;
+      },
+      error: (response: any) => {
+        handleToastErrors(this.showToast, response);
+      },
+    });
+  }
+
+
+
+  onInputChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.showClearButton = input.value.length > 0;
+  }
+
+  clearSearch() {
+    this.searchForm.get('searchKeyword')?.reset(); // Xóa giá trị trong ô input
+    this.showClearButton = false; // Ẩn nút xóa
+    this.currentSearchUrl = null;
+  }
+
 }

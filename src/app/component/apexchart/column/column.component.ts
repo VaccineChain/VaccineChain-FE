@@ -69,18 +69,18 @@ export class AppApexChartColumnComponent {
 
       xaxis: {
         categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec"
+          "VAC001",
+          "VAC002",
+          "VAC003",
+          "VAC004",
+          "VAC005",
+          "VAC006",
+          "VAC007",
+          "VAC008",
+          "VAC009",
+          "VAC0010",
+          "VAC0011",
+          "VAC0012"
         ],
         position: "top",
         labels: {

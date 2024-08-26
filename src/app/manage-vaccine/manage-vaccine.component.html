@@ -5,8 +5,16 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a
             routerLink="/admin/dashboard">Home</a></li>
-        <li class="breadcrumb-item active">Manage Vaccine</li>
+        <li class="breadcrumb-item active"><button class="btn_nav"
+            (click)="loadVaccines()">Manage Vaccine</button></li>
+        <li class="breadcrumb-item active" *ngIf="currentSearchUrl">{{
+          currentSearchUrl }}
+          <button class="btn_clear" (click)="loadVaccines()">
+            <i class="bi bi-x-circle"></i>
+          </button>
+        </li>
       </ol>
+
     </nav>
   </div><!-- End Page Title -->
 
@@ -15,14 +23,54 @@
     <div class="container-fluid">
       <div class="row mt-4 mb-5">
         <div id="cust-wrap">
-          <div class="text-end mb-3 me-2 add_icon">
-            <button class="btn-add slide" data-bs-toggle="modal"
-              (click)="openAddVaccineModal()"
-              data-bs-target="#vaccineModal">
-              <i class="bi bi-plus-circle"></i>
-              Add new
-            </button>
+          <div
+            class="d-flex justify-content-between align-items-center margin">
+            <form [formGroup]="searchForm" (ngSubmit)="onSearch()"
+              class="search d-flex align-items-center">
+              <select id="searchType" name="searchType" class="form-select me-2"
+                formControlName="searchType" required>
+                <option [value]="item.id"
+                  *ngFor="let item of selectSearchOption">{{item.name}}</option>
+              </select>
+              <input type="text" id="searchInput" name="searchKeyword"
+                placeholder="Search..." class="form-control me-2"
+                formControlName="searchKeyword" required value="{{searchValue}}"
+                (input)="onInputChange($event)">
+
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i>
+              </button>
+
+              <!-- Nút xóa (Clear Button) -->
+              <button *ngIf="showClearButton" type="button"
+                class="btn-clear"
+                (click)="loadVaccines()">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </form>
+
+            <div class="text-end mb-3 me-2 add_icon">
+              <button class="btn-add slide" data-bs-toggle="modal"
+                (click)="openAddVaccineModal()"
+                data-bs-target="#vaccineModal">
+                <i class="bi bi-plus-circle"></i>
+                Add new
+              </button>
+            </div>
           </div>
+
+          <div *ngIf="vaccines.length == 0" class="d-block" :class="d-none" class="empty">
+            <div class="eyes d-flex">
+              <div class="eye">
+                <div class="ball"></div>
+              </div>
+              <div class="eye">
+                <div class="ball"></div>
+              </div>
+            </div>
+            <h5 class="title_empty">No logs available</h5>
+          </div>
+
           <table class="custom-table-fill container_admin">
             <thead>
               <tr class="custom-tr">
@@ -197,7 +245,7 @@
           </div>
           <div class="modal-body popup-body">
             <!-- Nội dung logs sẽ được cập nhật ở đây -->
-            <app-line [vaccineId]="statisticLog?.VaccineId"></app-line>
+            <app-line [vaccineId]="statisticLog?.Vaccine?.VaccineId"></app-line>
 
             <div class="show_more text-end mb-0 me-2 add_icon text-center">
               <button class="btn-add slide">

@@ -1,107 +1,116 @@
 <div class="section1 custom-container">
   <div class="container">
     <div
-      class="row center-conten">
+      class="row center-content title_search">
+      <span><i class="bi bi-search"></i>Search result for</span>
+      <h1>VACCINE ID {{statisticLog.Vaccine.VaccineId}}</h1>
       <div class="col-md-6 vaccine_infor">
-        <span><i class="bi bi-search"></i>Search result for</span>
-        <h1>VACCINE ID VAC001</h1>
         <div class="des">
           <h5>Vaccine Name: </h5>
-          <p>COVID-19 Vaccine</p>
+          <p>{{statisticLog.Vaccine.VaccineName}}</p>
         </div>
         <div class="des">
           <h5>Batch Number: </h5>
-          <p>BATCH001</p>
+          <p>{{statisticLog.Vaccine.BatchNumber}}</p>
         </div>
         <div class="des">
           <h5>Manufacturer: </h5>
-          <p>Johnson & Johnson</p>
+          <p>{{statisticLog.Vaccine.Manufacturer}}</p>
         </div>
         <div class="des">
           <h5>Expiration Date: </h5>
-          <p>August 1, 2024 </p>
+          <p>{{statisticLog.Vaccine.ExpirationDate}} </p>
         </div>
         <div class="space30"></div>
-
       </div>
-      <div class="col-md-6 vaccine_infor">
-        <h2>Dose:</h2>
-        <ul class="list ms-5 ps-3">
+      <div class="col-md-6 vaccine_infor pt-0">
+        <h5>Dose Information:</h5>
+        <ul class="list ms-5 ps-3 mt-3">
           <li><i class="icon-check"></i>
             <div class="dose">
-              <h5>Vaccine Name: </h5>
+              <h6>Location Administered: </h6>
               <p>COVID-19 Vaccine</p>
             </div>
           </li>
           <li><i class="icon-check"></i>
             <div class="dose">
-              <h5>Date Administered:</h5>
+              <h6>Date Administered:</h6>
               <p>August 10, 2024</p>
             </div>
           </li>
           <li><i class="icon-check"></i>
             <div class="dose">
-              <h5>Administrator: </h5>
+              <h6>Administrator: </h6>
               <p>Dr. John Doe</p>
             </div>
           </li>
         </ul>
       </div>
-      <div class="btn-see"  style="display: none;">
-        <button class="button1" id="seeMoreButton" rel="noopener">See more</button>
-      </div>
-      <div class="title_chart vaccine_infor">
-        <span><i class="bi bi-graph-up"></i>Statistic</span>
-      </div>
-      <div class="chart text-center" id="chartContainer">
-        <app-line [vaccineId]="statisticLog?.VaccineId"></app-line>
-      </div>
 
-      <div class="row m-3" id="show_more">
-        <div class="container_log">
-          <div class="col-6">
+      <div class="more" *ngIf="showMore">
+        <div class="title_chart vaccine_infor">
+          <span><i class="bi bi-graph-up"></i>Statistic</span>
+        </div>
+        <div class="chart text-center" id="chartContainer">
+          <app-line [vaccineId]="statisticLog?.Vaccine?.VaccineId"></app-line>
+        </div>
+
+        <div class="row m-3" id="show_more">
+          <div class="container_log">
+            <div class="col-6">
               <div class="card_log">
-                  <div class="d-flex">
-                      <h6 class="title">Time Range:</h6>
-                      <p class="description">
-                          From {{statisticLog?.DateRangeStart}} to {{statisticLog?.DateRangeEnd}}
-                      </p>
-                  </div>
+                <div class="d-flex">
+                  <h6 class="title">Time Range:</h6>
+                  <p class="description">
+                    From {{statisticLog?.DateRangeStart}} to {{statisticLog?.DateRangeEnd}}
+                  </p>
+                </div>
               </div>
 
               <div class="card_log">
-                  <div class="d-flex">
-                      <h6 class="title">Number of Temperature Records:</h6>
-                      <p class="description">
-                          A total of {{statisticLog?.NumberRecords}} temperature readings (every 3 minutes).
-                      </p>
-                  </div>
+                <div class="d-flex">
+                  <h6 class="title">Number of Temperature Records:</h6>
+                  <p class="description">
+                    A total of {{statisticLog?.NumberRecords}} temperature readings (every 3 minutes).
+                  </p>
+                </div>
               </div>
+            </div>
+
+            <div class="card_log col-6 height_temperature">
+              <div class="d-flex my-auto">
+                <h6 class="title">Average temperature:</h6>
+                <p class="description">{{statisticLog?.AverageValue}}°C</p>
+              </div>
+
+              <div class="d-flex my-auto">
+                <h6 class="title">Highest temperature:</h6>
+                <p class="description">
+                  {{statisticLog?.HighestValue}}°C (recorded on {{statisticLog?.DateHighestValue}} at {{statisticLog?.TimeHighestValue}})
+                </p>
+              </div>
+
+              <div class="d-flex my-auto">
+                <h6 class="title">Lowest temperature:</h6>
+                <p class="description">
+                  {{statisticLog?.LowestValue}}°C (recorded on {{statisticLog?.DateLowestValue}} at {{statisticLog?.TimeLowestValue}})
+                </p>
+              </div>
+            </div>
           </div>
-
-          <div class="card_log col-6 height_temperature">
-              <div class="d-flex my-auto">
-                  <h6 class="title">Average temperature:</h6>
-                  <p class="description">
-                    {{statisticLog?.AverageValue}}°C
-                  </p>
-              </div>
-
-              <div class="d-flex my-auto">
-                  <h6 class="title">Highest temperature: </h6>
-                  <p class="description">
-                    {{statisticLog?.HighestValue}}°C (recorded on {{statisticLog?.DateHighestValue}} at {{statisticLog?.TimeHighestValue}})
-                  </p>
-              </div>
-
-              <div class="d-flex my-auto">
-                  <h6 class="title">Lowest temperature: </h6>
-                  <p class="description">
-                    {{statisticLog?.LowestValue}}°C (recorded on {{statisticLog?.DateLowestValue}} at {{statisticLog?.TimeLowestValue}})
-                  </p>
-              </div>
-          </div>
+        </div>
       </div>
+
+
+      <div class="see_button pulse">
+        <a class="dedcription-btn" (click)="toggleShow()">
+          <div class="pulsing"></div>
+          <span class="name-descripeion">{{ showMore ? 'See less' : 'See more' }}</span>
+          <div class="btn-icon">
+            <i class="bi bi-lightbulb-fill"></i>
+          </div>
+        </a>
+      </div>
+
     </div>
   </div>
-</div>

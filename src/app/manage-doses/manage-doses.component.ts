@@ -10,6 +10,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { AppApexChartLineComponent } from '../component/apexchart/line/line.component';
 import { DoseService } from '../services/api/dose.service';
 import { Vaccine } from '../models/vaccine';
+import { handleToastErrors } from '../utils';
 
 @Component({
   selector: 'app-manage-doses',
@@ -25,7 +26,13 @@ export class ManageDosesComponent {
   doseForm!: FormGroup;
   isEditMode: boolean = false;
   vaccineIds: string[] = [];
-
+  searchForm!: FormGroup;
+  selectSearchOption: any = [
+    { id: 1, name: 'Dose Number' },
+  ];
+  searchValue: string = '';
+  currentSearchUrl: string | null = null;
+  showClearButton = false;
 
   constructor(
     private doseService: DoseService,
@@ -37,6 +44,21 @@ export class ManageDosesComponent {
   ngOnInit(): void {
     this.loadDoses();
     this.initForm();
+    this.createSearchForm();
+  }
+
+  createSearchForm() {
+    this.searchForm = new FormGroup({
+      searchType: new FormControl(1, Validators.required),
+      searchKeyword: new FormControl('', Validators.required)
+    });
+  }
+
+  get searchType() {
+    return this.searchForm.get('searchType') as FormControl;
+  }
+  get searchKeyword() {
+    return this.searchForm.get('searchKeyword') as FormControl
   }
 
   initForm() {
@@ -134,8 +156,6 @@ export class ManageDosesComponent {
     const DoseData = this.doseForm.getRawValue();
 
     if (this.isEditMode) {
-      console.log(DoseData);
-
       // Call the update dose service method
       this.doseService.updateDoses(DoseData).subscribe(() => {
         this.loadDoses();
@@ -182,4 +202,44 @@ export class ManageDosesComponent {
       }
     });
   }
+
+  onSearch() {
+    var type = this.searchForm.value.searchType;
+    var value = this.searchForm.value.searchKeyword;
+
+    if(value == '') {
+      const message = type == '1' ? 'Please enter a vaccine ID' : 'Please enter a vaccine name';
+      this.showToast.showWarningMessage('Warning', message);
+      return;
+    }
+    this.searchValue = value;
+
+    if (type == '1') {
+      this.searchByDoseId(value);
+    }
+  }
+
+  searchByDoseId(doseId : number) {
+    this.doseService.getDoseById(doseId).subscribe({
+      next: (response) => {
+        this.doses = [response];
+        this.currentSearchUrl = `Search Dose Id: ${doseId}`;
+      },
+      error: (response: any) => {
+        handleToastErrors(this.showToast, response);
+      },
+    });
+  }
+
+  onInputChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.showClearButton = input.value.length > 0;
+  }
+
+  clearSearch() {
+    this.searchForm.get('searchKeyword')?.reset(); // Xóa giá trị trong ô input
+    this.showClearButton = false; // Ẩn nút xóa
+    this.currentSearchUrl = null;
+  }
+
 }

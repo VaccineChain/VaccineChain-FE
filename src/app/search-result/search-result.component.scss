@@ -9,47 +9,62 @@
 }
 
 .custom-container {
-  margin-top: 50px;
+  margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 50px;
   width: 1200px;
-  height: 700px;
+  height: auto;
   font-size: 14px;
+  box-shadow: 5px 5px 60px rgb(235, 235, 235), -5px -5px 60px rgb(237, 237, 237);
+  border-radius: 15px;
+  padding: 30px;
 }
 
-.vaccine_infor {
-  text-align: start;
-  padding-top: 30px;
-}
-
-.vaccine_infor span {
-  margin: 70px 0 0 100px;
+.title_search span {
+  margin: 20px 0 0 0;
   color: brown;
   font-weight: 900;
   letter-spacing: 5px;
   text-transform: uppercase;
   font-size: 16px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
-.vaccine_infor span i {
+.title_search span i {
   margin-right: 15px;
 }
 
-.vaccine_infor h1 {
+.title_search h1 {
   color: #10212A;
   font-family: "DM Sans", sans-serif;
   letter-spacing: 2px;
   font-weight: 500;
-  margin: 20px 0 20px 100px;
+  margin: 20px 0;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
-.vaccine_infor h2 {
+.vaccine_infor {
+  text-align: start;
+  padding-top: 20px;
+}
+
+.vaccine_infor h5 {
   color: #10212A;
   font-family: "DM Sans", sans-serif;
   letter-spacing: 2px;
   font-weight: 500;
-  margin-left: 65px;
-  margin-top: 45px;
+  margin-left: 50px;
+}
+.vaccine_infor h6 {
+  font-family: "DM Sans", sans-serif;
+  font-size: 18px;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
 }
 
 .vaccine_infor p {
@@ -57,24 +72,33 @@
   font-weight: 600;
 }
 
+.vaccine_infor .list li i{
+  top: 2px;
+}
+
 .des {
   display: flex;
   font-family: "DM Sans", sans-serif;
+  margin: 0 0 0 65px;
 }
 
 .des h5 {
   font-size: 18px;
   /* Adjusts the font size of the heading */
-  margin: 0 0 0 100px;
+  margin: 0 0 20px 51px;
   letter-spacing: 0.5px;
   color: #10212A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .des p {
-  margin-left: 25px;
   font-size: 18px;
   font-weight: 400;
   color: #585A5F;
+  margin: 0 0 20px 51px;
+
 }
 
 .dose {
@@ -82,20 +106,20 @@
   font-family: "DM Sans", sans-serif;
 }
 
-.dose h5 {
-  font-size: 18px;
-  /* Adjusts the font size of the heading */
-  letter-spacing: 0.5px;
-  color: #10212A;
-}
-
 .list li {
   padding: 0 0 0 35px;
   font-family: "DM Sans", sans-serif;
 }
 
+.dose h6 {
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #10212A;
+  margin: 3px 15px 20px 10px;
+
+}
+
 .dose p {
-  margin-left: 25px;
   font-size: 18px;
   font-weight: 400;
   color: #585A5F;
@@ -140,6 +164,8 @@
 
 #chartContainer {
   margin: 10px 0 20px 60px;
+  width: auto;
+  height: 400px;
 }
 
 .title_chart {
@@ -156,8 +182,10 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-  margin: 0 0 50px 35px;
+  margin: 0 0 50px 60px;
   padding: 0 10px 0 0;
+  width: 1065px;
+  height: auto;
 }
 
 .card_log {
@@ -201,4 +229,91 @@
   justify-content: center;
 }
 
+// BUTTON SEE MORE
+.see_button{
+  display: flex;
+  justify-content: center;
+  margin: 0 0 20px 0;
+}
+.see_button a {
+  text-decoration: none !important;
+}
+.dedcription-btn {
+  width: 200px;
+  height: 45px !important;
+  position: relative;
+  display: inline-block;
+  border-radius: 30px;
+  text-align: center;
+  font-size: 18px;
+  padding: 9px 0;
+  transition: all 0.3s;
+  padding-right: 40px;
+  margin: auto;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+}
+.dedcription-btn .btn-icon {
+  background-color: #ed1a25;
+  width: 75px;
+  height: 45px;
+  float: right;
+  position: absolute;
+  border-radius: 30px 30px 30px 0;;
+  right: 0px;
+  top: 0px;
+  transition: all 0.3s;
+}
 
+.dedcription-btn .btn-icon i {
+  font-size: 20px;
+  right: 15px;
+  top: 12px;
+  transition: all 0.3s;
+  animation: gelatine 0.5s infinite;
+}
+@keyframes gelatine {
+  from, to { transform: scale(1, 1); }
+  25% { transform: scale(0.9, 1.1); }
+  50% { transform: scale(1.1, 0.9); }
+  75% { transform: scale(0.95, 1.05); }
+}
+
+.name-descripeion {
+  position: relative;
+  z-index: 9999;
+  font-size: 14px !important;
+  margin: 0 !important;
+  color: #ed1a25 !important; ;
+}
+.btn-icon::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 45px solid #fcfcfc;
+  border-right: 40px solid transparent;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.dedcription-btn:hover .btn-icon {
+  width: 100%;
+  border-radius: 30px;
+}
+.dedcription-btn:hover .btn-icon::after {
+  display: none;
+  opacity: 0.1;
+}
+.btn-icon i {
+  position: absolute;
+  right: 25px;
+  top: 15px;
+  color: #F8DE22;
+}
+.dedcription-btn:hover {
+  color: #fff!important;
+
+  .name-descripeion {
+    color: #fff !important;
+    transform: scale(1.1);
+  }
+}

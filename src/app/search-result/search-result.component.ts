@@ -10,12 +10,12 @@ import { StatisticLogService } from '../services/api/statistic-log.service';
 import { FormatDateService } from '../services/format-date.service';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { NgFor, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-search-result',
   standalone: true,
-  imports: [RouterLink, NgFor, NgIf, AppApexChartLineComponent, ReactiveFormsModule],
+  imports: [RouterLink, NgFor, NgClass, NgIf, AppApexChartLineComponent, ReactiveFormsModule],
   templateUrl: './search-result.component.html',
   styleUrl: './search-result.component.scss'
 })
@@ -26,6 +26,11 @@ export class SearchResultComponent implements OnInit {
   popupTitle: string = '';
   vaccineForm!: FormGroup;
   isEditMode: boolean = false;
+  showMore: boolean = false; // Default state
+
+  toggleShow() {
+    this.showMore = !this.showMore;
+  }
 
   constructor(
     private vaccineService: VaccineService,
@@ -54,6 +59,7 @@ export class SearchResultComponent implements OnInit {
         //2024-08-03T16:46:17.6803832 converse and get only date in DateRangeStart
         response.DateRangeStart = this.formatDateService.toDateString(response.DateRangeStart);
         response.DateRangeEnd = this.formatDateService.toDateString(response.DateRangeEnd);
+        response.Vaccine.ExpirationDate = this.formatDateService.toDateString(response.Vaccine.ExpirationDate);
 
         // DateLowestValue and TimeLowestValue
         response.DateLowestValue = this.formatDateService.toDateString(response.TimeLowestValue);
@@ -62,6 +68,8 @@ export class SearchResultComponent implements OnInit {
         this.statisticLog = response;
         this.statisticLog.TimeLowestValue = this.formatDateService.toTimeString(response.TimeLowestValue);
         this.statisticLog.TimeHighestValue = this.formatDateService.toTimeString(response.TimeHighestValue);
+
+        console.log("🚀 ~ SearchResultComponent ~ loadVaccines ~ this.statisticLog", this.statisticLog)
       },
       error: (response: any) => {
         console.log("🚀 ~ ManageVaccineComponent ~ this.statisticLogService.GetStatisticLog ~ response:", response)
