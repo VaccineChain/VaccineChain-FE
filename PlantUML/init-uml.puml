@@ -1,0 +1,87 @@
+@startuml
+
+package Controller {
+    class DeviceController {
+        +_deviceService : IDeviceService
+        +GetAll()
+        +GetById(id : string)
+    }
+    class DoseController {
+        +_doseService : IDoseService
+        +GetAll()
+        +CreateDose()
+    }
+    class LogController {
+        +_logService : ILogService
+        +GetLogs()
+        +CreateLog()
+    }
+}
+
+package Service {
+    class DeviceService {
+        +_deviceRepository : IDeviceRepository
+        +GetAll()
+        +CreateDevice()
+    }
+    class DoseService {
+        +_doseRepository : IDoseRepository
+        +GetAll()
+        +CreateDose()
+    }
+    class LogService {
+        +_logRepository : ILogRepository
+        +GetLogs()
+        +CreateLog()
+    }
+}
+
+package Repository {
+    class DeviceRepository {
+        +_context : ApplicationDbContext
+        +SaveDevice()
+        +GetAllDevices()
+    }
+    class DoseRepository {
+        +_context : ApplicationDbContext
+        +SaveDose()
+        +GetAllDoses()
+    }
+    class LogRepository {
+        +_context : ApplicationDbContext
+        +SaveLog()
+        +GetAllLogs()
+    }
+}
+
+package DTO {
+    class DeviceDto {
+        +Id : string
+        +Name : string
+    }
+    class DoseDto {
+        +Id : int
+        +Quantity : int
+    }
+    class LogDto {
+        +Id : string
+        +Value : string
+    }
+}
+
+package ORM {
+    class ApplicationDbContext {
+        +Devices : DbSet<Device>
+        +Doses : DbSet<Dose>
+        +Logs : DbSet<Log>
+    }
+}
+
+' Define relationships between packages
+Controller --> Service : "uses"
+Service --> Repository : "uses"
+Repository --> ORM : "uses"
+Controller --> DTO : "uses DTO"
+Service --> DTO : "uses DTO"
+
+@enduml

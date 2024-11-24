@@ -1,5 +1,9 @@
+import { statisticAreaChart } from './../../../models/statisticAreaChart';
 import { Vaccine } from './../../../models/vaccine';
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { ToastService } from "../../../services/toast.service";
+import { StatisticLogService } from "../../../services/api/statistic-log.service";
+import { TemperatureService } from '../../../services/api/temperature.service';
 
 import {
   ChartComponent,
@@ -13,9 +17,6 @@ import {
   ApexLegend,
   NgApexchartsModule
 } from "ng-apexcharts";
-import { ToastService } from "../../../services/toast.service";
-import { StatisticLogService } from "../../../services/api/statistic-log.service";
-import { statisticAreaChart } from '../../../models/statisticAreaChart';
 
 
 export type ChartOptions = {
@@ -47,10 +48,12 @@ export class AppApexChartLineComponent implements OnChanges {
   dates!: string[];
   name!: string[];
   apiData: statisticAreaChart[] = [];
+  temperatureData:any = []; // Mảng để lưu dữ liệu nhận được
 
   constructor(
     private showToast: ToastService,
     private statisticLogService: StatisticLogService,
+    private temperatureService: TemperatureService
 
   ) { }
 
@@ -109,7 +112,7 @@ export class AppApexChartLineComponent implements OnChanges {
         curve: "smooth"
       },
       title: {
-        text: "Detailed Log Overview for Vaccine VAC001",
+        text: "Detailed Log Overview for Vaccine " + this.vaccineId,
         align: "left"
       },
       subtitle: {

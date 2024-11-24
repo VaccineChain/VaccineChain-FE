@@ -1,0 +1,120 @@
+classDiagram
+    %% Define Packages
+    class Controllers {
+        class ControllerBase
+        class DeviceController
+        class Dht11Controller
+        class VaccineController
+        class DoseController
+        class LogController
+        class StatisticController
+    }
+
+    class Services {
+        class IDeviceService
+        class IDht11Service
+        class IVaccineService
+        class IDoseService
+        class ILogService
+        class IStatisticService
+        class DeviceService
+        class Dht11Service
+        class VaccineService
+        class DoseService
+        class LogService
+        class StatisticService
+    }
+
+    class DTO {
+        class DeviceDto
+        class CreateDeviceDto
+        class UpdateDeviceDto
+        class Dht11Dto
+        class CreateDht11Dto
+        class UpdateDht11Dto
+        class VaccineDto
+        class CreateVaccineDto
+        class UpdateVaccineDto
+        class DoseDto
+        class CreateDoseDto
+        class UpdateDoseDto
+        class LogDto
+        class CreateLogDto
+        class UpdateLogDto
+    }
+
+    class Repositories {
+        class IDeviceRepository
+        class IDht11Repository
+        class IVaccineRepository
+        class IDoseRepository
+        class ILogRepository
+        class IStatisticRepository
+    }
+
+    class Models {
+        class ApplicationDbContext
+        class Device
+        class Vaccine
+        class Dose
+        class Log
+    }
+
+    %% Relationships
+    ControllerBase <|-- DeviceController
+    ControllerBase <|-- Dht11Controller
+    ControllerBase <|-- VaccineController
+    ControllerBase <|-- DoseController
+    ControllerBase <|-- LogController
+    ControllerBase <|-- StatisticController
+
+    IDeviceService <|-- DeviceService
+    IDht11Service <|-- Dht11Service
+    IVaccineService <|-- VaccineService
+    IDoseService <|-- DoseService
+    ILogService <|-- LogService
+    IStatisticService <|-- StatisticService
+
+    DeviceService --> IDeviceService
+    Dht11Service --> IDht11Service
+    VaccineService --> IVaccineService
+    DoseService --> IDoseService
+    LogService --> ILogService
+    StatisticService --> IStatisticService
+
+    DeviceDto <|-- CreateDeviceDto
+    CreateDeviceDto <|-- UpdateDeviceDto
+
+    Dht11Dto <|-- CreateDht11Dto
+    CreateDht11Dto <|-- UpdateDht11Dto
+
+    VaccineDto <|-- CreateVaccineDto
+    CreateVaccineDto <|-- UpdateVaccineDto
+
+    DoseDto <|-- CreateDoseDto
+    CreateDoseDto <|-- UpdateDoseDto
+
+    LogDto <|-- CreateLogDto
+    CreateLogDto <|-- UpdateLogDto
+
+    IDeviceRepository <|-- Device
+    IDht11Repository <|-- Dht11
+    IVaccineRepository <|-- Vaccine
+    IDoseRepository <|-- Dose
+    ILogRepository <|-- Log
+    IStatisticRepository <|-- StatisticLogsByVaccineId
+    IStatisticRepository <|-- StatisticAreaChart
+
+    ApplicationDbContext --> Device
+    ApplicationDbContext --> Vaccine
+    ApplicationDbContext --> Dose
+    ApplicationDbContext --> Log
+
+    Device "1" -- "0..*" Log
+    Vaccine "1" -- "0..*" Log
+    Vaccine "1" -- "0..*" Dose
+
+    Controllers ..> Services
+    Services ..> DTO : uses
+    Services ..> Repositories
+    Repositories ..> Models : uses
