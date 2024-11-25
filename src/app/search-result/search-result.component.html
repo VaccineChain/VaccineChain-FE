@@ -1,7 +1,6 @@
 <div class="section1 custom-container">
   <div class="container">
-    <div
-      class="row center-content title_search">
+    <div class="row center-content title_search">
       <span><i class="bi bi-search"></i>Search result for</span>
       <h1>VACCINE ID {{statisticLog.Vaccine.VaccineId}}</h1>
       <div class="col-md-6 vaccine_infor">
@@ -52,7 +51,7 @@
           <span><i class="bi bi-graph-up"></i>Statistic</span>
         </div>
         <div class="chart text-center" id="chartContainer">
-          <app-line [vaccineId]="statisticLog?.Vaccine?.VaccineId"></app-line>
+          <app-line [vaccineId]="statisticLog.Vaccine.VaccineId"></app-line>
         </div>
 
         <div class="row m-3" id="show_more">
@@ -62,7 +61,7 @@
                 <div class="d-flex">
                   <h6 class="title">Time Range:</h6>
                   <p class="description">
-                    From {{statisticLog?.DateRangeStart}} to {{statisticLog?.DateRangeEnd}}
+                    From {{statisticLog.DateRangeStart}} to {{statisticLog.DateRangeEnd}}
                   </p>
                 </div>
               </div>
@@ -71,7 +70,7 @@
                 <div class="d-flex">
                   <h6 class="title">Number of Temperature Records:</h6>
                   <p class="description">
-                    A total of {{statisticLog?.NumberRecords}} temperature readings (every 3 minutes).
+                    A total of {{statisticLog.NumberRecords}} temperature readings (every 3 minutes).
                   </p>
                 </div>
               </div>
@@ -80,20 +79,22 @@
             <div class="card_log col-6 height_temperature">
               <div class="d-flex my-auto">
                 <h6 class="title">Average temperature:</h6>
-                <p class="description">{{statisticLog?.AverageValue}}°C</p>
+                <p class="description">{{statisticLog.AverageValue}}°C</p>
               </div>
 
               <div class="d-flex my-auto">
                 <h6 class="title">Highest temperature:</h6>
                 <p class="description">
-                  {{statisticLog?.HighestValue}}°C (recorded on {{statisticLog?.DateHighestValue}} at {{statisticLog?.TimeHighestValue}})
+                  {{statisticLog.HighestValue}}°C (recorded on {{statisticLog.DateHighestValue}} at
+                  {{statisticLog.TimeHighestValue}})
                 </p>
               </div>
 
               <div class="d-flex my-auto">
                 <h6 class="title">Lowest temperature:</h6>
                 <p class="description">
-                  {{statisticLog?.LowestValue}}°C (recorded on {{statisticLog?.DateLowestValue}} at {{statisticLog?.TimeLowestValue}})
+                  {{statisticLog.LowestValue}}°C (recorded on {{statisticLog.DateLowestValue}} at
+                  {{statisticLog.TimeLowestValue}})
                 </p>
               </div>
             </div>

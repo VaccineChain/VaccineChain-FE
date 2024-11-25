@@ -4,7 +4,6 @@ import { StorageService } from './storage.service';
 import { Router } from '@angular/router';
 import { Token } from '../models/user';
 import { UserInfo } from '../models/profile';
-import { Login } from '../models/login';
 import { Log } from '../models/log';
 
 const ACCESS_KEY = 'ACCESS_TOKEN';
@@ -17,21 +16,19 @@ const ROLE_KEY = 'USER_ROLE';
 export class AuthService {
   constructor(
     private http: HttpClient,
-    private storageService: StorageService,
-    private router: Router
+    private storageService: StorageService
   ) {}
 
-  login(loginData: Login) {
-    return this.http.post<Login>('https://localhost:7241/api/Users/login', loginData);
+  login(loginData: any) {
+    return this.http.post<any>('/api/users/login', loginData);
   }
 
-  resetPassword(data: unknown) {
-    return this.http.post('/api/auth/reset-password', data);
+  register(data: any) {
+    return this.http.post<any>('/api/users/register', data);
   }
 
   logout() {
     this.clearLoginData();
-    this.router.navigate(['/login']);
   }
 
   clearLoginData() {
@@ -40,24 +37,11 @@ export class AuthService {
     this.storageService.remove(ROLE_KEY);
   }
 
-  getRefreshToken() {
-    return this.http.post(
-      '/api/auth/refresh',
-      {
-        //TODO - Check the request body of refresh Api and apply it here
-        refesh_token:
-          this.getTokenResponse()?.accessTokenResponse.refresh_token,
-        access_token: this.getAccessToken(),
-      },
-      { withCredentials: true }
-    );
-  }
-
   //LOCAL SESSION
   saveUser(data: Token): void {
-    this.saveToken(data.accessTokenResponse.access_token);
-    this.storageService.save(ROLE_KEY, data.roles);
-    this.storageService.save(USER_KEY, data.user);
+    this.saveToken(data.Token);
+    this.storageService.save(ROLE_KEY, data.User.Role);
+    this.storageService.save(USER_KEY, data.User);
   }
 
   saveToken(data: unknown) {
@@ -96,7 +80,7 @@ export class AuthService {
     return ['USER'];
   }
 
-  public isLoggedIn(): boolean {
+  isLoggedIn(): boolean {
     if (this.getAccessToken()) {
       return true;
     }

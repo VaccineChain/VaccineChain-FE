@@ -1,14 +1,17 @@
-.dashboard{
+.dashboard {
 
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
+
 .card-header {
   border-bottom: none !important;
   margin: auto 0 auto auto;
 }
-.profile-role{
+
+.profile-role {
   margin-left: 20px;
 }
+
 /* TAB 1 */
 .cycle-tab-container {
   width: 900px;
@@ -19,16 +22,15 @@
 .cycle-tab-container a {
   color: #173649;
   font-size: 16px;
-  font-family: roboto;
   text-align: center;
 }
 
 .tab-pane {
-    text-align: center;
-    height: 350px !important;
-    margin: auto;
-    width: 800px;
-    max-width: 100%;
+  text-align: center;
+  height: 350px !important;
+  margin: auto;
+  width: 800px;
+  max-width: 100%;
 }
 
 .fade {
@@ -44,13 +46,13 @@
   width: 230px;
 }
 
-.cycle-tab-item .active{
+.cycle-tab-item .active {
   border: none !important;
   border-bottom: solid 3px #ed1a25 !important;
 }
 
 .cycle-tab-item:after {
-  display:block;
+  display: block;
   content: '';
   transform: scaleX(0);
   transition: transform 0ms ease-out;
@@ -58,7 +60,7 @@
 
 .cycle-tab-item .active:after {
   transform: scaleX(1);
-  transform-origin:  0% 50%;
+  transform-origin: 0% 50%;
   transition: transform 5000ms ease-in;
 }
 
@@ -75,7 +77,7 @@
 // //////////////////////
 
 // FORM
-.form{
+.form {
   --bg-color: #ede9f8;
   --color-primary: #2d3436;
   --color-secondary: #252c6a;
@@ -83,11 +85,11 @@
   padding: 20px;
 }
 
-.form > *:first-child {
+.form>*:first-child {
   margin-top: 0;
 }
 
-.form > *:last-child {
+.form>*:last-child {
   margin-bottom: 0;
 }
 
@@ -100,7 +102,7 @@
   margin-bottom: 1rem;
 }
 
-.form__input-group i{
+.form__input-group i {
   font-size: 28px;
   margin: auto;
   padding-right: 20px;
@@ -134,7 +136,8 @@
   outline: none;
   cursor: pointer;
   background: var(--color-primary);
-  -webkit-user-select: none; /* No Userselect */
+  -webkit-user-select: none;
+  /* No Userselect */
 }
 
 .btn_save_change {

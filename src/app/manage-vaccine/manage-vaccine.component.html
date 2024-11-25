@@ -3,10 +3,8 @@
     <h1>Manage Vaccine</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a
-            routerLink="/admin/dashboard">Home</a></li>
-        <li class="breadcrumb-item active"><button class="btn_nav"
-            (click)="loadVaccines()">Manage Vaccine</button></li>
+        <li class="breadcrumb-item"><a routerLink="/admin/dashboard">Home</a></li>
+        <li class="breadcrumb-item active"><button class="btn_nav" (click)="loadVaccines()">Manage Vaccine</button></li>
         <li class="breadcrumb-item active" *ngIf="currentSearchUrl">{{
           currentSearchUrl }}
           <button class="btn_clear" (click)="loadVaccines()">
@@ -23,35 +21,26 @@
     <div class="container-fluid">
       <div class="row mt-4 mb-5">
         <div id="cust-wrap">
-          <div
-            class="d-flex justify-content-between align-items-center margin">
-            <form [formGroup]="searchForm" (ngSubmit)="onSearch()"
-              class="search d-flex align-items-center">
-              <select id="searchType" name="searchType" class="form-select me-2"
-                formControlName="searchType" required>
-                <option [value]="item.id"
-                  *ngFor="let item of selectSearchOption">{{item.name}}</option>
+          <div class="d-flex justify-content-between align-items-center margin">
+            <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search d-flex align-items-center">
+              <select id="searchType" name="searchType" class="form-select me-2" formControlName="searchType" required>
+                <option [value]="item.id" *ngFor="let item of selectSearchOption">{{item.name}}</option>
               </select>
-              <input type="text" id="searchInput" name="searchKeyword"
-                placeholder="Search..." class="form-control me-2"
-                formControlName="searchKeyword" required value="{{searchValue}}"
-                (input)="onInputChange($event)">
+              <input type="text" id="searchInput" name="searchKeyword" placeholder="Search..." class="form-control me-2"
+                formControlName="searchKeyword" required value="{{searchValue}}" (input)="onInputChange($event)">
 
               <button type="submit" class="btn btn-primary">
                 <i class="bi bi-search"></i>
               </button>
 
               <!-- Nút xóa (Clear Button) -->
-              <button *ngIf="showClearButton" type="button"
-                class="btn-clear"
-                (click)="loadVaccines()">
+              <button *ngIf="showClearButton" type="button" class="btn-clear" (click)="loadVaccines()">
                 <i class="bi bi-x-lg"></i>
               </button>
             </form>
 
             <div class="text-end mb-3 me-2 add_icon">
-              <button class="btn-add slide" data-bs-toggle="modal"
-                (click)="openAddVaccineModal()"
+              <button class="btn-add slide" data-bs-toggle="modal" (click)="openAddVaccineModal()"
                 data-bs-target="#vaccineModal">
                 <i class="bi bi-plus-circle"></i>
                 Add new
@@ -90,229 +79,196 @@
                 <td class="col-2 custom-td text-left">{{item.VaccineName}}</td>
                 <td class="col-2 custom-td text-left">{{item.BatchNumber}}</td>
                 <td class="col-2 custom-td text-left">{{item.Manufacturer}}</td>
-                <td
-                  class="col-2 custom-td text-left">{{item.ExpirationDate}}</td>
-                <td
-                  class="col-2 custom-td text-left">{{item.CreatedAt}}</td>
+                <td class="col-2 custom-td text-left">{{item.ExpirationDate}}</td>
+                <td class="col-2 custom-td text-left">{{item.CreatedAt}}</td>
                 <td class="col-2 custom-td text-left view_temperature">
-                  <button class="btn btn-warning"
-                    (click)="viewLogs(item.VaccineId)" data-bs-toggle="modal"
+                  <button class="btn btn-warning" (click)="viewLogs(item.VaccineId)" data-bs-toggle="modal"
                     data-bs-target="#viewLogsModal">
                     <i class="bi bi-eye ms-0"></i>
                   </button>
-                  <td class="col-2 custom-td text-left view_temperature">
-                    <div class="d-flex">
-                      <button class="btn btn-success me-1"
-                        (click)="deleteVaccine(item.VaccineId)">
-                        <i class="bi bi-trash"></i>
-                      </button>
-                      <button class="btn btn-danger" data-bs-toggle="modal"
-                        data-bs-target="#vaccineModal"
-                        (click)="openEditVaccineModal(item)">
-                        <i class="bi bi-pencil-square"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                <td class="col-2 custom-td text-left view_temperature">
+                  <div class="d-flex">
+                    <button class="btn btn-success me-1" (click)="deleteVaccine(item.VaccineId)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#vaccineModal"
+                      (click)="openEditVaccineModal(item)">
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
-    <!-- /#page-content-wrapper -->
+  </div>
+  <!-- /#page-content-wrapper -->
 
-    <!-- Modal -->
-    <div class="modal fade" id="vaccineModal" tabindex="-1"
-      aria-labelledby="vaccineModalLabel" aria-hidden="true">
-      <div
-        class="modal-dialog custom-modal-dialog modal-lg modal-dialog-centered ">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="vaccineModalLabel">{{popupTitle}}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"
-              aria-label="Close"></button>
-          </div>
-          <div class="modal-body popup-body">
-            <!-- Nội dung logs sẽ được cập nhật ở đây -->
-            <form [formGroup]="vaccineForm"
-              (ngSubmit)="submit()" class="form" id="login">
-              <div class="form__input-group d-flex">
-                <i class="bi bi-cpu"></i>
-                <div class="w-100">
-                  <input type="text" class="form__input" autofocus
-                    placeholder="Vaccine ID" id="vaccineIdInput"
-                    [class.is-invalid]="vaccineId.invalid && vaccineId.touched"
-                    formControlName="vaccineId">
-                  <div
-                    *ngIf="vaccineId?.invalid && vaccineId?.touched"
-                    class="invalid-feedback">
-                    <small *ngIf="vaccineId?.errors?.['required']">
-                      Please enter vaccine ID
-                    </small>
-                  </div>
-                </div>
-              </div>
-              <div class="form__input-group d-flex">
-                <i class="bi bi-type"></i>
-                <div class="w-100">
-                  <input type="text" class="form__input" autofocus
-                    placeholder="Vaccine Name" id="vaccineNameInput"
-                    [class.is-invalid]="vaccineName.invalid && vaccineName.touched"
-                    formControlName="vaccineName">
-                  <div
-                    *ngIf="vaccineName?.invalid && vaccineName?.touched"
-                    class="invalid-feedback">
-                    <small *ngIf="vaccineName?.errors?.['required']">
-                      Please enter vaccine Name
-                    </small>
-                  </div>
-                </div>
-              </div>
-              <div class="form__input-group d-flex">
-                <i class="bi bi-archive"></i>
-                <div class="w-100">
-                  <input type="text" class="form__input" autofocus
-                    placeholder="Batch Number" id="batchNumberInput"
-                    [class.is-invalid]="batchNumber.invalid && batchNumber.touched"
-                    formControlName="batchNumber">
-                  <div
-                    *ngIf="batchNumber?.invalid && batchNumber?.touched"
-                    class="invalid-feedback">
-                    <small *ngIf="batchNumber?.errors?.['required']">
-                      Please enter Batch Number
-                    </small>
-                  </div>
-                </div>
-              </div>
-              <div class="form__input-group d-flex">
-                <i class="bi bi-hospital"></i>
-                <div class="w-100">
-                  <input type="text" class="form__input" autofocus
-                    placeholder="Manufacturer" id="manufacturerInput"
-                    [class.is-invalid]="manufacturer.invalid && manufacturer.touched"
-                    formControlName="manufacturer">
-                  <div
-                    *ngIf="manufacturer?.invalid && manufacturer?.touched"
-                    class="invalid-feedback">
-                    <small *ngIf="manufacturer?.errors?.['required']">
-                      Please enter Manufacturer
-                    </small>
-                  </div>
-                </div>
-              </div>
-              <div class="form__input-group d-flex">
-                <i class="bi bi-calendar-week"></i>
-                <div class="w-100">
-                  <input type="datetime-local" class="form__input" autofocus
-                    placeholder="Expiration Date" id="expirationDateInput"
-                    [class.is-invalid]="expirationDate.invalid && expirationDate.touched"
-                    formControlName="expirationDate">
-                  <div
-                    *ngIf="expirationDate?.invalid && expirationDate?.touched"
-                    class="invalid-feedback">
-                    <small *ngIf="expirationDate?.errors?.['required']">
-                      Please enter Expiration Date
-                    </small>
-                  </div>
-                </div>
-              </div>
-              <a>
-                <button class="btn_save_change btn form__button" type="submit">
-                  Save Change
-                </button>
-              </a>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary"
-              data-bs-dismiss="modal">Close</button>
-          </div>
+  <!-- Modal -->
+  <div class="modal fade" id="vaccineModal" tabindex="-1" aria-labelledby="vaccineModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog modal-lg modal-dialog-centered ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="vaccineModalLabel">{{popupTitle}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-      </div>
-    </div>
-
-    <!-- Modal Logs -->
-    <div class="modal fade" id="viewLogsModal" tabindex="-1"
-      aria-labelledby="logModalLabel" aria-hidden="true">
-      <div
-        class="modal-dialog custom-modal-dialog modal-xl-lg modal-dialog-centered ">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="logModalLabel">{{popupTitle}}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"
-              aria-label="Close"></button>
-          </div>
-          <div class="modal-body popup-body">
-            <!-- Nội dung logs sẽ được cập nhật ở đây -->
-            <app-line [vaccineId]="statisticLog?.Vaccine?.VaccineId"></app-line>
-
-            <div class="show_more text-end mb-0 me-2 add_icon text-center">
-              <button class="btn-add slide">
-                <i class="bi bi-plus-circle"></i>
-                Show more
+        <div class="modal-body popup-body">
+          <!-- Nội dung logs sẽ được cập nhật ở đây -->
+          <form [formGroup]="vaccineForm" (ngSubmit)="submit()" class="form" id="login">
+            <div class="form__input-group d-flex">
+              <i class="bi bi-cpu"></i>
+              <div class="w-100">
+                <input type="text" class="form__input" autofocus placeholder="Vaccine ID" id="vaccineIdInput"
+                  [class.is-invalid]="vaccineId.invalid && vaccineId.touched" formControlName="vaccineId">
+                <div *ngIf="vaccineId?.invalid && vaccineId?.touched" class="invalid-feedback">
+                  <small *ngIf="vaccineId?.errors?.['required']">
+                    Please enter vaccine ID
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="form__input-group d-flex">
+              <i class="bi bi-type"></i>
+              <div class="w-100">
+                <input type="text" class="form__input" autofocus placeholder="Vaccine Name" id="vaccineNameInput"
+                  [class.is-invalid]="vaccineName.invalid && vaccineName.touched" formControlName="vaccineName">
+                <div *ngIf="vaccineName?.invalid && vaccineName?.touched" class="invalid-feedback">
+                  <small *ngIf="vaccineName?.errors?.['required']">
+                    Please enter vaccine Name
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="form__input-group d-flex">
+              <i class="bi bi-archive"></i>
+              <div class="w-100">
+                <input type="text" class="form__input" autofocus placeholder="Batch Number" id="batchNumberInput"
+                  [class.is-invalid]="batchNumber.invalid && batchNumber.touched" formControlName="batchNumber">
+                <div *ngIf="batchNumber?.invalid && batchNumber?.touched" class="invalid-feedback">
+                  <small *ngIf="batchNumber?.errors?.['required']">
+                    Please enter Batch Number
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="form__input-group d-flex">
+              <i class="bi bi-hospital"></i>
+              <div class="w-100">
+                <input type="text" class="form__input" autofocus placeholder="Manufacturer" id="manufacturerInput"
+                  [class.is-invalid]="manufacturer.invalid && manufacturer.touched" formControlName="manufacturer">
+                <div *ngIf="manufacturer?.invalid && manufacturer?.touched" class="invalid-feedback">
+                  <small *ngIf="manufacturer?.errors?.['required']">
+                    Please enter Manufacturer
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="form__input-group d-flex">
+              <i class="bi bi-calendar-week"></i>
+              <div class="w-100">
+                <input type="datetime-local" class="form__input" autofocus placeholder="Expiration Date"
+                  id="expirationDateInput" [class.is-invalid]="expirationDate.invalid && expirationDate.touched"
+                  formControlName="expirationDate">
+                <div *ngIf="expirationDate?.invalid && expirationDate?.touched" class="invalid-feedback">
+                  <small *ngIf="expirationDate?.errors?.['required']">
+                    Please enter Expiration Date
+                  </small>
+                </div>
+              </div>
+            </div>
+            <a>
+              <button class="btn_save_change btn form__button" type="submit">
+                Save Change
               </button>
-            </div>
-
-            <div class="row m-3" id="show_more">
-              <div class="container_log">
-                <div class="col-6">
-                  <div class="card_log">
-                    <div class="d-flex">
-                      <h6 class="title">Time Range:</h6>
-                      <p class="description">
-                        From {{statisticLog?.DateRangeStart}} to
-                        {{statisticLog?.DateRangeEnd}}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="card_log">
-                    <div class="d-flex">
-                      <h6 class="title">Number of Temperature Records:</h6>
-                      <p class="description">
-                        A total of {{statisticLog?.NumberRecords}} temperature
-                        readings (every 3 minutes).
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="card_log col-6 height_temperature">
-                  <div class="d-flex my-auto">
-                    <h6 class="title">Average temperature:</h6>
-                    <p class="description">
-                      {{statisticLog?.AverageValue}}°C
-                    </p>
-                  </div>
-
-                  <div class="d-flex my-auto">
-                    <h6 class="title">Highest temperature: </h6>
-                    <p class="description">
-                      {{statisticLog?.HighestValue}}°C (recorded on
-                      {{statisticLog?.DateHighestValue}} at
-                      {{statisticLog?.TimeHighestValue}})
-                    </p>
-                  </div>
-
-                  <div class="d-flex my-auto">
-                    <h6 class="title">Lowest temperature: </h6>
-                    <p class="description">
-                      {{statisticLog?.LowestValue}}°C (recorded on
-                      {{statisticLog?.DateLowestValue}} at
-                      {{statisticLog?.TimeLowestValue}})
-                    </p>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary"
-              data-bs-dismiss="modal">Close</button>
-          </div>
+            </a>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
-  </main>
+  </div>
+
+  <!-- Modal Logs -->
+  <div class="modal fade" id="viewLogsModal" tabindex="-1" aria-labelledby="logModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog modal-xl-lg modal-dialog-centered ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logModalLabel">{{popupTitle}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body popup-body">
+          <!-- Nội dung logs sẽ được cập nhật ở đây -->
+          <app-line [vaccineId]="statisticLog.Vaccine.VaccineId"></app-line>
+
+          <div class="show_more text-end mb-0 me-2 add_icon text-center">
+            <button class="btn-add slide">
+              <i class="bi bi-plus-circle"></i>
+              Show more
+            </button>
+          </div>
+
+          <div class="row m-3" id="show_more">
+            <div class="container_log">
+              <div class="col-6">
+                <div class="card_log">
+                  <div class="d-flex">
+                    <h6 class="title">Time Range:</h6>
+                    <p class="description">
+                      From {{statisticLog.DateRangeStart}} to
+                      {{statisticLog.DateRangeEnd}}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="card_log">
+                  <div class="d-flex">
+                    <h6 class="title">Number of Temperature Records:</h6>
+                    <p class="description">
+                      A total of {{statisticLog.NumberRecords}} temperature
+                      readings (every 3 minutes).
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card_log col-6 height_temperature">
+                <div class="d-flex my-auto">
+                  <h6 class="title">Average temperature:</h6>
+                  <p class="description">
+                    {{statisticLog.AverageValue}}°C
+                  </p>
+                </div>
+
+                <div class="d-flex my-auto">
+                  <h6 class="title">Highest temperature: </h6>
+                  <p class="description">
+                    {{statisticLog.HighestValue}}°C (recorded on
+                    {{statisticLog.DateHighestValue}} at
+                    {{statisticLog.TimeHighestValue}})
+                  </p>
+                </div>
+
+                <div class="d-flex my-auto">
+                  <h6 class="title">Lowest temperature: </h6>
+                  <p class="description">
+                    {{statisticLog.LowestValue}}°C (recorded on
+                    {{statisticLog.DateLowestValue}} at
+                    {{statisticLog.TimeLowestValue}})
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

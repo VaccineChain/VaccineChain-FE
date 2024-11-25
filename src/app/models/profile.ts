@@ -1,30 +1,17 @@
 export interface UserInfo {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  profile: Profile;
-  avatar?: Avatar;
-  cover?: Cover;
-  skills?: Array<Skill>;
-  experiences?: Array<Experience>;
+  UserId: string;
+  Email: string;
+  FirstName: string;
+  LastName: string;
+  DateOfBirth: Date;
+  Address: string;
+  ProfilePicture: string;
+  Role: Role;
 }
 
-export interface Profile {
-  id?: string;
-  gender: boolean;
-  dateOfBirth: Date;
-  country: string;
-  address: string;
-  aboutMe: string;
-  phoneNumber: string;
-  hobbies: Array<string>;
-}
-
-export interface Avatar {
-  id?: string;
-  imageId: string;
-  imageUrl: string;
+export interface Role {
+  RoleId: string;
+  Name: string;
 }
 
 export interface ChangeAvatar {
