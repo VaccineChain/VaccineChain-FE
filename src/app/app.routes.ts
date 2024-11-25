@@ -12,6 +12,10 @@ import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { SearchResultComponent } from './search-result/search-result.component';
 import { ManageDosesComponent } from './manage-doses/manage-doses.component';
+import {
+  AuthenticationGuard,
+  UnAuthenticationGuard,
+} from './services/active.guard';
 
 export const routes: Routes = [
   {
@@ -22,20 +26,26 @@ export const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'about', component: AboutComponent },
       { path: 'contact', component: ContactComponent },
-      { path: 'result', component: SearchResultComponent},
-    ]
+      { path: 'result', component: SearchResultComponent },
+    ],
   },
   {
-    path: 'admin', component: AdminComponent, children: [
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AuthenticationGuard],
+    children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'vaccines', component: ManageVaccineComponent },
       { path: 'doses', component: ManageDosesComponent },
       { path: 'devices', component: ManageDeviceComponent },
-      { path: 'connections', component: ManageConnectionsComponent},
+      { path: 'connections', component: ManageConnectionsComponent },
       { path: 'profile', component: ProfileComponent },
-    ]
+    ],
   },
-  { path: 'login', component: LoginComponent },
-
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [UnAuthenticationGuard],
+  },
 ];

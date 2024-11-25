@@ -42,9 +42,15 @@ Author URL : https://themeforest.net/user/divine-store
   --gray-2: #757575;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Lato", sans-serif;
+}
+
 body {
   background: #fff;
-  font-family: "Lato", sans-serif;
   font-weight: 300;
   font-style: normal;
   color: #555;
@@ -60,7 +66,6 @@ h4,
 h5,
 h6 {
   color: #000000;
-  font-family: "Lato", sans-serif;
   font-weight: 300;
   font-style: normal;
   font-weight: 700;
@@ -308,7 +313,6 @@ li {
   font-size: 16px;
   color: #fff;
   text-transform: uppercase;
-  font-family: "Lato", sans-serif;
   font-weight: 300;
   font-style: normal;
   font-weight: 500;
@@ -487,7 +491,6 @@ li {
   font-size: 53px;
   text-transform: none;
   margin: 0 0 15px;
-  font-family: "Lato", sans-serif;
   font-weight: 700;
   font-style: normal;
 }
@@ -915,7 +918,6 @@ li {
 
 .benifits p span {
   font-size: 48px;
-  font-family: ubuntu;
   font-weight: 100;
   vertical-align: -moz-middle-with-baseline;
 }
@@ -2504,80 +2506,6 @@ li {
 }
 
 /* SIDEBAR */
-
-.un-search {
-  position: relative;
-}
-
-.un-search input {
-  width: 100%;
-  height: 50px;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  appearance: none;
-  border: 3px solid rgba(0, 0, 0, 0.1);
-  padding: 5px 12px;
-  outline: none;
-}
-
-.un-search:after {
-  content: "\f002";
-  font-family: fontAwesome;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  transform: translateY(-50%);
-  text-align: center;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  font-size: 18px;
-}
-
-.side-widget {
-  margin-bottom: 50px;
-}
-
-.side-widget h4 {
-  margin: 0 0 20px;
-}
-
-.widget_categories ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.widget_categories ul li {
-  padding: 11px 0;
-  border-bottom: 1px solid #e5e5e5;
-  font-size: 14px;
-}
-
-.widget_categories ul li:last-child {
-  padding: 11px 0 0;
-  border-bottom: none;
-}
-
-.widget_categories ul li:after {
-  content: "\f105";
-  font-size: 13px;
-  font-family: fontAwesome;
-  float: right;
-  color: #444;
-}
-
-.widget_categories ul li a {
-  color: #444;
-}
-
-.widget_categories ul li a:hover {
-  color: #ed1b24;
-}
-
 .widget_about p {
   font-size: 14px;
 }
@@ -2590,11 +2518,6 @@ li {
   padding: 7px 10px;
   font-size: 13px;
   margin-bottom: 5px;
-}
-
-.side-widget {
-  padding: 22px;
-  border: 1px solid #eee;
 }
 
 /* PORTFOLIO */
@@ -3278,7 +3201,6 @@ li {
 .faq h4 span {
   color: #ed1b24;
   font-size: 48px;
-  font-family: ubuntu;
   font-weight: 100;
   vertical-align: -moz-middle-with-baseline;
 }
@@ -3312,7 +3234,6 @@ li {
 .nav-tabs>li>a {
   border: none;
   color: #666;
-  font-family: Roboto Slab;
   color: #000;
   text-transform: uppercase;
   font-size: 13px;
@@ -3374,11 +3295,9 @@ blockquote {
   font-style: italic;
   color: #000000;
   font-size: 16px;
-  font-family: Roboto Slab;
 }
 
 blockquote cite {
-  font-family: Roboto Slab;
   display: block;
   font-style: normal;
   text-transform: uppercase;
@@ -3521,7 +3440,6 @@ blockquote.pull-right {
 
 .process-step small {
   display: block;
-  font-family: Roboto Slab;
   color: #000;
   text-transform: uppercase;
   padding-top: 18px;
@@ -3587,7 +3505,6 @@ blockquote.pull-right {
 
 .process-step2 small {
   display: block;
-  font-family: Roboto Slab;
   color: #999;
   text-transform: uppercase;
   padding-top: 18px;
@@ -3694,7 +3611,6 @@ blockquote.pull-right {
 .footer2 {
   background-color: #f8f9fa;
   padding: 60px 0;
-  font-family: Arial, sans-serif;
   color: #333;
 }
 
@@ -3774,7 +3690,6 @@ blockquote.pull-right {
   line-height: 40px;
   margin: 0 0 60px;
   font-weight: 300;
-  font-family: Roboto Slab;
   letter-spacing: 0.2px;
 }
 
@@ -3875,7 +3790,6 @@ blockquote.pull-right {
   left: 0;
   cursor: pointer;
   color: #fff;
-  font-family: Roboto Slab;
   line-height: 50px;
   text-transform: uppercase;
   font-size: 10px;
@@ -3902,7 +3816,6 @@ blockquote.pull-right {
 
 .settings-section {
   padding: 0px;
-  font-family: Roboto Slab;
   display: table;
   margin: 0 auto;
 }
@@ -4178,13 +4091,11 @@ blockquote.pull-right {
   color: #000;
   font-size: 40px;
   margin: 0 0 20px;
-  font-family: Roboto Slab;
 }
 
 .stats1-info h2 {
   color: #000;
   font-size: 12px;
-  font-family: Roboto Slab;
   text-transform: uppercase;
   letter-spacing: 3px;
   font-weight: 700;
@@ -4209,13 +4120,11 @@ blockquote.pull-right {
   color: #fff;
   font-size: 40px;
   margin: 0 0 20px;
-  font-family: Roboto Slab;
 }
 
 .stats2-info h2 {
   color: #fff;
   font-size: 12px;
-  font-family: Roboto Slab;
   text-transform: uppercase;
   letter-spacing: 3px;
   font-weight: 700;
@@ -4438,7 +4347,6 @@ blockquote.pull-right {
   font-size: 32px;
   text-align: center;
   color: #999;
-  font-family: Roboto Slab;
   margin: 8px 10px 0px 0px;
 }
 
@@ -4452,7 +4360,6 @@ blockquote.pull-right {
   font-size: 32px;
   text-align: center;
   color: #999;
-  font-family: Roboto Slab;
   margin: 8px 10px 0px 0px;
 }
 
@@ -4467,7 +4374,6 @@ blockquote.pull-right {
   text-align: center;
   border-radius: 50%;
   color: #999;
-  font-family: Roboto Slab;
   margin: 8px 10px 0px 0px;
 }
 
@@ -4754,7 +4660,6 @@ blockquote.pull-right {
   font-size: 41px;
   font-weight: 300;
   margin: 7px 0 -5px;
-  font-family: Roboto Slab;
 }
 
 .event-list li time .month {
@@ -4787,7 +4692,6 @@ blockquote.pull-right {
 
 .event-list li .info h2 span {
   display: block;
-  font-family: Roboto Slab;
   font-size: 12px;
   color: #222;
   letter-spacing: 0px;
@@ -4798,7 +4702,6 @@ blockquote.pull-right {
 
 .event-list li .info h2 span+span {
   display: block;
-  font-family: Roboto Slab;
   font-size: 11px;
   color: #555;
   letter-spacing: 0px;
@@ -4904,7 +4807,6 @@ blockquote.pull-right {
   line-height: 120px;
   color: #fff;
   font-size: 40px;
-  font-family: Roboto Slab;
   font-weight: 400;
   margin: 20px auto;
 }
@@ -5129,7 +5031,6 @@ textarea:focus {
 }
 
 .subscribe-elt2 h5 {
-  font-family: Roboto Slab;
   font-size: 40px;
   color: #000;
   font-weight: 300;
@@ -5179,7 +5080,6 @@ textarea:focus {
 }
 
 .subscribe-elt3 h5 {
-  font-family: Roboto Slab;
   font-size: 40px;
   color: #fff;
   font-weight: 300;
@@ -6558,29 +6458,13 @@ textarea:focus {
   scroll-behavior: smooth;
 }
 
-body {
-  font-family: 'Roboto', sans-serif;
-  background: #f6f9ff;
-  color: #444444;
-}
-
 a {
   text-decoration: none;
 }
 
 a:hover {
-
   color: #ed1a25 !important;
   text-decoration: none;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Roboto', sans-serif;
 }
 
 /*--------------------------------------------------------------
@@ -6782,7 +6666,6 @@ h6 {
   font-size: 18px;
   font-weight: 500;
   color: #ed1a25;
-  font-family: 'Roboto', sans-serif;
 }
 
 .card-title span {
@@ -6802,7 +6685,6 @@ h6 {
 /* Alerts */
 .alert-heading {
   font-weight: 500;
-  font-family: 'Roboto', sans-serif;
   font-size: 20px;
 }
 
@@ -6851,7 +6733,6 @@ h6 {
 /* Breadcrumbs */
 .breadcrumb {
   font-size: 14px;
-  font-family: 'Roboto', sans-serif;
   color: #899bbd;
   font-weight: 600;
 }
@@ -6917,7 +6798,6 @@ h6 {
   font-size: 26px;
   font-weight: 700;
   color: #ed1a25;
-  font-family: 'Roboto', sans-serif;
 }
 
 .header {
@@ -7540,7 +7420,6 @@ h6 {
 }
 
 .iconslist .label {
-  font-family: "Lato", sans-serif;
   display: inline-block;
   width: 100%;
   overflow: hidden;

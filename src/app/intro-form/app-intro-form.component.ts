@@ -61,7 +61,7 @@ export class AppIntroFormComponent implements OnInit {
         this.searchForm.reset();
         console.log(response);
         // Chuyển hướng đến SearchResultComponent với vaccineId
-        this.router.navigate(['/result'], { queryParams: { vaccineId: vaccineId } });
+        // this.router.navigate(['/result'], { queryParams: { vaccineId: vaccineId } });
       },
       error: (response: any) => {
         handleToastErrors(this.showToast, response);

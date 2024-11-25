@@ -1,4 +1,4 @@
-import { Avatar, Cover, UserInfo } from './profile';
+import { UserInfo } from './profile';
 
 export interface TokenData {
   access_token: string;
@@ -10,13 +10,14 @@ export interface TokenData {
 }
 
 export interface Token {
-  accessTokenResponse: TokenData;
-  roles: string[];
-  user: UserInfo;
+  Success: boolean;
+  Secret: string;
+  Message: string;
+  Token: string;
+  User: UserInfo;
 }
 
 export enum Roles {
-  ADMIN = 'ADMIN',
-  SUPER_ADMIN = 'SUPER_ADMIN',
-  USER = 'USER',
+  ADMIN = 'Admin',
+  USER = 'User',
 }
