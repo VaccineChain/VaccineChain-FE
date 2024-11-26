@@ -14,7 +14,7 @@ import { Vaccine } from '../models/vaccine';
 import Swal from 'sweetalert2';
 import { FormControl, FormGroup, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { statisticLogsByVaccineId } from '../models/statisticLogsByVaccineId';
+import { VaccineDetail } from '../models/vaccineDetail';
 import { handleToastErrors } from '../utils';
 
 @Component({
@@ -27,7 +27,7 @@ import { handleToastErrors } from '../utils';
 export class ManageVaccineComponent implements OnInit {
   vaccines: Vaccine[] = []
   logs: Log[] = [];
-  statisticLog!: statisticLogsByVaccineId;
+  statisticLog!: VaccineDetail;
   popupTitle: string = '';
   vaccineForm!: FormGroup;
   isEditMode: boolean = false;
@@ -214,7 +214,7 @@ export class ManageVaccineComponent implements OnInit {
     this.popupTitle = 'View Logs for Vaccine ID: ' + vaccineId;
 
     this.statisticLogService.GetStatisticLog(vaccineId).subscribe({
-      next: (response: statisticLogsByVaccineId) => {
+      next: (response: VaccineDetail) => {
         //2024-08-03T16:46:17.6803832 converse and get only date in DateRangeStart
         response.DateRangeStart = this.formatDateService.toDateString(response.DateRangeStart);
         response.DateRangeEnd = this.formatDateService.toDateString(response.DateRangeEnd);

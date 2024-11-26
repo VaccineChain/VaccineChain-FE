@@ -19,4 +19,9 @@ export class FormatDateService {
   toBirthdayString(dateTime: string) {
     return moment(dateTime).format('YYYY-MM-DD');
   }
+
+  toFullDateTimeString(dateTime: string): string {
+    return `${this.toTimeString(dateTime)} - ${this.toDateString(dateTime)}`; // Kết hợp
+  }
 }
+

@@ -2,23 +2,23 @@
   <div class="container">
     <div class="row center-content title_search">
       <span><i class="bi bi-search"></i>Search result for</span>
-      <h1>VACCINE ID {{statisticLog.Vaccine.VaccineId}}</h1>
+      <h1>VACCINE ID {{vaccineDetail.Vaccine.VaccineId}}</h1>
       <div class="col-md-6 vaccine_infor">
         <div class="des">
           <h5>Vaccine Name: </h5>
-          <p>{{statisticLog.Vaccine.VaccineName}}</p>
+          <p>{{vaccineDetail.Vaccine.VaccineName}}</p>
         </div>
         <div class="des">
           <h5>Batch Number: </h5>
-          <p>{{statisticLog.Vaccine.BatchNumber}}</p>
+          <p>{{vaccineDetail.Vaccine.BatchNumber}}</p>
         </div>
         <div class="des">
           <h5>Manufacturer: </h5>
-          <p>{{statisticLog.Vaccine.Manufacturer}}</p>
+          <p>{{vaccineDetail.Vaccine.Manufacturer}}</p>
         </div>
         <div class="des">
           <h5>Expiration Date: </h5>
-          <p>{{statisticLog.Vaccine.ExpirationDate}} </p>
+          <p>{{vaccineDetail.Vaccine.ExpirationDate}} </p>
         </div>
         <div class="space30"></div>
       </div>
@@ -51,7 +51,7 @@
           <span><i class="bi bi-graph-up"></i>Statistic</span>
         </div>
         <div class="chart text-center" id="chartContainer">
-          <app-line [vaccineId]="statisticLog.Vaccine.VaccineId"></app-line>
+          <app-line [vaccineDetail]="vaccineDetail"></app-line>
         </div>
 
         <div class="row m-3" id="show_more">
@@ -61,7 +61,7 @@
                 <div class="d-flex">
                   <h6 class="title">Time Range:</h6>
                   <p class="description">
-                    From {{statisticLog.DateRangeStart}} to {{statisticLog.DateRangeEnd}}
+                    From {{vaccineDetail?.DateRangeStart}} to {{vaccineDetail?.DateRangeEnd}}
                   </p>
                 </div>
               </div>
@@ -70,7 +70,7 @@
                 <div class="d-flex">
                   <h6 class="title">Number of Temperature Records:</h6>
                   <p class="description">
-                    A total of {{statisticLog.NumberRecords}} temperature readings (every 3 minutes).
+                    A total of {{vaccineDetail?.NumberRecords}} temperature readings (every 3 minutes).
                   </p>
                 </div>
               </div>
@@ -79,22 +79,20 @@
             <div class="card_log col-6 height_temperature">
               <div class="d-flex my-auto">
                 <h6 class="title">Average temperature:</h6>
-                <p class="description">{{statisticLog.AverageValue}}°C</p>
+                <p class="description">{{vaccineDetail?.AverageValue}}°C</p>
               </div>
 
               <div class="d-flex my-auto">
                 <h6 class="title">Highest temperature:</h6>
                 <p class="description">
-                  {{statisticLog.HighestValue}}°C (recorded on {{statisticLog.DateHighestValue}} at
-                  {{statisticLog.TimeHighestValue}})
+                  {{vaccineDetail?.HighestValue}}°C (recorded on {{vaccineDetail?.DateHighestValue}} at {{vaccineDetail?.TimeHighestValue}})
                 </p>
               </div>
 
               <div class="d-flex my-auto">
                 <h6 class="title">Lowest temperature:</h6>
                 <p class="description">
-                  {{statisticLog.LowestValue}}°C (recorded on {{statisticLog.DateLowestValue}} at
-                  {{statisticLog.TimeLowestValue}})
+                  {{vaccineDetail?.LowestValue}}°C (recorded on {{vaccineDetail?.DateLowestValue}} at {{vaccineDetail?.TimeLowestValue}})
                 </p>
               </div>
             </div>

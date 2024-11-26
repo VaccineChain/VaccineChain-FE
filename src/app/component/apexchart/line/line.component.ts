@@ -17,6 +17,7 @@ import {
   ApexLegend,
   NgApexchartsModule
 } from "ng-apexcharts";
+import { VaccineDetail } from '../../../models/vaccineDetail';
 
 
 export type ChartOptions = {
@@ -41,7 +42,7 @@ export type ChartOptions = {
 })
 
 export class AppApexChartLineComponent implements OnChanges {
-  @Input() vaccineId!: string | undefined;
+  @Input() vaccineDetail!: VaccineDetail | undefined;
   @ViewChild("chart") chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions> = {};
   value!: number[];
@@ -59,41 +60,27 @@ export class AppApexChartLineComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['vaccineId'] && changes['vaccineId'].currentValue) {
-      this.statisticLogs(changes['vaccineId'].currentValue);
+      this.statisticLogs(this.vaccineDetail);
     }
   }
 
-  statisticLogs(Vaccine: string) {
-    this.statisticLogService.GetStatisticsForAreaChart(Vaccine).subscribe({
-      next: (response: statisticAreaChart[]) => {
-        console.log(response);
-        this.apiData = response;
-        this.initChart();
-      },
-      error: (response: any) => {
-        this.showToast.showErrorMessage(
-          "Error",
-          response.error?.message ||
-          "Something went wrong. Please try again later"
-        );
-      }
-    });
+  statisticLogs(vaccineDetail: VaccineDetail) {
+    // lấy value từ vaccineDetail
+
+    // lấy tất dates từ vaccineDetail
   }
 
   initChart() {
     // Xử lý dữ liệu
     const seriesData = this.apiData.map(device => {
       return {
-        name: device.DeviceId,
+        name: value,
         data: device.SensorValue.map(entry => ({
           x: new Date(entry.Timestamp).getTime(),
           y: entry.Value
         }))
       };
     });
-
-    // Lấy danh sách các ngày từ dữ liệu
-    const dates = [...new Set(this.apiData.flatMap(device => device.SensorValue.map(entry => entry.Timestamp)))];
 
     // Cập nhật các tùy chọn cho biểu đồ
     this.chartOptions = {

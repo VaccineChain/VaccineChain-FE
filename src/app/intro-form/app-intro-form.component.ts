@@ -1,3 +1,4 @@
+import { VaccineResponse } from './../models/dto/vaccineResponse';
 import { VaccineService } from './../services/api/vaccine.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -21,6 +22,8 @@ export class AppIntroFormComponent implements OnInit {
   failureMessage = true;
   incompleteMessage = true;
 
+  vaccineResponse!: VaccineResponse[];
+
   model = {
     firstName: '',
     lastName: '',
@@ -30,7 +33,7 @@ export class AppIntroFormComponent implements OnInit {
   };
 
   constructor(
-    private vaccineService : VaccineService,
+    private vaccineService: VaccineService,
     private router: Router,
     private showToast: ToastService,
   ) { }
@@ -48,23 +51,36 @@ export class AppIntroFormComponent implements OnInit {
     return this.searchForm.get('vaccineId') as FormControl;
   }
 
-  submit() : void {
+  submit(): void {
     var vaccineId = this.searchForm.value.vaccineId;
 
-    if(vaccineId == '') {
+    if (vaccineId == '') {
       this.showToast.showWarningMessage('Warning', 'Please enter a vaccine ID');
       return;
     }
 
-    this.vaccineService.getVaccineById(vaccineId).subscribe({
-      next: (response) => {
-        this.searchForm.reset();
-        console.log(response);
-        // Chuyển hướng đến SearchResultComponent với vaccineId
-        // this.router.navigate(['/result'], { queryParams: { vaccineId: vaccineId } });
+    this.vaccineService.getVaccineResponse(vaccineId).subscribe({
+      next: (response: any) => {
+        this.vaccineResponse = response.Data;
+        console.log('Vaccine data:', this.vaccineResponse);
+
+        // convert to date from time unix to date
+        this.vaccineResponse = response.Data.map((item: any) => {
+          return {
+            ...item,
+            created_date: new Date(Number(item.created_date) * 1000), // Chuyển timestamp UNIX thành Date
+          };
+        });
+
+        console.log('Vaccine data:', this.vaccineResponse);
+
+        // Gởi tất cả dữ liệu vaccineResponse lên /results với tên listVaccine
+        this.router.navigate(['/result'], {
+          queryParams: { listVaccine: JSON.stringify(this.vaccineResponse) },
+        });
       },
-      error: (response: any) => {
-        handleToastErrors(this.showToast, response);
+      error: (error) => {
+        console.error('Error fetching vaccine data:', error);
       },
     });
   }

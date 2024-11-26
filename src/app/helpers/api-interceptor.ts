@@ -29,6 +29,7 @@ export class ApiInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     //attach token to request
+    console.log('intercepting request', this.authService.getAccessToken());
     const res = this.addHeaderToken(req, this.authService.getAccessToken());
 
     return next.handle(res).pipe(
