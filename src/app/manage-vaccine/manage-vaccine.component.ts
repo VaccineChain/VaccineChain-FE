@@ -3,16 +3,12 @@ import { StatisticLogService } from './../services/api/statistic-log.service';
 import { Component, OnInit } from '@angular/core';
 import { VaccineService } from '../services/api/vaccine.service';
 import { ToastService } from '../services/toast.service';
-import { environment } from '../../environment/environment';
 import { NgFor, NgIf } from '@angular/common';
-import { LogService } from '../services/api/log.service';
 import { Log } from '../models/log';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppApexChartLineComponent } from '../component/apexchart/line/line.component';
-import { Device } from '../models/device';
 import { Vaccine } from '../models/vaccine';
 import Swal from 'sweetalert2';
-import { FormControl, FormGroup, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { VaccineDetail } from '../models/vaccineDetail';
 import { handleToastErrors } from '../utils';
@@ -27,14 +23,17 @@ import { handleToastErrors } from '../utils';
 export class ManageVaccineComponent implements OnInit {
   vaccines: Vaccine[] = []
   logs: Log[] = [];
-  statisticLog!: VaccineDetail;
+  statisticLog: VaccineDetail | undefined;
   popupTitle: string = '';
   vaccineForm!: FormGroup;
   isEditMode: boolean = false;
   searchForm!: FormGroup;
   selectSearchOption: any = [
     { id: 1, name: 'Vaccine ID' },
-    { id: 2, name: 'Vaccine Name' }
+    { id: 2, name: 'Vaccine Name' },
+    { id: 3, name: 'Batch Number' },
+    { id: 4, name: 'Manufacturer' },
+    { id: 5, name: 'Expiration Date' }
   ];
   searchValue: string = '';
   currentSearchUrl: string | null = null;
@@ -97,7 +96,6 @@ export class ManageVaccineComponent implements OnInit {
     this.vaccineService.getVaccines().subscribe({
       next: (response: Vaccine[]) => {
         this.vaccines = response;
-        this.clearSearch();
       },
       error: (response: any) => {
         this.showToast.showErrorMessage(
@@ -133,7 +131,7 @@ export class ManageVaccineComponent implements OnInit {
     var type = this.searchForm.value.searchType;
     var value = this.searchForm.value.searchKeyword;
 
-    if(value == '') {
+    if (value == '') {
       const message = type == '1' ? 'Please enter a vaccine ID' : 'Please enter a vaccine name';
       this.showToast.showWarningMessage('Warning', message);
       return;
@@ -147,7 +145,7 @@ export class ManageVaccineComponent implements OnInit {
     }
   }
 
-  searchByVaccineId(vaccineId : string) {
+  searchByVaccineId(vaccineId: string) {
     this.vaccineService.getVaccineById(vaccineId).subscribe({
       next: (response) => {
         this.vaccines = [response];
@@ -220,12 +218,13 @@ export class ManageVaccineComponent implements OnInit {
         response.DateRangeEnd = this.formatDateService.toDateString(response.DateRangeEnd);
 
         // DateLowestValue and TimeLowestValue
-        response.DateLowestValue = this.formatDateService.toDateString(response.TimeLowestValue);
-        response.DateHighestValue = this.formatDateService.toDateString(response.TimeHighestValue);
+        response.DateLowestValue = this.formatDateService.toDateString(response.DateLowestValue);
+        response.DateHighestValue = this.formatDateService.toDateString(response.DateHighestValue);
+
+        response.TimeLowestValue = this.formatDateService.toDateString(response.TimeLowestValue);
+        response.TimeHighestValue = this.formatDateService.toDateString(response.TimeHighestValue);
 
         this.statisticLog = response;
-        this.statisticLog.TimeLowestValue = this.formatDateService.toTimeString(response.TimeLowestValue);
-        this.statisticLog.TimeHighestValue = this.formatDateService.toTimeString(response.TimeHighestValue);
       },
       error: (response: any) => {
         console.log("🚀 ~ ManageVaccineComponent ~ this.statisticLogService.GetStatisticLog ~ response:", response)

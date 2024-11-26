@@ -83,25 +83,6 @@ export class ApiInterceptor implements HttpInterceptor {
     });
   }
 
-  handleRefreshToken(
-    req: HttpRequest<unknown>,
-    next: HttpHandler
-  ): Observable<HttpEvent<unknown>> {
-    return this.authService.getRefreshToken().pipe(
-      switchMap((data: unknown) => {
-        //TODO - Check the response of refresh Api and apply it here
-        this.authService.saveToken(data);
-        const res = this.addHeaderToken(req, data as string);
-        return next.handle(res);
-      }),
-      //if refresh token fails, logout
-      catchError((error: HttpErrorResponse) => {
-        this.authService.logout();
-        return throwError(() => error);
-      })
-    );
-  }
-
   logout() {
     this.authService.logout();
   }

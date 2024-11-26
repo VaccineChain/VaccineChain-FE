@@ -29,6 +29,10 @@ export class ManageDosesComponent {
   searchForm!: FormGroup;
   selectSearchOption: any = [
     { id: 1, name: 'Dose Number' },
+    { id: 2, name: 'Date' },
+    { id: 3, name: 'Location' },
+    { id: 4, name: 'Administrator' },
+    { id: 5, name: 'Vaccine ID' },
   ];
   searchValue: string = '';
   currentSearchUrl: string | null = null;

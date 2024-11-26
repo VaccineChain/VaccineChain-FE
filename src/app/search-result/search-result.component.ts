@@ -1,3 +1,4 @@
+import { VaccineResponse } from './../models/dto/vaccineResponse';
 import { VaccineDetail } from './../models/vaccineDetail';
 import { Component, OnInit } from '@angular/core';
 import { AppApexChartLineComponent } from '../component/apexchart/line/line.component';
@@ -22,6 +23,7 @@ export class SearchResultComponent implements OnInit {
   vaccines: Vaccine[] = [];
   logs: Log[] = [];
   vaccineDetail!: VaccineDetail;
+  vaccineResponse: VaccineResponse[] = [];
   popupTitle: string = '';
   vaccineForm!: FormGroup;
   isEditMode: boolean = false;
@@ -38,17 +40,22 @@ export class SearchResultComponent implements OnInit {
   ngOnInit(): void {
     // Retrieve `listVaccine` from query parameters
     this.route.queryParams.subscribe(params => {
-      const vaccineList = JSON.parse(params['listVaccine'] || '[]');
+      this.vaccineResponse = JSON.parse(params['listVaccine'] || '[]').map((item: any) => ({
+        vaccineId: item.vaccine_id,
+        deviceId: item.device_id,
+        value: Number(item.value),
+        createdDate: new Date(item.created_date)
+      }));
 
-      if (vaccineList.length > 0) {
-        const selectedVaccine = vaccineList[0]; // Take the first vaccine in the list
-
+      if (this.vaccineResponse.length > 0) {
+        console.log('Vaccine response:', this.vaccineResponse);
+        const getVaccineId = this.vaccineResponse[0].vaccineId
         // Fetch full vaccine details based on VaccineID
-        this.vaccineService.getVaccineById(selectedVaccine.vaccine_id).subscribe({
+        this.vaccineService.getVaccineById(getVaccineId).subscribe({
           next: (vaccine: Vaccine) => {
             console.log("🚀 ~ SearchResultComponent ~ this.vaccineService.getVaccineById ~ vaccine:", vaccine)
-
-            this.processVaccineData(vaccineList, vaccine);
+            vaccine.ExpirationDate = this.formatDateService.toFullDateTimeString(vaccine.ExpirationDate);
+            this.processVaccineData(this.vaccineResponse, vaccine);
           },
           error: error => console.error('Error fetching vaccine details:', error)
         });
@@ -56,39 +63,27 @@ export class SearchResultComponent implements OnInit {
     });
   }
 
-  private processVaccineData(vaccineList: any[], vaccine: Vaccine) {
+  private processVaccineData(vaccineList: VaccineResponse[], vaccine: Vaccine) {
     const values = vaccineList.map(v => v.value);
-    console.log("🚀 ~ SearchResultComponent ~ processVaccineData ~ values:", values)
-    const timestamps = vaccineList.map(v => v.created_date);
-    console.log("🚀 ~ SearchResultComponent ~ processVaccineData ~ timestamps:", timestamps)
+    const timestamps = vaccineList.map(v => v.createdDate);
 
     // Calculate statistics
     const averageValue = this.calculateAverage(values);
-    console.log("🚀 ~ SearchResultComponent ~ processVaccineData ~ averageValue:", averageValue)
     const highestValue = Math.max(...values);
-    console.log("🚀 ~ SearchResultComponent ~ processVaccineData ~ highestValue:", highestValue)
     const lowestValue = Math.min(...values);
-    console.log("🚀 ~ SearchResultComponent ~ processVaccineData ~ lowestValue:", lowestValue)
     const dateHighestValue = this.formatDateService.toDateString(new Date(timestamps[values.indexOf(highestValue)]).toISOString());
-    console.log("🚀 ~ SearchResultComponent ~ processVaccineData ~ dateHighestValue:", dateHighestValue)
     const timeHighestValue = this.formatDateService.toTimeString(new Date(timestamps[values.indexOf(highestValue)]).toISOString());
-    console.log("🚀 ~ SearchResultComponent ~ processVaccineData ~ timeHighestValue:", timeHighestValue)
     const dateLowestValue = this.formatDateService.toDateString(new Date(timestamps[values.indexOf(lowestValue)]).toISOString());
-    console.log("🚀 ~ SearchResultComponent ~ processVaccineData ~ dateLowestValue:", dateLowestValue)
     const timeLowestValue = this.formatDateService.toTimeString(new Date(timestamps[values.indexOf(lowestValue)]).toISOString());
-    console.log("🚀 ~ SearchResultComponent ~ processVaccineData ~ timeLowestValue:", timeLowestValue)
     var { dateRangeStart, dateRangeEnd } = this.processTimestamps(timestamps);
 
     dateRangeStart = this.formatDateService.toDateString(dateRangeStart);
     dateRangeEnd = this.formatDateService.toDateString(dateRangeEnd);
 
-    console.log("🚀 ~ SearchResultComponent ~ processVaccineData ~ dateRangeStart:", dateRangeStart)
-    console.log("🚀 ~ SearchResultComponent ~ processVaccineData ~ dateRangeEnd:", dateRangeEnd)
-
     // Set vaccine details
     this.vaccineDetail = {
       Vaccine: vaccine,
-      DeviceId: [...new Set(vaccineList.map(v => v.device_id))], // Unique DeviceIDs
+      DeviceId: [...new Set(vaccineList.map(v => v.deviceId))], // Unique DeviceIDs
       AverageValue: averageValue,
       HighestValue: highestValue,
       DateHighestValue: dateHighestValue,
@@ -101,7 +96,7 @@ export class SearchResultComponent implements OnInit {
       NumberRecords: vaccineList.length
     };
   }
-  private processTimestamps(timestamps: string[]): { dateRangeStart: string; dateRangeEnd: string } {
+  private processTimestamps(timestamps: Date[]): { dateRangeStart: string; dateRangeEnd: string } {
     const dates = timestamps.map(timestamp => new Date(timestamp));
 
     const startDate = new Date(Math.min(...dates.map(date => date.getTime())));

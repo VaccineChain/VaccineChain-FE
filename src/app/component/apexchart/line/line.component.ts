@@ -1,10 +1,4 @@
-import { statisticAreaChart } from './../../../models/statisticAreaChart';
-import { Vaccine } from './../../../models/vaccine';
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
-import { ToastService } from "../../../services/toast.service";
-import { StatisticLogService } from "../../../services/api/statistic-log.service";
-import { TemperatureService } from '../../../services/api/temperature.service';
-
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -17,8 +11,8 @@ import {
   ApexLegend,
   NgApexchartsModule
 } from "ng-apexcharts";
-import { VaccineDetail } from '../../../models/vaccineDetail';
-
+import { VaccineResponse } from '../../../models/dto/vaccineResponse';
+import { FormatDateService } from "../../../services/format-date.service";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -40,54 +34,38 @@ export type ChartOptions = {
   templateUrl: './line.component.html',
   styleUrls: ['./line.component.scss']
 })
-
 export class AppApexChartLineComponent implements OnChanges {
-  @Input() vaccineDetail!: VaccineDetail | undefined;
+  @Input() vaccineResponse: VaccineResponse[] = [];
   @ViewChild("chart") chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions> = {};
-  value!: number[];
-  dates!: string[];
-  name!: string[];
-  apiData: statisticAreaChart[] = [];
-  temperatureData:any = []; // Mảng để lưu dữ liệu nhận được
 
-  constructor(
-    private showToast: ToastService,
-    private statisticLogService: StatisticLogService,
-    private temperatureService: TemperatureService
-
-  ) { }
+  constructor(private formatDateService: FormatDateService) {} // Inject FormatDateService
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['vaccineId'] && changes['vaccineId'].currentValue) {
-      this.statisticLogs(this.vaccineDetail);
+    if (changes['vaccineResponse'] && changes['vaccineResponse'].currentValue) {
+      this.initChart();
     }
   }
 
-  statisticLogs(vaccineDetail: VaccineDetail) {
-    // lấy value từ vaccineDetail
-
-    // lấy tất dates từ vaccineDetail
-  }
-
   initChart() {
-    // Xử lý dữ liệu
-    const seriesData = this.apiData.map(device => {
-      return {
-        name: value,
-        data: device.SensorValue.map(entry => ({
-          x: new Date(entry.Timestamp).getTime(),
-          y: entry.Value
-        }))
-      };
-    });
+    // Group dữ liệu theo `deviceId`
+    const groupedData = this.groupByDeviceId(this.vaccineResponse);
 
-    // Cập nhật các tùy chọn cho biểu đồ
+    // Xử lý dữ liệu thành định dạng cho ApexCharts
+    const seriesData = Object.entries(groupedData).map(([deviceId, data]) => ({
+      name: deviceId, // Tên của thiết bị
+      data: data.map((entry: VaccineResponse) => ({
+        x: this.correctTimestamp(entry.createdDate), // Chuyển đổi timestamp
+        y: entry.value // Giá trị của thiết bị
+      }))
+    }));
+
+    // Cập nhật cấu hình biểu đồ
     this.chartOptions = {
       series: seriesData,
       chart: {
         type: "area",
-        height: 350,
+        height: 400,
         zoom: {
           enabled: true
         }
@@ -99,17 +77,17 @@ export class AppApexChartLineComponent implements OnChanges {
         curve: "smooth"
       },
       title: {
-        text: "Detailed Log Overview for Vaccine " + this.vaccineId,
+        text: "Detailed Log Overview",
         align: "left"
       },
       subtitle: {
-        text: "Complete log history and analysis for this vaccine",
+        text: "Complete log history by device",
         align: "left"
       },
       xaxis: {
         type: "datetime",
         labels: {
-          format: "dd/MM/yy HH:mm"
+          formatter: (value) => this.formatDateService.toCompactDateTimeString(new Date(value).toISOString()),
         }
       },
       yaxis: {
@@ -120,6 +98,27 @@ export class AppApexChartLineComponent implements OnChanges {
       }
     };
   }
+
+  private correctTimestamp(timestamp: any): number {
+    console.log('Timestamp:', timestamp);
+    if (timestamp instanceof Date) {
+      return timestamp.getTime(); // Nếu đã là Date object, trả về timestamp
+    }
+    if (typeof timestamp === "string") {
+      // Nếu là chuỗi, cố gắng chuyển sang số và nhân với 1000 (nếu cần)
+      const numericTimestamp = Number(timestamp);
+      return numericTimestamp < 10000000000 ? numericTimestamp * 1000 : numericTimestamp;
+    }
+    return timestamp; // Nếu không chuyển đổi được, trả về giá trị gốc
+  }
+
+  private groupByDeviceId(data: VaccineResponse[]): { [key: string]: VaccineResponse[] } {
+    return data.reduce((acc: { [key: string]: VaccineResponse[] }, curr: VaccineResponse) => {
+      if (!acc[curr.deviceId]) {
+        acc[curr.deviceId] = [];
+      }
+      acc[curr.deviceId].push(curr);
+      return acc;
+    }, {});
+  }
 }
-
-

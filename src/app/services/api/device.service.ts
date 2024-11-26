@@ -25,10 +25,10 @@ export class DeviceService {
   }
 
   updateDevices(Device: Device) {
-    return this.http.put<Device>(`https://localhost:7241/api/Devices/${Device.DeviceId}`, Device);
+    return this.http.put<Device>(`/api/Devices/${Device.DeviceId}`, Device);
   }
 
   deleteDevice(id: string) {
-    return this.http.delete<any>(`https://localhost:7241/api/Devices/${id}`);
+    return this.http.delete<any>(`/api/Devices/${id}`);
   }
 }

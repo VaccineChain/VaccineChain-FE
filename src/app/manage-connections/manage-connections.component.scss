@@ -68,6 +68,7 @@
 .btn-add {
   background-color: black;
   color: white;
+  width: 150px;
   border: none;
   padding: 15px 20px;
   cursor: pointer;
@@ -331,7 +332,7 @@ td.text-right {
 
         .btn-switch {
           right: auto;
-          left: 9%;
+          left: 4%;
           animation: animationClickOn .7s;
         }
 
@@ -352,7 +353,7 @@ td.text-right {
 
         .btn-switch {
           left: auto;
-          right: 9%;
+          right: 4%;
           animation: animationClickOff .7s;
         }
 
@@ -374,8 +375,8 @@ td.text-right {
 
     #switch {
       border: none;
-      width: 8vw;
-      height: 8vw;
+      width: 100px;
+      height: 50px;
       border-radius: 4vw;
       position: absolute;
       cursor: pointer;
@@ -383,19 +384,21 @@ td.text-right {
       .btn-switch {
         display: block;
         background-color: $color-switch-button;
-        width: 6vw;
-        height: 6vw;
+        width: 40px;
+        height: 40px;
         border-radius: 3vw;
         position: absolute;
         z-index: 0;
-        top: 13%;
+        top: 4px;
       }
 
       svg {
-        font-size: 35px;
+        font-size: 30px;
         position: absolute;
         z-index: 1;
-        top: 26%;
+        margin-left: -5px;
+        margin-right: -5px;
+        top: 16%;
         color: $color-text-light;
 
         &.bxs-sun {

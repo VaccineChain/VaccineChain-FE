@@ -20,11 +20,11 @@ export class AuthService {
   ) {}
 
   login(loginData: any) {
-    return this.http.post<any>('/api/users/login', loginData);
+    return this.http.post<any>('https://localhost:7241/api/users/login', loginData);
   }
 
   register(data: any) {
-    return this.http.post<any>('/api/users/register', data);
+    return this.http.post<any>('https://localhost:7241/api/users/register', data);
   }
 
   logout() {
@@ -59,7 +59,7 @@ export class AuthService {
     if (this.storageService.get(ACCESS_KEY)) {
       return this.storageService.get(ACCESS_KEY) as string;
     }
-    return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzI1OTA0NjgsInVzZXJuYW1lIjoidHJhbm5xMjAwM0BnbWFpbC5jb20iLCJvcmdOYW1lIjoiT3JnMSIsImlhdCI6MTczMjU1NDQ2OH0.YI9e4IfhMQK2Arnef-XAwzqnxBb5bxVykElS2-AaW9Y";
+    return "";
   }
 
   saveUserData(data: UserInfo) {

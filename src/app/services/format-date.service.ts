@@ -21,7 +21,11 @@ export class FormatDateService {
   }
 
   toFullDateTimeString(dateTime: string): string {
-    return `${this.toTimeString(dateTime)} - ${this.toDateString(dateTime)}`; // Kết hợp
+    return `${this.toDateString(dateTime)} - ${this.toTimeString(dateTime)}`;
+  }
+
+  toCompactDateTimeString(dateTime: string): string {
+    return moment(dateTime).format('DD, MMM HH:mm:ss');
   }
 }
 

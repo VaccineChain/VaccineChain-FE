@@ -11,10 +11,10 @@ export class StatisticLogService {
   constructor(private http: HttpClient) { }
 
   GetStatisticLog(vaccineId: string) {
-    return this.http.get<VaccineDetail>(`https://localhost:7241/api/Statistic/Logs/${vaccineId}`);
+    return this.http.get<VaccineDetail>(`/api/Statistic/Logs/${vaccineId}`);
   }
 
   GetStatisticsForAreaChart(vaccineId: string) {
-    return this.http.get<statisticAreaChart[]>(`https://localhost:7241/api/Statistic/Area-Chart/${vaccineId}`);
+    return this.http.get<statisticAreaChart[]>(`/api/Statistic/Area-Chart/${vaccineId}`);
   }
 }

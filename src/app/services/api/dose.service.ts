@@ -21,10 +21,10 @@ export class DoseService {
   }
 
   updateDoses(dose: Dose) {
-    return this.http.put<Dose>(`https://localhost:7241/api/Doses/${dose.DoseNumber}`, dose);
+    return this.http.put<Dose>(`/api/Doses/${dose.DoseNumber}`, dose);
   }
 
   deleteDose(id: number) {
-    return this.http.delete<any>(`https://localhost:7241/api/Doses/${id}`);
+    return this.http.delete<any>(`/api/Doses/${id}`);
   }
 }

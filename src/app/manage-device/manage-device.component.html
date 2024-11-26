@@ -4,8 +4,9 @@
     <h1>Manage Device</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a
-            routerLink="/admin/dashboard">Home</a></li>
+        <li class="breadcrumb-item">
+          <a routerLink="/admin/dashboard">Home</a>
+        </li>
         <li class="breadcrumb-item active">Manage Device</li>
       </ol>
     </nav>
@@ -41,17 +42,15 @@
               </button>
             </form>
 
-            <div class="text-end mb-3 me-2 add_icon">
+            <div class="text-end mb-3 mx-2 add_icon">
               <button class="btn-add slide" data-bs-toggle="modal"
                 (click)="openAddDeviceModal()"
                 data-bs-target="#deviceModal">
-                <i class="bi bi-plus-circle"></i>
-                Add new
-              </button>
+                <i class="bi bi-plus-circle"></i> Add new </button>
             </div>
           </div>
 
-          <div *ngIf="devices.length == 0" class="d-block" :class="d-none" class="empty">
+          <div *ngIf="devices.length == 0" class="d-block d-none empty">
             <div class="eyes d-flex">
               <div class="eye">
                 <div class="ball"></div>

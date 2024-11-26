@@ -2,7 +2,6 @@ import { RouterLink } from '@angular/router';
 import { DeviceService } from './../services/api/device.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastService } from '../services/toast.service';
-import { environment } from '../../environment/environment';
 import { NgFor, NgIf } from '@angular/common';
 import { AppApexChartLineComponent } from '../component/apexchart/line/line.component';
 import { Device } from '../models/device';
@@ -19,7 +18,6 @@ import { handleToastErrors } from '../utils';
 })
 
 export class ManageDeviceComponent implements OnInit {
-  private apiUrl = environment.apiUrl;
   devices: Device[] = []
   popupTitle: string = '';
   deviceForm!: FormGroup;
@@ -28,17 +26,17 @@ export class ManageDeviceComponent implements OnInit {
   searchForm!: FormGroup;
   selectSearchOption: any = [
     { id: 1, name: 'Device ID' },
+    { id: 2, name: 'Location' },
+    { id: 3, name: 'Sensor Type' },
   ];
   searchValue: string = '';
   currentSearchUrl: string | null = null;
   showClearButton = false;
 
-
   constructor(
     private deviceService: DeviceService,
     private showToast: ToastService,
-  ) {
-  }
+  ) { }
 
   ngOnInit(): void {
     this.loadDevices();
@@ -83,7 +81,6 @@ export class ManageDeviceComponent implements OnInit {
   loadDevices() {
     this.deviceService.getDevices().subscribe({
       next: (response: Device[]) => {
-        console.log(response);
         this.devices = response;
       },
       error: (response: any) => {
@@ -181,7 +178,7 @@ export class ManageDeviceComponent implements OnInit {
     var type = this.searchForm.value.searchType;
     var value = this.searchForm.value.searchKeyword;
 
-    if(value == '') {
+    if (value == '') {
       const message = type == '1' ? 'Please enter a vaccine ID' : 'Please enter a vaccine name';
       this.showToast.showWarningMessage('Warning', message);
       return;
@@ -193,7 +190,7 @@ export class ManageDeviceComponent implements OnInit {
     }
   }
 
-  searchByDeviceId(deviceId : string) {
+  searchByDeviceId(deviceId: string) {
     this.deviceService.getDeviceById(deviceId).subscribe({
       next: (response) => {
         this.devices = [response];

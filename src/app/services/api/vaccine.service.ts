@@ -32,7 +32,7 @@ export class VaccineService {
   }
 
   getVaccineByName(name: string) {
-    return this.http.get<Vaccine[]>(`https://localhost:7241/api/Vaccines/GetByName?vaccineName=${name}`);
+    return this.http.get<Vaccine[]>(`/api/Vaccines/GetByName?vaccineName=${name}`);
   }
 
   createVaccine(vaccine: Vaccine) {
@@ -44,6 +44,6 @@ export class VaccineService {
   }
 
   deleteVaccine(id: string) {
-    return this.http.delete<Vaccine>(`https://localhost:7241/api/Vaccines/${id}`);
+    return this.http.delete<Vaccine>(`/api/Vaccines/${id}`);
   }
 }
