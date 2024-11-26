@@ -2,25 +2,25 @@
 .btn-add {
   background-color: black;
   color: white;
-  width: 150px;
   border: none;
   padding: 15px 20px;
   cursor: pointer;
   font-size: 16px;
   border-radius: 20px;
   transition: all 0.3s;
-  font-family: "Roboto", sans-serif;
   font-weight: 400;
 }
-.btn-add i{
+
+.btn-add i {
   margin-right: 10px;
 }
 
 .btn-add:hover {
   background-color: white;
-  color: black  ;
+  color: black;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
 }
+
 .btn .bi-trash,
 .btn .bi-pencil-square {
   margin-left: 0 !important;
@@ -30,10 +30,14 @@
 .btn-add.slide:hover {
   animation: bounce 0.5s;
 }
+
 @keyframes bounce {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -166,64 +170,65 @@ td.text-right {
 }
 
 .close {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 51px;
-    height: 51px;
-    font-size: 0;
-    cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 51px;
+  height: 51px;
+  font-size: 0;
+  cursor: pointer;
 }
 
-.close:before, .close:after {
+.close:before,
+.close:after {
   content: '';
-    position: absolute;
-    background: #767676;
-    -moz-border-radius: 1px;
-    -webkit-border-radius: 1px;
-    -o-border-radius: 1px;
-    border-radius: 1px;
-    left: 14px;
-    right: 14px;
-    top: 30px;
-    height: 3px;
-    -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    transform: rotate(45deg);
-    transition: all 100ms ease-in;
-    -moz-transition: all 100ms ease-in;
-    -webkit-transition: all 100ms ease-in;
-    -o-transition: all 100ms ease-in;
+  position: absolute;
+  background: #767676;
+  -moz-border-radius: 1px;
+  -webkit-border-radius: 1px;
+  -o-border-radius: 1px;
+  border-radius: 1px;
+  left: 14px;
+  right: 14px;
+  top: 30px;
+  height: 3px;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  transition: all 100ms ease-in;
+  -moz-transition: all 100ms ease-in;
+  -webkit-transition: all 100ms ease-in;
+  -o-transition: all 100ms ease-in;
 }
 
 .close:after {
-     -moz-transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-    -o-transform: rotate(-45deg);
-    transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 
 .popup {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translateX(-50%) translateY(-50%);
-    -moz-transform: translateX(-50%) translateY(-50%);
-    -o-transform: translateX(-50%) translateY(-50%);
-    transform: translateX(-50%) translateY(-50%);
-    background: #FAFDFF;
-    -moz-border-radius: 5px;
-    -o-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    width: 600px;
-    box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.09), 0px 11px 12px 7px rgba(0, 0, 0, 0.02);
-    -moz-transition: all 120ms;
-    -webkit-transition: all 120ms;
-    -o-transition: all 120ms;
-    transition: all 120ms;
-    z-index: 99;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -o-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  background: #FAFDFF;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  width: 600px;
+  box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.09), 0px 11px 12px 7px rgba(0, 0, 0, 0.02);
+  -moz-transition: all 120ms;
+  -webkit-transition: all 120ms;
+  -o-transition: all 120ms;
+  transition: all 120ms;
+  z-index: 99;
   padding: 25px;
   color: #5E5E5E;
 }
@@ -251,7 +256,7 @@ td.text-right {
   color: #5E5E5E;
   cursor: pointer;
   transition: all 120ms ease-in;
-  outline:none;
+  outline: none;
 }
 
 .button:hover {
@@ -259,48 +264,59 @@ td.text-right {
   transform: translateY(-1px);
 }
 
-.button:active, .button:visited {
+.button:active,
+.button:visited {
   transform: translateY(1px);
-  outline:none;
+  outline: none;
   box-shadow: 1px 2px 3px #F5F5F5;
 }
+
 .custom-modal-dialog {
-  max-width: 100%; /* Hoặc bất kỳ giá trị nào bạn muốn */
-  margin: 30px auto; /* Điều chỉnh khoảng cách trên/bên dưới và căn giữa modal */
+  max-width: 100%;
+  /* Hoặc bất kỳ giá trị nào bạn muốn */
+  margin: 30px auto;
+  /* Điều chỉnh khoảng cách trên/bên dưới và căn giữa modal */
 }
 
 
 .popup-body {
-  padding: 20px; /* Thêm khoảng cách trong modal body */
+  padding: 20px;
+  /* Thêm khoảng cách trong modal body */
 }
 
 .modal-content {
-  margin: auto; /* Căn giữa modal */
+  margin: auto;
+  /* Căn giữa modal */
 }
+
 .custom-modal-dialog {
-  max-width: 70%; /* Chiếm một nửa màn hình */
+  max-width: 70%;
+  /* Chiếm một nửa màn hình */
 }
 
 .popup-body {
-  padding: 20px; /* Thêm khoảng cách trong modal body */
+  padding: 20px;
+  /* Thêm khoảng cách trong modal body */
 }
 
 .modal-content {
-  margin: auto; /* Căn giữa modal */
+  margin: auto;
+  /* Căn giữa modal */
 }
 
 // View
 .view_temperature {
-  text-align: center !important; /* Căn giữa nội dung của ô */
+  text-align: center !important;
+  /* Căn giữa nội dung của ô */
 }
 
-.container_admin{
+.container_admin {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 7px !important;
   padding: 30px;
 }
 
 // FORM
-.form{
+.form {
   --bg-color: #ede9f8;
   --color-primary: #2d3436;
   --color-secondary: #252c6a;
@@ -308,11 +324,11 @@ td.text-right {
   padding: 20px;
 }
 
-.form > *:first-child {
+.form>*:first-child {
   margin-top: 0;
 }
 
-.form > *:last-child {
+.form>*:last-child {
   margin-bottom: 0;
 }
 
@@ -325,7 +341,7 @@ td.text-right {
   margin-bottom: 1rem;
 }
 
-.form__input-group i{
+.form__input-group i {
   font-size: 28px;
   margin: auto;
   padding-right: 20px;
@@ -359,7 +375,8 @@ td.text-right {
   outline: none;
   cursor: pointer;
   background: var(--color-primary);
-  -webkit-user-select: none; /* No Userselect */
+  -webkit-user-select: none;
+  /* No Userselect */
 }
 
 .btn_save_change {
@@ -369,50 +386,54 @@ td.text-right {
 
 // VERHERICAL
 .vertical-divider {
-	position: absolute;
-	display: table;
-	text-align: center;
+  position: absolute;
+  display: table;
+  text-align: center;
 
-	height: 100%; // CHANGE ME!
-	width: 100%;
+  height: 100%; // CHANGE ME!
+  width: 100%;
 
-	.center-element {
-		position: relative;
-		display: table-cell;
-		vertical-align: middle;
+  .center-element {
+    position: relative;
+    display: table-cell;
+    vertical-align: middle;
 
-		&:before, &:after {
-			position: absolute;
-			content: "";
-			width: 1px;
-			left: 50%;
-			border-left: 3px solid black;
-		}
-		&:before {
-			bottom: 50%;
-			top: 0;
-			margin-bottom: 20px;
-		}
-		&:after {
-			top: 50%;
-			bottom: 0;
-			margin-top: 20px;
-		}
-	}
+    &:before,
+    &:after {
+      position: absolute;
+      content: "";
+      width: 1px;
+      left: 50%;
+      border-left: 3px solid black;
+    }
+
+    &:before {
+      bottom: 50%;
+      top: 0;
+      margin-bottom: 20px;
+    }
+
+    &:after {
+      top: 50%;
+      bottom: 0;
+      margin-top: 20px;
+    }
+  }
 }
 
 // //////////////////// LOG DETAIL ////////////////////////
-.view_log_detail{
+.view_log_detail {
   margin: 10px 0;
 }
+
 .view_log_detail p {
   margin: auto 0 auto 20px;
 }
 
 .container_log {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .card_log {
@@ -421,13 +442,13 @@ td.text-right {
   background: #fff;
   border-radius: 15px;
   border-color: #fff !important;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
   margin: 10px;
 }
 
 .card_log:hover {
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .card_log .title {
@@ -449,7 +470,7 @@ td.text-right {
   text-decoration-line: underline;
 }
 
-.height_temperature{
+.height_temperature {
   height: 160px;
   display: flex;
   flex-direction: column;
@@ -457,7 +478,7 @@ td.text-right {
 }
 
 // SEARCH BAR
-.search{
+.search {
   width: 80% !important;
   margin: 0 0 20px 100px;
   border: 1px solid rgb(255, 255, 255);
@@ -468,26 +489,29 @@ td.text-right {
   background: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
-  .search select {
-      padding: 10px;
-      border: none;
-      outline: none;
-      width: 25%;
-      cursor: pointer;
-  }
-.search input{
+
+.search select {
+  padding: 10px;
+  border: none;
+  outline: none;
+  width: 20%;
+  cursor: pointer;
+}
+
+.search input {
   width: 90% !important;
   height: 30px;
   padding: 0;
   border: none;
-  outline:none;
+  outline: none;
   margin-left: 10px;
 }
-.search button{
+
+.search button {
   width: 10%;
   padding: 0;
   border: none;
-  outline:none;
+  outline: none;
   font-size: 25px;
   margin: auto;
   margin-right: 0;
@@ -495,40 +519,41 @@ td.text-right {
   background: white;
 
 }
+
 @media only screen and (max-width: 600px) {
   .search {
-      width: 100%;
-      flex-wrap: wrap;
+    width: 100%;
+    flex-wrap: wrap;
   }
+
   .search select {
-      width: 100%;
+    width: 100%;
   }
 }
 
 .btn_nav {
   background-color: white;
   border: none;
-  color:#899bbd;
+  color: #899bbd;
   text-decoration: underline;
   font-weight: 600;
-  font-family: "Roboto", sans-serif;
   letter-spacing: 1px;
 }
 
-.btn_clear{
+.btn_clear {
   background-color: white;
   border: none;
-  color:#ed1a25;
+  color: #ed1a25;
 
 }
 
-.btn-clear{
+.btn-clear {
   position: absolute;
   text-align: center;
   right: 315px;
   width: 55px !important;
 }
 
-.margin{
+.margin {
   margin: 30px 100px 20px 0;
 }
