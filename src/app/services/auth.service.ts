@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { StorageService } from './storage.service';
 import { Router } from '@angular/router';
 import { Token } from '../models/user';
-import { UserInfo } from '../models/profile';
+import { Role, UserInfo } from '../models/profile';
 import { Log } from '../models/log';
 
 const ACCESS_KEY = 'ACCESS_TOKEN';
@@ -20,11 +20,21 @@ export class AuthService {
   ) {}
 
   login(loginData: any) {
-    return this.http.post<any>('https://localhost:7241/api/users/login', loginData);
+    return this.http.post<any>(
+      'https://localhost:7241/api/users/login',
+      loginData
+    );
   }
 
   register(data: any) {
-    return this.http.post<any>('https://localhost:7241/api/users/register', data);
+    return this.http.post<any>(
+      'https://localhost:7241/api/users/register',
+      data
+    );
+  }
+
+  changePassword(data: any) {
+    return this.http.post<any>('/api/users/change-password', data);
   }
 
   logout() {
@@ -59,7 +69,7 @@ export class AuthService {
     if (this.storageService.get(ACCESS_KEY)) {
       return this.storageService.get(ACCESS_KEY) as string;
     }
-    return "";
+    return '';
   }
 
   saveUserData(data: UserInfo) {
@@ -73,11 +83,11 @@ export class AuthService {
     return null;
   }
 
-  getRoles(): string[] {
+  getRoles(): Role | null {
     if (this.storageService.get(ROLE_KEY)) {
-      return this.storageService.get(ROLE_KEY) as string[];
+      return this.storageService.get(ROLE_KEY) as Role;
     }
-    return ['USER'];
+    return null;
   }
 
   isLoggedIn(): boolean {

@@ -47,6 +47,9 @@ export class UnAuthenticationGuard {
     | UrlTree {
     if (!this.authService.isLoggedIn()) {
       return true;
+    } else if (this.authService.getRoles()?.Name === 'Admin') {
+      this.router.navigate(['/admin/dashboard']);
+      return false;
     } else {
       this.router.navigate(['/']);
       return false;

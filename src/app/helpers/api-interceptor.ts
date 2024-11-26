@@ -1,89 +1,65 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import {
-  HttpInterceptor,
-  HttpEvent,
-  HttpHandler,
   HttpRequest,
   HttpErrorResponse,
+  HttpHandlerFn,
 } from '@angular/common/http';
-import { Observable, catchError, switchMap, throwError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { SwalService } from '../services/swal.service';
 import { StorageService } from '../services/storage.service';
 import { noAuthList } from './noAuthList';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ApiInterceptor implements HttpInterceptor {
-  isRefreshed = false;
+export function authInterceptor(
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+) {
+  //attach token to request
+  const res = addHeaderToken(req, inject(AuthService).getAccessToken());
 
-  constructor(
-    private authService: AuthService,
-    private swalService: SwalService,
-    private storageService: StorageService
-  ) {}
-
-  intercept(
-    req: HttpRequest<unknown>,
-    next: HttpHandler
-  ): Observable<HttpEvent<unknown>> {
-    //attach token to request
-    console.log('intercepting request', this.authService.getAccessToken());
-    const res = this.addHeaderToken(req, this.authService.getAccessToken());
-
-    return next.handle(res).pipe(
-      catchError((error: HttpErrorResponse) => {
-        //if token is expired, refresh it and retry the request
-        if (
-          (error.status === 401 && !this.isRefreshed) ||
-          (error.status === 500 && error.error.message === 'TOKEN_EXPIRED')
-        ) {
-          this.isRefreshed = true;
-          //if logined user, logout
-          if (this.authService.isLoggedIn()) {
-            this.storageService.clean();
-            this.swalService.showMessageToHandle(
-              'Session Expired',
-              'Your session has expired. Please login again.',
-              'error',
-              this.logout.bind(this)
-            );
-          }
-          //TODO enable when backend implement refresh token
-          //this.handleRefreshToken(req, next);
+  return next(res).pipe(
+    catchError((error: HttpErrorResponse) => {
+      //if token is expired, refresh it and retry the request
+      if (
+        error.status === 401 ||
+        (error.status === 500 && error.error.message === 'TOKEN_EXPIRED')
+      ) {
+        //if logined user, logout
+        if (inject(AuthService).isLoggedIn()) {
+          inject(StorageService).clean();
+          inject(SwalService).showMessageToHandle(
+            'Session Expired',
+            'Your session has expired. Please login again.',
+            'error',
+            () => inject(AuthService).logout()
+          );
         }
-        this.isRefreshed = false;
-        return throwError(() => error);
-      })
-    );
-  }
+      }
+      return throwError(() => error);
+    })
+  );
+}
 
-  addHeaderToken(
-    req: HttpRequest<unknown>,
-    token: string | null
-  ): HttpRequest<unknown> {
-    //do not add header for api in noAuthList
-    if (noAuthList.includes(req.url) || !token) return req;
+function addHeaderToken(
+  req: HttpRequest<unknown>,
+  token: string | null
+): HttpRequest<unknown> {
+  //do not add header for api in noAuthList
+  if (noAuthList.includes(req.url) || !token) return req;
 
-    // Do not set 'Content-Type' header for FormData requests
-    if (req.body instanceof FormData) {
-      return req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    }
-
+  // Do not set 'Content-Type' header for FormData requests
+  if (req.body instanceof FormData) {
     return req.clone({
       setHeaders: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
   }
 
-  logout() {
-    this.authService.logout();
-  }
+  return req.clone({
+    setHeaders: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }

@@ -3,36 +3,29 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Vaccine } from '../../models/vaccine';
 import { VaccineResponse } from '../../models/dto/vaccineResponse';
-import { map } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class VaccineService {
-
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   getVaccines() {
     return this.http.get<Vaccine[]>('/api/Vaccines');
   }
 
   getVaccineById(id: string) {
-    return this.http.get<Vaccine>(`https://localhost:7241/api/Vaccines/GetById?vaccineId=${id}`);
+    return this.http.get<Vaccine>(`/api/Vaccines/GetById?vaccineId=${id}`);
   }
 
   getVaccineResponse(id: string) {
-    const token = this.authService.getAccessToken();
-    console.log('Token used for request:', token);
-
-    const headers = {
-      Authorization: `Bearer ${token}`, // Add Authorization header manually
-    };
-
-    return this.http.get<VaccineResponse[]>(`https://localhost:7241/api/Sensor/get/${id}`, { headers });
+    return this.http.get<VaccineResponse[]>(`/api/Sensor/get/${id}`);
   }
 
   getVaccineByName(name: string) {
-    return this.http.get<Vaccine[]>(`/api/Vaccines/GetByName?vaccineName=${name}`);
+    return this.http.get<Vaccine[]>(
+      `/api/Vaccines/GetByName?vaccineName=${name}`
+    );
   }
 
   createVaccine(vaccine: Vaccine) {
@@ -40,7 +33,10 @@ export class VaccineService {
   }
 
   updateVaccines(vaccine: Vaccine) {
-    return this.http.put<Vaccine>(`/api/Vaccines/${vaccine.VaccineId}`, vaccine);
+    return this.http.put<Vaccine>(
+      `/api/Vaccines/${vaccine.VaccineId}`,
+      vaccine
+    );
   }
 
   deleteVaccine(id: string) {

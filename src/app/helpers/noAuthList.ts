@@ -1,1 +1,1 @@
-export const noAuthList = ['/api/auth/login', '/api/auth/register'];
+export const noAuthList = ['/api/users/login', '/api/users/register'];
