@@ -2,17 +2,16 @@
   <h4>Vaccine Lookup with Blockchain system</h4>
   <p>Enter your vaccine id to verify the authenticity of your vaccine.</p>
   <div id="join-us-results"></div>
- <!-- Form -->
-<form id="search_vaccine" [formGroup]="searchForm" (ngSubmit)="submit()">
-  <div class="mt-4 mb-3">
-    <input type="text" formControlName="vaccineId" [class.is-invalid]="vaccineId.invalid && vaccineId.touched"
-      id="vaccineId" class="form-control"
-      placeholder="Enter vaccine id ..." required />
-  </div>
-  <button type="submit" class="btn-loading">
-    <span>Search</span>
-  </button>
-</form>
+  <!-- Form -->
+  <form id="search_vaccine" [formGroup]="searchForm" (ngSubmit)="submit()">
+    <div class="mt-4 mb-3">
+      <input type="text" formControlName="vaccineId" [class.is-invalid]="vaccineId.invalid && vaccineId.touched"
+        id="vaccineId" class="form-control" placeholder="Enter vaccine id ..." required />
+    </div>
+    <button type="submit" class="btn-loading">
+      <span>Search</span>
+    </button>
+  </form>
 
 
   @if (sendingMessage) {

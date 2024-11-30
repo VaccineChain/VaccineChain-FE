@@ -15,25 +15,20 @@ export function authInterceptor(
   next: HttpHandlerFn
 ) {
   //attach token to request
-  const res = addHeaderToken(req, inject(AuthService).getAccessToken());
+  const authService = inject(AuthService);
+  const res = addHeaderToken(req, authService.getAccessToken());
 
   return next(res).pipe(
     catchError((error: HttpErrorResponse) => {
       //if token is expired, refresh it and retry the request
-      if (
-        error.status === 401 ||
-        (error.status === 500 && error.error.message === 'TOKEN_EXPIRED')
-      ) {
-        //if logined user, logout
-        if (inject(AuthService).isLoggedIn()) {
-          inject(StorageService).clean();
-          inject(SwalService).showMessageToHandle(
-            'Session Expired',
-            'Your session has expired. Please login again.',
-            'error',
-            () => inject(AuthService).logout()
-          );
-        }
+      if (error.status === 401 && authService.isLoggedIn()) {
+        inject(StorageService).clean();
+        inject(SwalService).showMessageToHandle(
+          'Session Expired',
+          'Your session has expired. Please login again.',
+          'error',
+          () => authService.logout()
+        );
       }
       return throwError(() => error);
     })

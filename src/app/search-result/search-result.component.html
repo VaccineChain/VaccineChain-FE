@@ -46,7 +46,8 @@
         </ul>
       </div>
 
-      <div class="more" *ngIf="showMore">
+      @if(showMore){
+      <div class="more">
         <div class="title_chart vaccine_infor">
           <span><i class="bi bi-graph-up"></i>Statistic</span>
         </div>
@@ -105,9 +106,10 @@
           </div>
         </div>
       </div>
+      }
 
       <div class="see_button pulse">
-        <a class="dedcription-btn" (click)="toggleShow()">
+        <a class="description-btn" (click)="toggleShow()">
           <div class="pulsing"></div>
           <span class="name-descripeion">{{ showMore ? 'See less' : 'See more'
             }}</span>

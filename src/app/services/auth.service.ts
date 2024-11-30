@@ -20,21 +20,23 @@ export class AuthService {
   ) {}
 
   login(loginData: any) {
-    return this.http.post<any>(
-      'https://localhost:7241/api/users/login',
-      loginData
-    );
+    return this.http.post<any>('/api/users/login', loginData);
   }
 
   register(data: any) {
-    return this.http.post<any>(
-      'https://localhost:7241/api/users/register',
-      data
-    );
+    return this.http.post<any>('/api/users/register', data);
+  }
+
+  profile() {
+    return this.http.get<any>('/api/users/profile');
+  }
+
+  updateProfile(data: any) {
+    return this.http.put<any>('/api/users/profile', data);
   }
 
   changePassword(data: any) {
-    return this.http.post<any>('/api/users/change-password', data);
+    return this.http.put<any>('/api/users/change-password', data);
   }
 
   logout() {
