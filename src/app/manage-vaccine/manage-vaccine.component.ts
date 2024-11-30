@@ -31,9 +31,6 @@ export class ManageVaccineComponent implements OnInit {
   selectSearchOption: any = [
     { id: 1, name: 'Vaccine ID' },
     { id: 2, name: 'Vaccine Name' },
-    { id: 3, name: 'Batch Number' },
-    { id: 4, name: 'Manufacturer' },
-    { id: 5, name: 'Expiration Date' }
   ];
   searchValue: string = '';
   currentSearchUrl: string | null = null;
