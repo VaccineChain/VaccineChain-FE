@@ -3,11 +3,10 @@ import { Injectable } from '@angular/core';
 import { Log } from '../../models/log';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LogService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getLogs() {
     return this.http.get<Log[]>(`/api/Logs`);
@@ -19,6 +18,14 @@ export class LogService {
 
   createLog(log: Log) {
     return this.http.post<Log>('/api/Logs', log);
+  }
+
+  updateStatusLog(deviceId: string, vaccineId: string) {
+    const body = {
+      deviceId: deviceId,
+      vaccineId: vaccineId,
+    };
+    return this.http.put<Log>('/api/Logs/UpdateStatus', body);
   }
 
   deleteLog(deviceId: string, vaccineId: string) {

@@ -5,20 +5,33 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Log } from '../models/log';
 import { AppApexChartLineComponent } from '../component/apexchart/line/line.component';
 import { NgFor, NgIf, NgSwitch } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { handleToastErrors } from '../utils';
 import Swal from 'sweetalert2';
 import { VaccineService } from '../services/api/vaccine.service';
 import { DeviceService } from '../services/api/device.service';
 import { RouterLink } from '@angular/router';
 import { Connection } from '../models/connection';
+import { LOG_STATUS } from '../utils/constant';
 
 @Component({
   selector: 'app-manage-connections',
   standalone: true,
-  imports: [RouterLink, NgFor, NgIf, NgSwitch, AppApexChartLineComponent, ReactiveFormsModule],
+  imports: [
+    RouterLink,
+    NgFor,
+    NgIf,
+    NgSwitch,
+    AppApexChartLineComponent,
+    ReactiveFormsModule,
+  ],
   templateUrl: './manage-connections.component.html',
-  styleUrl: './manage-connections.component.scss'
+  styleUrl: './manage-connections.component.scss',
 })
 export class ManageConnectionsComponent implements OnInit {
   connectForm!: FormGroup;
@@ -29,13 +42,14 @@ export class ManageConnectionsComponent implements OnInit {
   isLightMode = true;
   form_title = 'Create Connection';
   form_button = 'Save';
+  LOG_STATUS = LOG_STATUS;
 
   constructor(
     private logService: LogService,
     private vaccineService: VaccineService,
     private deviceService: DeviceService,
-    private showToast: ToastService,
-  ) { }
+    private showToast: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.loadConnections();
@@ -67,7 +81,7 @@ export class ManageConnectionsComponent implements OnInit {
         this.showToast.showErrorMessage(
           'Error',
           response.error?.message ||
-          'Something went wrong. Please try again later'
+            'Something went wrong. Please try again later'
         );
       },
     });
@@ -81,7 +95,7 @@ export class ManageConnectionsComponent implements OnInit {
         this.showToast.showErrorMessage(
           'Error',
           response.error?.message ||
-          'Something went wrong. Please try again later'
+            'Something went wrong. Please try again later'
         );
       },
     });
@@ -89,13 +103,18 @@ export class ManageConnectionsComponent implements OnInit {
     this.logService.getLogs().subscribe({
       next: (response: Log[]) => {
         console.log(response);
-        this.connections = response;
+        const values = Object.values(LOG_STATUS);
+        this.connections = response.map((log) => ({
+          Status: values[log.Status],
+          Device: log.Device,
+          Vaccine: log.Vaccine,
+        }));
       },
       error: (response: any) => {
         this.showToast.showErrorMessage(
           'Error',
           response.error?.message ||
-          'Something went wrong. Please try again later'
+            'Something went wrong. Please try again later'
         );
       },
     });
@@ -103,7 +122,7 @@ export class ManageConnectionsComponent implements OnInit {
 
   submit(): void {
     if (this.connectForm.invalid) {
-      console.log("Invalid form");
+      console.log('Invalid form');
       this.showToast.showWarningMessage(
         'Warning',
         'Please complete all fields'
@@ -111,13 +130,14 @@ export class ManageConnectionsComponent implements OnInit {
       return;
     }
 
-    const isExit = this.connections.find((connection) => connection.Device.DeviceId === this.connectForm.value.deviceId && connection.Vaccine.VaccineId === this.connectForm.value.vaccineId);
+    const isExit = this.connections.find(
+      (connection) =>
+        connection.Device.DeviceId === this.connectForm.value.deviceId &&
+        connection.Vaccine.VaccineId === this.connectForm.value.vaccineId
+    );
 
     if (isExit) {
-      this.showToast.showWarningMessage(
-        'Warning',
-        'Connection already exists'
-      );
+      this.showToast.showWarningMessage('Warning', 'Connection already exists');
       return;
     }
 
@@ -127,7 +147,8 @@ export class ManageConnectionsComponent implements OnInit {
           'Success',
           'Create connection successfully'
         );
-        this.connections.push(response);
+        // this.connections.push(response);
+        this.loadConnections(); // Refresh the vaccine list
         // CLEAR FORM
         this.connectForm.reset();
       },
@@ -145,16 +166,12 @@ export class ManageConnectionsComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
         this.logService.deleteLog(deviceId, vaccineId).subscribe({
           next: () => {
-            Swal.fire(
-              'Deleted!',
-              'The vaccine has been deleted.',
-              'success'
-            );
+            Swal.fire('Deleted!', 'The vaccine has been deleted.', 'success');
             this.loadConnections(); // Refresh the vaccine list
           },
           error: (error: any) => {
@@ -164,16 +181,55 @@ export class ManageConnectionsComponent implements OnInit {
               'error'
             );
             console.error(error);
-          }
+          },
         });
       }
     });
   }
 
+  updateConnect(vaccineId: string, deviceId: string) {
+    const isExit = this.connections.find(
+      (connection) =>
+        connection.Device.DeviceId === deviceId &&
+        connection.Vaccine.VaccineId === vaccineId
+    );
+
+    if (!isExit) {
+      this.showToast.showWarningMessage('Warning', 'Connection does not exist');
+      return;
+    }
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `Do you really want to make this connection change to Collected?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, update it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.logService.updateStatusLog(deviceId, vaccineId).subscribe({
+          next: () => {
+            Swal.fire('Updated!', 'The vaccine has been updated.', 'success');
+            this.loadConnections(); // Refresh the vaccine list
+          },
+          error: (error: any) => {
+            Swal.fire(
+              'Error!',
+              'There was an error updating the vaccine.',
+              'error'
+            );
+            console.error(error);
+          },
+        });
+      }
+    });
+  }
 
   toggleTheme(): void {
     this.isLightMode = !this.isLightMode;
-    const mainContent = document.getElementById("main_swap");
+    const mainContent = document.getElementById('main_swap');
     if (this.isLightMode) {
       mainContent?.classList.remove('main_swap--dark');
       mainContent?.classList.add('main_swap--light');
@@ -187,4 +243,3 @@ export class ManageConnectionsComponent implements OnInit {
     }
   }
 }
-

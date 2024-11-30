@@ -1,7 +1,8 @@
-import { Device } from "./device";
-import { Vaccine } from "./vaccine";
+import { Device } from './device';
+import { Vaccine } from './vaccine';
 
 export interface Connection {
-  Vaccine: Vaccine,
-  Device: Device
+  Status: string;
+  Vaccine: Vaccine;
+  Device: Device;
 }
