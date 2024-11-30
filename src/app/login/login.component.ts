@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private showToast: ToastService,
-    private swalService: SwalService,
+    private swalService: SwalService
   ) {}
 
   ngOnInit() {
@@ -109,10 +109,10 @@ export class LoginComponent implements OnInit {
     console.log(this.registrationForm.value);
 
     const requestData = {
-      email: this.registrationForm.value.email,
-      password: this.registrationForm.value.password,
-      firstName: this.registrationForm.value.firstName,
-      lastName: this.registrationForm.value.lastName,
+      Email: this.registrationForm.value.email,
+      Password: this.registrationForm.value.password,
+      FirstName: this.registrationForm.value.firstName,
+      LastName: this.registrationForm.value.lastName,
     };
 
     this.isRegisterLoading = true;
@@ -144,17 +144,13 @@ export class LoginComponent implements OnInit {
     }
 
     const loginData = {
-      email: this.loginForm.value.email,
-      password: this.loginForm.value.password,
+      Email: this.loginForm.value.email,
+      Password: this.loginForm.value.password,
     };
 
     this.isLoginLoading = true;
     this.authService.login(loginData).subscribe({
       next: (response) => {
-        console.log(
-          '🚀 ~ LoginComponent ~ this.authService.login ~ response:',
-          response
-        );
         this.isLoginLoading = false;
         this.authService.saveUser(response);
 
@@ -165,7 +161,6 @@ export class LoginComponent implements OnInit {
         return this.router.navigate(['/']);
       },
       error: (response) => {
-        console.log("🚀 ~ LoginComponent ~ this.authService.login ~ response:", response)
         this.isLoginLoading = false;
 
         switch (response.status) {

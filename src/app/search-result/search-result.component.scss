@@ -232,7 +232,7 @@
   text-decoration: none !important;
 }
 
-.dedcription-btn {
+.description-btn {
   width: 200px;
   height: 45px !important;
   position: relative;
@@ -244,10 +244,11 @@
   transition: all 0.3s;
   padding-right: 40px;
   margin: auto;
+  cursor: pointer;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
 }
 
-.dedcription-btn .btn-icon {
+.description-btn .btn-icon {
   background-color: #ed1a25;
   width: 75px;
   height: 45px;
@@ -260,7 +261,7 @@
   transition: all 0.3s;
 }
 
-.dedcription-btn .btn-icon i {
+.description-btn .btn-icon i {
   font-size: 20px;
   right: 15px;
   top: 12px;
@@ -290,7 +291,7 @@
 
 .name-descripeion {
   position: relative;
-  z-index: 9999;
+  z-index: 10;
   font-size: 14px !important;
   margin: 0 !important;
   color: #ed1a25 !important;
@@ -308,12 +309,12 @@
   left: 0px;
 }
 
-.dedcription-btn:hover .btn-icon {
+.description-btn:hover .btn-icon {
   width: 100%;
   border-radius: 30px;
 }
 
-.dedcription-btn:hover .btn-icon::after {
+.description-btn:hover .btn-icon::after {
   display: none;
   opacity: 0.1;
 }
@@ -325,7 +326,7 @@
   color: #F8DE22;
 }
 
-.dedcription-btn:hover {
+.description-btn:hover {
   color: #fff !important;
 
   .name-descripeion {
