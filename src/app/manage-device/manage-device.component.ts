@@ -6,23 +6,31 @@ import { NgFor, NgIf } from '@angular/common';
 import { AppApexChartLineComponent } from '../component/apexchart/line/line.component';
 import { Device } from '../models/device';
 import Swal from 'sweetalert2';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { handleToastErrors } from '../utils';
 
 @Component({
   selector: 'app-manage-device',
   standalone: true,
-  imports: [RouterLink, NgFor, NgIf, AppApexChartLineComponent, ReactiveFormsModule],
+  imports: [RouterLink, NgFor, NgIf, ReactiveFormsModule],
   templateUrl: './manage-device.component.html',
-  styleUrl: './manage-device.component.scss'
+  styleUrl: './manage-device.component.scss',
 })
-
 export class ManageDeviceComponent implements OnInit {
-  devices: Device[] = []
+  devices: Device[] = [];
   popupTitle: string = '';
   deviceForm!: FormGroup;
   isEditMode: boolean = false;
-  sensorTypes: string[] = ['Temperature Sensor', 'Humidity Sensor', 'Light Sensor']; // example sensor types
+  sensorTypes: string[] = [
+    'Temperature Sensor',
+    'Humidity Sensor',
+    'Light Sensor',
+  ]; // example sensor types
   searchForm!: FormGroup;
   selectSearchOption: any = [
     { id: 1, name: 'Device ID' },
@@ -35,8 +43,8 @@ export class ManageDeviceComponent implements OnInit {
 
   constructor(
     private deviceService: DeviceService,
-    private showToast: ToastService,
-  ) { }
+    private showToast: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.loadDevices();
@@ -47,7 +55,7 @@ export class ManageDeviceComponent implements OnInit {
   createSearchForm() {
     this.searchForm = new FormGroup({
       searchType: new FormControl(1, Validators.required),
-      searchKeyword: new FormControl('', Validators.required)
+      searchKeyword: new FormControl('', Validators.required),
     });
   }
 
@@ -55,7 +63,7 @@ export class ManageDeviceComponent implements OnInit {
     return this.searchForm.get('searchType') as FormControl;
   }
   get searchKeyword() {
-    return this.searchForm.get('searchKeyword') as FormControl
+    return this.searchForm.get('searchKeyword') as FormControl;
   }
 
   initForm() {
@@ -87,7 +95,7 @@ export class ManageDeviceComponent implements OnInit {
         this.showToast.showErrorMessage(
           'Error',
           response.error?.message ||
-          'Something went wrong. Please try again later'
+            'Something went wrong. Please try again later'
         );
       },
     });
@@ -122,11 +130,9 @@ export class ManageDeviceComponent implements OnInit {
     }
 
     const DeviceData = this.deviceForm.getRawValue();
-    DeviceData.sensorType = this.sensorTypes.findIndex((sensorType) => sensorType === DeviceData.SensorType) + 1;
+    DeviceData.sensorType = Number(DeviceData.sensorType);
 
     if (this.isEditMode) {
-      console.log(DeviceData);
-
       // Call the update Device service method
       this.deviceService.updateDevices(DeviceData).subscribe(() => {
         this.loadDevices();
@@ -149,16 +155,12 @@ export class ManageDeviceComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
         this.deviceService.deleteDevice(deviceId).subscribe({
           next: () => {
-            Swal.fire(
-              'Deleted!',
-              'The device has been deleted.',
-              'success'
-            );
+            Swal.fire('Deleted!', 'The device has been deleted.', 'success');
             this.loadDevices(); // Refresh the Device list
           },
           error: (error: any) => {
@@ -168,7 +170,7 @@ export class ManageDeviceComponent implements OnInit {
               'error'
             );
             console.error(error);
-          }
+          },
         });
       }
     });
@@ -179,7 +181,10 @@ export class ManageDeviceComponent implements OnInit {
     var value = this.searchForm.value.searchKeyword;
 
     if (value == '') {
-      const message = type == '1' ? 'Please enter a vaccine ID' : 'Please enter a vaccine name';
+      const message =
+        type == '1'
+          ? 'Please enter a vaccine ID'
+          : 'Please enter a vaccine name';
       this.showToast.showWarningMessage('Warning', message);
       return;
     }
@@ -202,8 +207,6 @@ export class ManageDeviceComponent implements OnInit {
     });
   }
 
-
-
   onInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
     this.showClearButton = input.value.length > 0;
@@ -214,5 +217,4 @@ export class ManageDeviceComponent implements OnInit {
     this.showClearButton = false; // Ẩn nút xóa
     this.currentSearchUrl = null;
   }
-
 }

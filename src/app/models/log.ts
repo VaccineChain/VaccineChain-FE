@@ -1,11 +1,11 @@
-import { Device } from "./device";
-import { Vaccine } from "./vaccine";
+import { Device } from './device';
+import { Vaccine } from './vaccine';
 
 export interface Log {
-  Vaccine: Vaccine,
-  Device: Device,
-  Value: number,
-  Unit: string,
-  Timestamp: string,
-  Status: number,
+  Vaccine: Vaccine;
+  Device: Device;
+  Value: number;
+  Unit: string;
+  Timestamp: string;
+  Status: number;
 }
