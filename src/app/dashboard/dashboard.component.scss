@@ -1,6 +1,10 @@
+//đặt tên biến border để sử dụng lại
+$_boder: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
 .container_admin {
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 7px;
+  box-shadow: $_boder;
   padding: 30px;
+  border: 1px solid #fff;
+  border-radius: 15px;
 }
 
 .page-content-wrapper {
@@ -10,4 +14,20 @@
 h1 {
   font-size: 45px;
   margin-bottom: -10px;
+}
+
+.shadow-1 {
+  //
+}
+
+.card {
+  box-shadow: $_boder;
+  margin-bottom: 30px;
+  border: 1px solid #fff;
+  border-radius: 15px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 0;
 }

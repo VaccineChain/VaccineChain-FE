@@ -25,7 +25,7 @@
       <div class="row mt-4 mb-5">
         <div id="cust-wrap">
           <div class="d-flex justify-content-between align-items-center margin">
-            <form [formGroup]="searchForm" (ngSubmit)="onSearch()"
+            <form [formGroup]="searchForm"
               class="search d-flex align-items-center">
               <select id="searchType" name="searchType" class="form-select me-2"
                 formControlName="searchType" required>
@@ -240,17 +240,12 @@
             aria-label="Close"></button>
         </div>
         <div class="modal-body popup-body">
-
-          <div class="show_more text-end mb-0 me-2 add_icon text-center">
-            <button class="btn-add slide">
-              <i class="bi bi-plus-circle"></i>
-              Show more
-            </button>
+          <div class="chart text-center" id="chartContainer">
+            <app-line [vaccineResponse]="vaccineResponse"></app-line>
           </div>
-
           <div class="row m-3" id="show_more">
             <div class="container_log">
-              <div class="col-6">
+              <div class="">
                 <div class="card_log">
                   <div class="d-flex">
                     <h6 class="title">Time Range:</h6>

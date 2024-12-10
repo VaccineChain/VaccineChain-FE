@@ -1,8 +1,8 @@
+import { Log } from './../models/log';
 import { Component, OnInit } from '@angular/core';
 import { ToastService } from '../services/toast.service';
 import { LogService } from '../services/api/log.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Log } from '../models/log';
 import { AppApexChartLineComponent } from '../component/apexchart/line/line.component';
 import { NgFor, NgIf, NgSwitch } from '@angular/common';
 import {
@@ -49,7 +49,7 @@ export class ManageConnectionsComponent implements OnInit {
     private vaccineService: VaccineService,
     private deviceService: DeviceService,
     private showToast: ToastService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadConnections();
@@ -81,7 +81,7 @@ export class ManageConnectionsComponent implements OnInit {
         this.showToast.showErrorMessage(
           'Error',
           response.error?.message ||
-            'Something went wrong. Please try again later'
+          'Something went wrong. Please try again later'
         );
       },
     });
@@ -95,15 +95,15 @@ export class ManageConnectionsComponent implements OnInit {
         this.showToast.showErrorMessage(
           'Error',
           response.error?.message ||
-            'Something went wrong. Please try again later'
+          'Something went wrong. Please try again later'
         );
       },
     });
 
     this.logService.getLogs().subscribe({
       next: (response: Log[]) => {
-        console.log(response);
         const values = Object.values(LOG_STATUS);
+
         this.connections = response.map((log) => ({
           Status: values[log.Status],
           Device: log.Device,
@@ -114,7 +114,7 @@ export class ManageConnectionsComponent implements OnInit {
         this.showToast.showErrorMessage(
           'Error',
           response.error?.message ||
-            'Something went wrong. Please try again later'
+          'Something went wrong. Please try again later'
         );
       },
     });
@@ -130,14 +130,32 @@ export class ManageConnectionsComponent implements OnInit {
       return;
     }
 
+    const deivceId = this.connectForm.value.deviceId;
+    const vaccineId = this.connectForm.value.vaccineId;
+
+    console.log('this.form_button ID:', this.form_button);
+    if (this.form_button === 'Search') {
+      this.searchConnection(deivceId, vaccineId);
+    } else if (this.form_button === 'Save') {
+      this.createConnection(deivceId, vaccineId);
+    }else{
+      // reset form with first selected value
+      this.connectForm.reset();
+    }
+  }
+
+  createConnection(deivceId: any, vaccineId: any) {
+    //check if connection already exist
     const isExit = this.connections.find(
       (connection) =>
-        connection.Device.DeviceId === this.connectForm.value.deviceId &&
-        connection.Vaccine.VaccineId === this.connectForm.value.vaccineId
+        connection.Device.DeviceId === deivceId &&
+        connection.Vaccine.VaccineId === vaccineId
     );
 
     if (isExit) {
-      this.showToast.showWarningMessage('Warning', 'Connection already exists');
+      this.showToast.showWarningMessage('Warning', 'Connection already exist');
+      // CLEAR FORM and set hint
+      // this.connectForm.reset();
       return;
     }
 
@@ -158,10 +176,25 @@ export class ManageConnectionsComponent implements OnInit {
     });
   }
 
+  searchConnection(deivce: any, vaccine: any) {
+    const connection = this.connections.find(
+      (connection) =>
+        connection.Device.DeviceId === deivce &&
+        connection.Vaccine.VaccineId === vaccine
+    );
+
+    if (!connection) {
+      this.showToast.showWarningMessage('Warning', 'Connection does not exist');
+      return;
+    }
+
+    this.connections = [connection];
+  }
+
   deleteConnect(vaccineId: string, deviceId: string) {
     Swal.fire({
       title: 'Are you sure?',
-      text: `Do you really want to delete vaccine ${vaccineId}? This process cannot be undone.`,
+      text: `Do you really want to delete connection between ${vaccineId} and ${deviceId}? \nThis process cannot be undone.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -171,13 +204,13 @@ export class ManageConnectionsComponent implements OnInit {
       if (result.isConfirmed) {
         this.logService.deleteLog(deviceId, vaccineId).subscribe({
           next: () => {
-            Swal.fire('Deleted!', 'The vaccine has been deleted.', 'success');
+            Swal.fire('Deleted!', 'The connnection has been deleted.', 'success');
             this.loadConnections(); // Refresh the vaccine list
           },
           error: (error: any) => {
             Swal.fire(
               'Error!',
-              'There was an error deleting the vaccine.',
+              'There was an error deleting the connnection.',
               'error'
             );
             console.error(error);

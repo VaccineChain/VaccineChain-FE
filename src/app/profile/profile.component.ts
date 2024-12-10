@@ -11,6 +11,8 @@ import {
 } from '@angular/forms';
 import { passwordMatchingValidatior } from '../utils/validator/password.validator';
 import { toBirthdayString } from '../utils';
+import Swal from 'sweetalert2';
+import { FormatDateService } from '../services/format-date.service';
 
 @Component({
   selector: 'app-profile',
@@ -26,12 +28,13 @@ export class ProfileComponent implements OnInit {
   selectedTab: string = 'profile';
   profileForm!: FormGroup;
   changePasswordForm!: FormGroup;
+  formatdateService!: FormatDateService;
 
   constructor(
     private formBuilder: FormBuilder,
     private showToast: ToastService,
     private userService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm(); // Initialize the forms with default or empty values
@@ -89,7 +92,7 @@ export class ProfileComponent implements OnInit {
         this.showToast.showErrorMessage(
           'Error',
           response.error?.message ||
-            'Something went wrong. Please try again later'
+          'Something went wrong. Please try again later'
         );
       },
     });
@@ -137,25 +140,45 @@ export class ProfileComponent implements OnInit {
       DateOfBirth: this.dateOfBirth.value,
       Address: this.address.value,
     };
-    console.log(
-      '🚀 ~ ProfileComponent ~ profileUpdate ~ requestData:',
-      requestData
-    );
 
-    // Send the request to update the user profile
-    this.userService.updateProfile(requestData).subscribe({
-      next: () => {
-        this.showToast.showSuccessMessage('Success', 'Profile updated');
-        this.loadProfile(); // Reload the profile data
-      },
-      error: (response) => {
-        this.showToast.showErrorMessage(
-          'Error',
-          response.error?.message ||
-            'Something went wrong. Please try again later'
-        );
-      },
+    if (
+      this.user.FirstName === requestData.FirstName &&
+      this.user.LastName === requestData.LastName &&
+      this.user.Email === requestData.Email &&
+      toBirthdayString(this.user.DateOfBirth) === toBirthdayString(requestData.DateOfBirth) &&
+      this.user.Address === requestData.Address
+    ) {
+      this.showToast.showWarningMessage('Warning', 'Nothing to change.');
+      return;
+    }
+
+    //popup confirm before updating the form
+    const text = `First Name: ${this.user.FirstName} \n Last Name: ${this.user.LastName} \n Email: ${this.user.Email} \n Date of Birth: ${toBirthdayString(this.user.DateOfBirth)} \n Address: ${this.user.Address}`;
+    Swal.fire({
+      title: 'Are you sure to update profile?',
+      text: text,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Update',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.updateProfile(requestData).subscribe({
+          next: () => {
+            this.showToast.showSuccessMessage('Success', 'Profile updated');
+            this.loadProfile(); // Reload the user data after successful update
+          },
+          error: (error) => {
+            this.showToast.showWarningMessage(
+              'Warning',
+              error.error?.Message || 'Profile update failed. Please try again'
+            );
+          },
+        });
+      }
     });
+
   }
 
   changePasswordSubmition(): void {

@@ -13,7 +13,7 @@ export class DoseService {
   }
 
   getDoseById(id: number) {
-    return this.http.get<Dose>(`/api/Doses/GetById?doseId=${id}`);
+    return this.http.get<Dose>(`/api/Doses/${id}`);
   }
 
   createDose(dose: Dose) {

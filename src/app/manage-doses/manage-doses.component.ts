@@ -29,7 +29,7 @@ export class ManageDosesComponent {
   searchForm!: FormGroup;
   selectSearchOption: any = [
     { id: 1, name: 'Dose Number' },
-    { id: 2, name: 'Date' },
+    // { id: 2, name: 'Date' },
     { id: 3, name: 'Location' },
     { id: 4, name: 'Administrator' },
     { id: 5, name: 'Vaccine ID' },
@@ -218,31 +218,41 @@ export class ManageDosesComponent {
     }
     this.searchValue = value;
 
-    if (type == '1') {
-      this.searchByDoseId(value);
+    //check search type and search by filter list dose without api
+    if(type == 1) {
+      this.doses = this.doses.filter(dose => dose.DoseNumber.toString().toUpperCase().includes(value.toUpperCase()));
+    } else if(type == 2) {
+      this.doses = this.doses.filter(dose => dose.DateAdministered == value);
+    } else if(type == 3) {
+      this.doses = this.doses.filter(dose => dose.LocationAdministered.toLocaleLowerCase().includes(value.toLocaleLowerCase()));
+    } else if(type == 4) {
+      this.doses = this.doses.filter(dose => dose.Administrator.toLocaleLowerCase().includes(value.toLocaleLowerCase()));
+    } else if(type == 5) {
+      this.doses = this.doses.filter(dose => dose.VaccineId.toLocaleLowerCase().includes(value.toLocaleLowerCase()));
     }
-  }
 
-  searchByDoseId(doseId : number) {
-    this.doseService.getDoseById(doseId).subscribe({
-      next: (response) => {
-        this.doses = [response];
-        this.currentSearchUrl = `Search Dose Id: ${doseId}`;
-      },
-      error: (response: any) => {
-        handleToastErrors(this.showToast, response);
-      },
-    });
+    //check if search result is empty
+    if(this.doses.length == 0) {
+      this.showToast.showWarningMessage('Warning', 'No result found');
+
+    }
+
   }
 
   onInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
     this.showClearButton = input.value.length > 0;
+
+    if (input.value.length === 0) {
+      this.loadDoses();
+    }else{
+      this.onSearch();
+    }
   }
 
   clearSearch() {
-    this.searchForm.get('searchKeyword')?.reset(); // Xóa giá trị trong ô input
-    this.showClearButton = false; // Ẩn nút xóa
+    this.searchForm.get('searchKeyword')?.reset();
+    this.showClearButton = false;
     this.currentSearchUrl = null;
   }
 

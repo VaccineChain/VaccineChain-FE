@@ -19,7 +19,7 @@ export class VaccineService {
   }
 
   getVaccineResponse(id: string) {
-    return this.http.get<VaccineResponse[]>(`/api/Sensor/get/${id}`);
+    return this.http.get<VaccineResponse[]>(`https://localhost:7241/api/Sensor/get/${id}`);
   }
 
   getVaccineByName(name: string) {

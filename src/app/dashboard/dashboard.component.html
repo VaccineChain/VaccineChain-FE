@@ -1,6 +1,6 @@
 <main id="main" class="main">
   <div class="pagetitle">
-    <h1>Statistic</h1>
+    <h1 class="title">Statistic</h1>
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
@@ -13,17 +13,24 @@
   <!-- Page Content -->
   <div id="page-content-wrapper">
     <div class="d-flex gap-2">
-      <div class="card mb-0" style="width: 100%;">
-        <div class="card-body">
-          <h1 class="mb-2">10</h1>
-          <p class="card-text">The total number of vaccines</p>
+      <div class="card shadow-1 mb-0" style="width: 100%;">
+        <div class="card-body text-center">
+          <h1 class="mb-2">{{totalVaccines}}</h1>
+          <p class="card-text">Total Vaccines</p>
         </div>
       </div>
 
-      <div class="card mb-0" style="width: 100%;">
-        <div class="card-body">
-          <h1 class="mb-2">6</h1>
-          <p class="card-text">The total number of devices.</p>
+      <div class="card shadow-1 mb-0" style="width: 100%;">
+        <div class="card-body text-center">
+          <h1 class="mb-2">{{totalVaccines}}</h1>
+          <p class="card-text">Total Devices.</p>
+        </div>
+      </div>
+
+      <div class="card shadow-1 mb-0" style="width: 100%;">
+        <div class="card-body text-center">
+          <h1 class="mb-2">5</h1>
+          <p class="card-text">Total Visitors</p>
         </div>
       </div>
     </div>
@@ -34,6 +41,10 @@
 
     <section class="container_admin section mt-2">
       <app-basic-bar-chart></app-basic-bar-chart>
+    </section>
+
+    <section class="container_admin section mt-2">
+      <app-statistic></app-statistic>
     </section>
 
     <section class="container_admin section mt-2">

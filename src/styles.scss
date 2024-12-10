@@ -2472,39 +2472,6 @@ li {
   top: 1px;
 }
 
-.pagination {
-  display: table;
-  margin: 0 auto;
-}
-
-.pagination>li>a {
-  border-radius: 5px;
-  margin: 0 5px;
-  width: 38px;
-  height: 38px;
-  text-align: center;
-  line-height: 40px;
-  padding: 0;
-  color: #555;
-  border: 1px solid #d5d5d5;
-}
-
-.pagination>li.active a:hover,
-.pagination>li a:hover,
-.pagination>li a:focus,
-.pagination>li.active a {
-  background: #ed1b24;
-  border: 1px solid #ed1b24;
-  color: #fff;
-}
-
-.pagination>li>a i {
-  font-style: normal;
-  position: relative;
-  top: -1px;
-  font-size: 22px;
-}
-
 /* SIDEBAR */
 .widget_about p {
   font-size: 14px;

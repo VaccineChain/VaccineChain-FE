@@ -1,10 +1,10 @@
+import { Device } from './../models/device';
 import { RouterLink } from '@angular/router';
 import { DeviceService } from './../services/api/device.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastService } from '../services/toast.service';
 import { NgFor, NgIf } from '@angular/common';
 import { AppApexChartLineComponent } from '../component/apexchart/line/line.component';
-import { Device } from '../models/device';
 import Swal from 'sweetalert2';
 import {
   FormControl,
@@ -44,7 +44,7 @@ export class ManageDeviceComponent implements OnInit {
   constructor(
     private deviceService: DeviceService,
     private showToast: ToastService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadDevices();
@@ -95,7 +95,7 @@ export class ManageDeviceComponent implements OnInit {
         this.showToast.showErrorMessage(
           'Error',
           response.error?.message ||
-            'Something went wrong. Please try again later'
+          'Something went wrong. Please try again later'
         );
       },
     });
@@ -133,6 +133,11 @@ export class ManageDeviceComponent implements OnInit {
     DeviceData.sensorType = Number(DeviceData.sensorType);
 
     if (this.isEditMode) {
+      // Convert to Device Model
+      DeviceData.SensorType = DeviceData.sensorType;
+      DeviceData.DeviceId = DeviceData.deviceId;
+      DeviceData.Location = DeviceData.location;
+
       // Call the update Device service method
       this.deviceService.updateDevices(DeviceData).subscribe(() => {
         this.loadDevices();
@@ -190,26 +195,33 @@ export class ManageDeviceComponent implements OnInit {
     }
     this.searchValue = value;
 
-    if (type == '1') {
-      this.searchByDeviceId(value);
+    //check search type and filter the devices
+    if (type == 1) {
+      this.devices = this.devices.filter((device) =>
+        device.DeviceId.toLowerCase().includes(value.toLowerCase())
+      );
+    } else if (type == 2) {
+      this.devices = this.devices.filter((device) =>
+        device.Location.toLowerCase().includes(value.toLowerCase())
+      );
+    } else if (type == 3) {
+      this.devices = this.devices.filter((device) =>
+        device.SensorType.toString().toLowerCase().includes(value.toLowerCase())
+      );
     }
   }
 
-  searchByDeviceId(deviceId: string) {
-    this.deviceService.getDeviceById(deviceId).subscribe({
-      next: (response) => {
-        this.devices = [response];
-        this.currentSearchUrl = `Search Device Id: ${deviceId}`;
-      },
-      error: (response: any) => {
-        handleToastErrors(this.showToast, response);
-      },
-    });
-  }
 
   onInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    this.showClearButton = input.value.length > 0;
+    // Nếu có giá trị thì gọi ham search còn không thì load dữu liệu củ
+    if (input.value) {
+      this.showClearButton = true;
+      this.onSearch();
+    } else {
+      this.showClearButton = false;
+      this.loadDevices();
+    }
   }
 
   clearSearch() {

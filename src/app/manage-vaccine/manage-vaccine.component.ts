@@ -1,3 +1,4 @@
+import { Vaccine } from './../models/vaccine';
 import { FormatDateService } from './../services/format-date.service';
 import { StatisticLogService } from './../services/api/statistic-log.service';
 import { Component, OnInit } from '@angular/core';
@@ -6,12 +7,12 @@ import { ToastService } from '../services/toast.service';
 import { NgFor, NgIf } from '@angular/common';
 import { Log } from '../models/log';
 import { AppApexChartLineComponent } from '../component/apexchart/line/line.component';
-import { Vaccine } from '../models/vaccine';
 import Swal from 'sweetalert2';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { VaccineDetail } from '../models/vaccineDetail';
 import { handleToastErrors } from '../utils';
+import { VaccineResponse } from '../models/dto/vaccineResponse';
 
 @Component({
   selector: 'app-manage-vaccine',
@@ -21,7 +22,8 @@ import { handleToastErrors } from '../utils';
   styleUrl: './manage-vaccine.component.scss'
 })
 export class ManageVaccineComponent implements OnInit {
-  vaccines: Vaccine[] = []
+  vaccines: Vaccine[] = [];
+  vaccineResponse: VaccineResponse[] = [];
   logs: Log[] = [];
   statisticLog: VaccineDetail | undefined;
   popupTitle: string = '';
@@ -93,6 +95,11 @@ export class ManageVaccineComponent implements OnInit {
     this.vaccineService.getVaccines().subscribe({
       next: (response: Vaccine[]) => {
         this.vaccines = response;
+
+        // load logs for each vaccine
+        this.vaccines.forEach((vaccine) => {
+          this.loadLogs(vaccine.VaccineId);
+        });
       },
       error: (response: any) => {
         this.showToast.showErrorMessage(
@@ -100,6 +107,34 @@ export class ManageVaccineComponent implements OnInit {
           response.error?.message ||
           'Something went wrong. Please try again later'
         );
+      },
+    });
+  }
+
+  loadLogs(vaccineId: string) {
+    this.vaccineService.getVaccineResponse(vaccineId).subscribe({
+      next: (response: any) => {
+        this.vaccineResponse = response.Data;
+        console.log('Vaccine data:', this.vaccineResponse);
+        // convert to date from time unix to date
+        this.vaccineResponse = response.Data.map((item: any) => {
+          return {
+            ...item,
+            created_date: new Date(Number(item.created_date) * 1000), // Chuyển timestamp UNIX thành Date
+          };
+        });
+
+        this.vaccineResponse = this.vaccineResponse.map((item: any) => ({
+          vaccineId: item.vaccine_id,
+          deviceId: item.device_id,
+          value: Number(item.value),
+          createdDate: new Date(item.created_date),
+        }));
+
+        console.log('Vaccine data:', this.vaccineResponse);
+      },
+      error: (error) => {
+        console.error('Error fetching vaccine data:', error);
       },
     });
   }
@@ -147,6 +182,13 @@ export class ManageVaccineComponent implements OnInit {
       next: (response) => {
         this.vaccines = [response];
         this.currentSearchUrl = `Search vaccine Id: ${vaccineId}`;
+        //check if the vaccineId is not found
+        if (response == null) {
+          this.showToast.showWarningMessage(
+            'Warning',
+            'Vaccine ID not found'
+          );
+        }
       },
       error: (response: any) => {
         handleToastErrors(this.showToast, response);
@@ -169,6 +211,11 @@ export class ManageVaccineComponent implements OnInit {
   onInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
     this.showClearButton = input.value.length > 0;
+    if (input.value.length > 0) {
+      this.onSearch();
+    } else {
+      this.loadVaccines();
+    }
   }
 
   clearSearch() {
@@ -187,10 +234,17 @@ export class ManageVaccineComponent implements OnInit {
     }
 
     const vaccineData = this.vaccineForm.getRawValue();
-    console.log(vaccineData);
+    console.log(vaccineData.vaccineId);
     console.log(this.isEditMode);
 
     if (this.isEditMode) {
+      // Convert to Vaccine model
+      vaccineData.VaccineId = vaccineData.vaccineId;
+      vaccineData.VaccineName = vaccineData.vaccineName;
+      vaccineData.Manufacturer = vaccineData.manufacturer;
+      vaccineData.BatchNumber = vaccineData.batchNumber;
+      vaccineData.ExpirationDate = vaccineData.expirationDate;
+
       // Call the update vaccine service method
       this.vaccineService.updateVaccines(vaccineData).subscribe(() => {
         this.loadVaccines();
@@ -208,38 +262,111 @@ export class ManageVaccineComponent implements OnInit {
   viewLogs(vaccineId: string) {
     this.popupTitle = 'View Logs for Vaccine ID: ' + vaccineId;
 
-    this.statisticLogService.GetStatisticLog(vaccineId).subscribe({
-      next: (response: VaccineDetail) => {
-        //2024-08-03T16:46:17.6803832 converse and get only date in DateRangeStart
-        response.DateRangeStart = this.formatDateService.toDateString(response.DateRangeStart);
-        response.DateRangeEnd = this.formatDateService.toDateString(response.DateRangeEnd);
+    // Fetch full vaccine details based on VaccineID
+    this.vaccineService.getVaccineById(vaccineId).subscribe({
+      next: (vaccine: Vaccine) => {
+        vaccine.ExpirationDate = this.formatDateService.toFullDateTimeString(
+          vaccine.ExpirationDate
+        );
+        this.processVaccineData(this.vaccineResponse, vaccine);
 
-        // DateLowestValue and TimeLowestValue
-        response.DateLowestValue = this.formatDateService.toDateString(response.DateLowestValue);
-        response.DateHighestValue = this.formatDateService.toDateString(response.DateHighestValue);
+        this.loadVaccineResponse(vaccineId); // Tải lại dữ liệu vaccineResponse
 
-        response.TimeLowestValue = this.formatDateService.toDateString(response.TimeLowestValue);
-        response.TimeHighestValue = this.formatDateService.toDateString(response.TimeHighestValue);
-
-        this.statisticLog = response;
       },
-      error: (response: any) => {
-        console.log("🚀 ~ ManageVaccineComponent ~ this.statisticLogService.GetStatisticLog ~ response:", response)
-        // Show error message not found when 404 status
-        if (response.status === 404) {
-          this.showToast.showWarningMessage(
-            'Warning',
-            'This vaccine has no logs yet'
-          );
-        } else {
-          this.showToast.showErrorMessage(
-            'Error',
-            response.error?.message ||
-            'Something went wrong. Please try again later'
-          );
-        }
-      },
+      error: (error) => console.error('Error fetching vaccine details:', error),
     });
+  }
+
+  //tự động load sau 3s
+  loadVaccineResponse(vaccineId: string) {
+    this.vaccineService.getVaccineResponse(vaccineId).subscribe({
+      next: (response: any) => {
+        this.vaccineResponse = response.Data;
+        console.log('Vaccine response data:', this.vaccineResponse);
+
+        // Convert timestamp UNIX thành Date
+        this.vaccineResponse = this.vaccineResponse.map((item: any) => ({
+          vaccineId: item.vaccine_id,
+          deviceId: item.device_id,
+          value: Number(item.value),
+          createdDate: new Date(item.created_date * 1000), // Chuyển timestamp UNIX thành Date
+        }));
+
+        console.log('Processed vaccine response:', this.vaccineResponse);
+      },
+      error: (error) => {
+        console.error('Error fetching vaccine response:', error);
+        this.showToast.showErrorMessage(
+          'Error',
+          'Could not load vaccine data. Please try again later.'
+        );
+      }
+    });
+  }
+
+
+  private processVaccineData(vaccineList: VaccineResponse[], vaccine: Vaccine) {
+    const values = vaccineList.map((v) => v.value);
+    const timestamps = vaccineList.map((v) => v.createdDate);
+
+    // Calculate statistics
+    const averageValue = this.calculateAverage(values);
+    const highestValue = Math.max(...values);
+    const lowestValue = Math.min(...values);
+    const dateHighestValue = this.formatDateService.toDateString(
+      new Date(timestamps[values.indexOf(highestValue)]).toISOString()
+    );
+    const timeHighestValue = this.formatDateService.toTimeString(
+      new Date(timestamps[values.indexOf(highestValue)]).toISOString()
+    );
+    const dateLowestValue = this.formatDateService.toDateString(
+      new Date(timestamps[values.indexOf(lowestValue)]).toISOString()
+    );
+    const timeLowestValue = this.formatDateService.toTimeString(
+      new Date(timestamps[values.indexOf(lowestValue)]).toISOString()
+    );
+    var { dateRangeStart, dateRangeEnd } = this.processTimestamps(timestamps);
+
+    dateRangeStart = this.formatDateService.toDateString(dateRangeStart);
+    dateRangeEnd = this.formatDateService.toDateString(dateRangeEnd);
+
+    // Set vaccine details
+    this.statisticLog = {
+      Vaccine: vaccine,
+      DeviceId: [...new Set(vaccineList.map((v) => v.deviceId))], // Unique DeviceIDs
+      AverageValue: averageValue,
+      HighestValue: highestValue,
+      DateHighestValue: dateHighestValue,
+      TimeHighestValue: timeHighestValue,
+      LowestValue: lowestValue,
+      DateLowestValue: dateLowestValue,
+      TimeLowestValue: timeLowestValue,
+      DateRangeStart: dateRangeStart,
+      DateRangeEnd: dateRangeEnd,
+      NumberRecords: vaccineList.length,
+    };
+  }
+
+  private processTimestamps(timestamps: Date[]): {
+    dateRangeStart: string;
+    dateRangeEnd: string;
+  } {
+    const dates = timestamps.map((timestamp) => new Date(timestamp));
+
+    const startDate = new Date(
+      Math.min(...dates.map((date) => date.getTime()))
+    );
+    const endDate = new Date(Math.max(...dates.map((date) => date.getTime())));
+
+    return {
+      dateRangeStart: startDate.toISOString(),
+      dateRangeEnd: endDate.toISOString(),
+    };
+  }
+
+  private calculateAverage(values: number[]): number {
+    const sum = values.reduce((total, value) => total + value, 0);
+    return Number((sum / values.length).toFixed(2)); // Rounded to 2 decimal places
   }
 
   deleteVaccine(vaccineId: string) {

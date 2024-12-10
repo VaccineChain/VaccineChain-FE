@@ -42,7 +42,7 @@ export class AppApexChartLineComponent implements OnChanges {
   constructor(private formatDateService: FormatDateService) {} // Inject FormatDateService
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['vaccineResponse'] && changes['vaccineResponse'].currentValue) {
+    if (changes['vaccineResponse'] && changes['vaccineResponse'].currentValue !== changes['vaccineResponse'].previousValue) {
       this.initChart();
     }
   }
@@ -50,6 +50,7 @@ export class AppApexChartLineComponent implements OnChanges {
   initChart() {
     // Group dữ liệu theo `deviceId`
     const groupedData = this.groupByDeviceId(this.vaccineResponse);
+    console.log('Grouped data:', groupedData);
 
     // Xử lý dữ liệu thành định dạng cho ApexCharts
     const seriesData = Object.entries(groupedData).map(([deviceId, data]) => ({
