@@ -1,5 +1,11 @@
-<div id="chart">
-    <apx-chart [series]="chartOptions.series!" [chart]="chartOptions.chart!" [dataLabels]="chartOptions.dataLabels!"
-        [plotOptions]="chartOptions.plotOptions!" [xaxis]="chartOptions.xaxis!"
-        [title]="chartOptions.title!"></apx-chart>
+<div id="chart" *ngIf="chartOptions">
+  <apx-chart
+      *ngIf="chartOptions.series"
+      [series]="chartOptions.series || []"
+      [chart]="chartOptions.chart || { type: 'line' }"
+      [dataLabels]="chartOptions.dataLabels || {}"
+      [plotOptions]="chartOptions.plotOptions || {}"
+      [xaxis]="chartOptions.xaxis || {}"
+      [title]="chartOptions.title || {}">
+  </apx-chart>
 </div>

@@ -1,24 +1,18 @@
 <div class="table-container">
-  <div class="table-header">
-    <div class="input-group mb-3">
-      <div class="form-outline search-wrapper" data-mdb-input-init>
-        <i class="bi bi-search"></i>
-        <input id="search-input" type="search" id="form1"
-          placeholder="Search by vaccine id"
-          class="form-control" />
-      </div>
-    </div>
-    <div class="view-options mb-3">
-      <label for="rows-select">Show rows:</label>
-      <select id="rows-select" (change)="onRowsChange($event)">
-        <option value="10">10</option>
-        <option value="20">20</option>
-        <option value="50">50</option>
-      </select>
-    </div>
+  <div class="controls">
+    <input
+      type="text"
+      placeholder="Search..."
+      (input)="onSearchChange($event)"
+    />
+    <select (change)="onRowsChange($event)">
+      <option value="10">10 rows</option>
+      <option value="20">20 rows</option>
+      <option value="50">50 rows</option>
+    </select>
   </div>
 
-  <table id="vaccine-table">
+  <table>
     <thead>
       <tr>
         <th>Vaccine ID</th>
@@ -34,26 +28,21 @@
         <td>{{ vaccine.vaccine }}</td>
         <td>{{ vaccine.vaccineName }}</td>
         <td>{{ vaccine.numberOfDevice }}</td>
-        <td>
-          <div [ngClass]="getStatusClass(vaccine.status)">
-            {{ vaccine.status }}
-          </div>
-        </td>
-        <!-- Add dynamic class for status -->
+        <td [class]="getStatusClass(vaccine.status)">{{ vaccine.status }}</td>
       </tr>
     </tbody>
   </table>
-  <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-end mt-4">
-      <li class="page-item disabled">
-        <a class="page-link">Previous</a>
-      </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#">Next</a>
-      </li>
-    </ul>
-  </nav>
+
+  <div class="pagination">
+    <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
+      Previous
+    </button>
+    <span>Page {{ currentPage }}</span>
+    <button
+      (click)="onPageChange(currentPage + 1)"
+      [disabled]="currentPage * rowsPerPage >= filteredVaccines.length"
+    >
+      Next
+    </button>
+  </div>
 </div>

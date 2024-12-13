@@ -14,6 +14,10 @@ export class StatisticLogService {
     return this.http.get<VaccineDetail>(`/api/Statistic/Logs/${vaccineId}`);
   }
 
+  GetVaccineDeviceStatus() {
+    return this.http.get<VaccineDetail>(`/api/Statistic/VaccineDeviceStatus`);
+  }
+
   GetStatisticsForAreaChart(vaccineId: string) {
     return this.http.get<statisticAreaChart[]>(`/api/Statistic/Area-Chart/${vaccineId}`);
   }

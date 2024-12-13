@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 
 import {
@@ -10,6 +11,11 @@ import {
   NgApexchartsModule,
   ApexTitleSubtitle,
 } from 'ng-apexcharts';
+import { LogService } from '../../../../services/api/log.service';
+import { LOG_STATUS } from '../../../../utils/constant';
+import { Log } from '../../../../models/log';
+import { Connection } from '../../../../models/connection';
+import { ToastService } from '../../../../services/toast.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -23,20 +29,52 @@ export type ChartOptions = {
 @Component({
   selector: 'app-basic-bar-chart',
   standalone: true,
-  imports: [NgApexchartsModule],
+  imports: [NgApexchartsModule, NgIf],
   templateUrl: './basic.component.html',
   styleUrl: './basic.component.scss',
 })
 export class BasicBarChartComponent {
   @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
+  public chartOptions: Partial<ChartOptions> | undefined;
+  connections: Connection[] = [];
+
   connectionData = {
     totalConnections: 50,
     notConnectedDevices: 20,
     notConnectedVaccines: 10,
   };
 
-  constructor() {
+  constructor(
+    private logService: LogService,
+    private showToast: ToastService
+  ) {
+    this.proccessData();
+    this.initChart();
+  }
+
+  proccessData() {
+    this.logService.getLogs().subscribe({
+      next: (response: Log[]) => {
+        const values = Object.values(LOG_STATUS);
+
+        this.connections = response.map((log) => ({
+          Status: values[log.Status],
+          Device: log.Device,
+          Vaccine: log.Vaccine,
+        }));
+
+        console.log('Connections:', this.connections);
+      },
+      error: (response: any) => {
+        this.showToast.showErrorMessage(
+          'Error',
+          response.error?.message ||
+          'Something went wrong. Please try again later'
+        );
+      },
+    });
+  }
+  initChart() {
     this.chartOptions = {
       series: [
         {
