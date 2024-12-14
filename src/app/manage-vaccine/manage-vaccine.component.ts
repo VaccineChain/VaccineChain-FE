@@ -8,7 +8,12 @@ import { NgFor, NgIf } from '@angular/common';
 import { Log } from '../models/log';
 import { AppApexChartLineComponent } from '../component/apexchart/line/line.component';
 import Swal from 'sweetalert2';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { VaccineDetail } from '../models/vaccineDetail';
 import { handleToastErrors } from '../utils';
@@ -17,9 +22,15 @@ import { VaccineResponse } from '../models/dto/vaccineResponse';
 @Component({
   selector: 'app-manage-vaccine',
   standalone: true,
-  imports: [RouterLink, NgFor, NgIf, AppApexChartLineComponent, ReactiveFormsModule],
+  imports: [
+    RouterLink,
+    NgFor,
+    NgIf,
+    AppApexChartLineComponent,
+    ReactiveFormsModule,
+  ],
   templateUrl: './manage-vaccine.component.html',
-  styleUrl: './manage-vaccine.component.scss'
+  styleUrl: './manage-vaccine.component.scss',
 })
 export class ManageVaccineComponent implements OnInit {
   vaccines: Vaccine[] = [];
@@ -37,13 +48,14 @@ export class ManageVaccineComponent implements OnInit {
   searchValue: string = '';
   currentSearchUrl: string | null = null;
   showClearButton = false;
+  isAppLineVisible = false;
 
   constructor(
     private vaccineService: VaccineService,
     private showToast: ToastService,
     private statisticLogService: StatisticLogService,
     private formatDateService: FormatDateService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loadVaccines();
@@ -80,7 +92,7 @@ export class ManageVaccineComponent implements OnInit {
   createSearchForm() {
     this.searchForm = new FormGroup({
       searchType: new FormControl(1, Validators.required),
-      searchKeyword: new FormControl('', Validators.required)
+      searchKeyword: new FormControl('', Validators.required),
     });
   }
 
@@ -88,7 +100,7 @@ export class ManageVaccineComponent implements OnInit {
     return this.searchForm.get('searchType') as FormControl;
   }
   get searchKeyword() {
-    return this.searchForm.get('searchKeyword') as FormControl
+    return this.searchForm.get('searchKeyword') as FormControl;
   }
 
   loadVaccines() {
@@ -105,7 +117,7 @@ export class ManageVaccineComponent implements OnInit {
         this.showToast.showErrorMessage(
           'Error',
           response.error?.message ||
-          'Something went wrong. Please try again later'
+            'Something went wrong. Please try again later'
         );
       },
     });
@@ -164,7 +176,10 @@ export class ManageVaccineComponent implements OnInit {
     var value = this.searchForm.value.searchKeyword;
 
     if (value == '') {
-      const message = type == '1' ? 'Please enter a vaccine ID' : 'Please enter a vaccine name';
+      const message =
+        type == '1'
+          ? 'Please enter a vaccine ID'
+          : 'Please enter a vaccine name';
       this.showToast.showWarningMessage('Warning', message);
       return;
     }
@@ -184,10 +199,7 @@ export class ManageVaccineComponent implements OnInit {
         this.currentSearchUrl = `Search vaccine Id: ${vaccineId}`;
         //check if the vaccineId is not found
         if (response == null) {
-          this.showToast.showWarningMessage(
-            'Warning',
-            'Vaccine ID not found'
-          );
+          this.showToast.showWarningMessage('Warning', 'Vaccine ID not found');
         }
       },
       error: (response: any) => {
@@ -259,7 +271,13 @@ export class ManageVaccineComponent implements OnInit {
     this.vaccineForm.reset();
   }
 
+  onModalClose() {
+    // Hide the app-line component when the modal closes
+    this.isAppLineVisible = false;
+  }
+
   viewLogs(vaccineId: string) {
+    this.isAppLineVisible = true;
     this.popupTitle = 'View Logs for Vaccine ID: ' + vaccineId;
 
     // Fetch full vaccine details based on VaccineID
@@ -269,9 +287,7 @@ export class ManageVaccineComponent implements OnInit {
           vaccine.ExpirationDate
         );
         this.processVaccineData(this.vaccineResponse, vaccine);
-
         this.loadVaccineResponse(vaccineId); // Tải lại dữ liệu vaccineResponse
-
       },
       error: (error) => console.error('Error fetching vaccine details:', error),
     });
@@ -300,10 +316,9 @@ export class ManageVaccineComponent implements OnInit {
           'Error',
           'Could not load vaccine data. Please try again later.'
         );
-      }
+      },
     });
   }
-
 
   private processVaccineData(vaccineList: VaccineResponse[], vaccine: Vaccine) {
     const values = vaccineList.map((v) => v.value);
@@ -377,16 +392,12 @@ export class ManageVaccineComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
         this.vaccineService.deleteVaccine(vaccineId).subscribe({
           next: () => {
-            Swal.fire(
-              'Deleted!',
-              'The vaccine has been deleted.',
-              'success'
-            );
+            Swal.fire('Deleted!', 'The vaccine has been deleted.', 'success');
             this.loadVaccines(); // Refresh the vaccine list
           },
           error: (error: any) => {
@@ -396,7 +407,7 @@ export class ManageVaccineComponent implements OnInit {
               'error'
             );
             console.error(error);
-          }
+          },
         });
       }
     });
