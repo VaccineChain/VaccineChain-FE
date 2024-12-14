@@ -1,9 +1,5 @@
-import { VaccineResponse } from './../../../../models/dto/vaccineResponse';
-import { Vaccine } from './../../../../models/vaccine';
 import { NgIf } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
-import { forkJoin } from 'rxjs';
-
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -19,7 +15,8 @@ import {
   ApexGrid,
   NgApexchartsModule,
 } from 'ng-apexcharts';
-import { VaccineService } from '../../../../services/api/vaccine.service';
+import { StatisticLogService } from '../../../../services/api/statistic-log.service';
+import { VaccinesTemperatureRange } from '../../../../models/statisticAreaChart';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries | any;
@@ -43,39 +40,43 @@ export type ChartOptions = {
   templateUrl: './dumbbell.component.html',
   styleUrl: './dumbbell.component.scss',
 })
-export class DumbbellChartComponent {
+export class DumbbellChartComponent implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions?: Partial<ChartOptions>;
-  temperatureData: { vaccine: string; minTemp: number; maxTemp: number; }[] = [];
 
-  constructor(private vaccineService: VaccineService) {
+  constructor(private statisticLogService: StatisticLogService) {
     this.chartOptions = {
       series: [],
       chart: {
+        height: 390,
         type: 'rangeBar',
-        height: 400,
-      },
-      plotOptions: {
-        bar: {
-          horizontal: true,
-          rangeBarGroupRows: true,
+        zoom: {
+          enabled: false,
         },
       },
       colors: ['#EC7D31', '#36BDCB'],
+      plotOptions: {
+        bar: {
+          horizontal: true,
+          isDumbbell: true,
+          dumbbellColors: [['#EC7D31', '#36BDCB']],
+        },
+      },
       title: {
         text: 'Temperature Range for Vaccines',
       },
       legend: {
         show: true,
+        showForSingleSeries: true,
         position: 'top',
         horizontalAlign: 'left',
-        customLegendItems: ['Min temperatures', 'Max temperatures'],
+        customLegendItems: ['Lowest Temperature', 'Highest Temperature'],
       },
       fill: {
         type: 'gradient',
         gradient: {
-          shadeIntensity: 1,
           gradientToColors: ['#36BDCB'],
+          inverseColors: false,
           stops: [0, 100],
         },
       },
@@ -92,55 +93,29 @@ export class DumbbellChartComponent {
         },
       },
     };
+  }
 
-    this.proccessData(); // Gọi hàm xử lý dữ liệu
+  ngOnInit(): void {
+    this.proccessData();
   }
 
   proccessData() {
-    this.vaccineService.getVaccines().subscribe({
-      next: (vaccines) => {
-        console.log('Vaccines loaded', vaccines);
-        const vaccineIds = vaccines.map((vaccine) => vaccine.VaccineId);
-
-        // Tạo mảng các Observable getVaccineResponse
-        const observables = vaccineIds.map((id) => this.vaccineService.getVaccineResponse(id));
-
-        // Dùng forkJoin để chờ tất cả Observable hoàn thành
-        forkJoin(observables).subscribe({
-          next: (responses: any[]) => {
-            // Lúc này responses là mảng chứa dữ liệu từ tất cả vaccine
-            responses.forEach((response) => {
-              const minTemp = this.processResponse(response.Data, 'min');
-              const maxTemp = this.processResponse(response.Data, 'max');
-              this.temperatureData.push({
-                vaccine: response.Data[0].vaccine_id,
-                minTemp: minTemp,
-                maxTemp: maxTemp,
-              });
-            });
-
-            // Cập nhật series sau khi dữ liệu đã xử lý
-            this.chartOptions!.series = [
-              {
-                data: this.temperatureData.map((t) => ({
-                  x: t.vaccine,
-                  y: [t.minTemp, t.maxTemp],
-                })),
-              },
-            ];
+    this.statisticLogService.GetVaccinesTemperatureRange().subscribe({
+      next: (vaccinesTemperatureRange: VaccinesTemperatureRange[]) => {
+        this.chartOptions!.series = [
+          {
+            data: vaccinesTemperatureRange.map(
+              (t: VaccinesTemperatureRange) => ({
+                x: t.VaccineName,
+                y: [t.LowestTemperature, t.HighestTemperature],
+              })
+            ),
           },
-          error: (err) => {
-            console.error('Error loading vaccine responses', err);
-          },
-        });
+        ];
       },
       error: (err) => {
         console.error('Error loading vaccines', err);
       },
     });
-  }
-  processResponse(response: any[], type: 'min' | 'max'): number {
-    const values = response.map((r: any) => r.value);
-    return type === 'min' ? Math.min(...values) : Math.max(...values);
   }
 }
