@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -15,6 +14,8 @@ import {
   ApexLegend,
   NgApexchartsModule,
 } from 'ng-apexcharts';
+import { StatisticLogService } from '../../../../services/api/statistic-log.service';
+import { GetDataCollectionStatus } from '../../../../models/statisticAreaChart';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -39,69 +40,78 @@ export type ChartOptions = {
 })
 export class StackedBarChartComponent {
   @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
-  collectionStatus = [
-    { category: 'Devices', collecting: 50, completed: 150 },
-    { category: 'Vaccines', collecting: 30, completed: 90 },
-  ];
+  public chartOptions!: Partial<ChartOptions>;
 
-  constructor() {
-    this.chartOptions = {
-      series: [
-        {
-          name: 'Collecting',
-          data: this.collectionStatus.map((c) => c.collecting),
-        },
-        {
-          name: 'Completed',
-          data: this.collectionStatus.map((c) => c.completed),
-        },
-      ],
-      chart: {
-        type: 'bar',
-        height: 350,
-        stacked: true,
-      },
-      plotOptions: {
-        bar: {
-          horizontal: true,
-        },
-      },
-      stroke: {
-        width: 1,
-        colors: ['#fff'],
-      },
-      title: {
-        text: 'Data Collection Status',
-      },
-      xaxis: {
-        categories: this.collectionStatus.map((c) => c.category),
-        labels: {
-          formatter: function (val) {
-            return val + 'K';
+  constructor(private statisticLogService: StatisticLogService) {}
+
+  ngOnInit(): void {
+    this.proccessData();
+  }
+
+  proccessData() {
+    this.statisticLogService.GetDataCollectionStatus().subscribe({
+      next: (dataCollectionStatus: GetDataCollectionStatus[]) => {
+        this.chartOptions = {
+          series: [
+            {
+              name: 'Collecting',
+              data: dataCollectionStatus.map((c) => c.Collecting),
+            },
+            {
+              name: 'Completed',
+              data: dataCollectionStatus.map((c) => c.Completed),
+            },
+          ],
+          chart: {
+            type: 'bar',
+            height: 350,
+            stacked: true,
           },
-        },
-      },
-      yaxis: {
-        title: {
-          text: undefined,
-        },
-      },
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return val + 'K';
+          plotOptions: {
+            bar: {
+              horizontal: true,
+            },
           },
-        },
+          stroke: {
+            width: 1,
+            colors: ['#fff'],
+          },
+          title: {
+            text: 'Data Collection Status',
+          },
+          xaxis: {
+            categories: dataCollectionStatus.map((status) => status.Category),
+            labels: {
+              formatter: function (val) {
+                return val.toString();
+              },
+            },
+          },
+          yaxis: {
+            title: {
+              text: undefined,
+            },
+          },
+          tooltip: {
+            y: {
+              formatter: function (val) {
+                return val.toString();
+              },
+            },
+          },
+          fill: {
+            opacity: 1,
+          },
+          legend: {
+            position: 'top',
+            horizontalAlign: 'left',
+            offsetX: 40,
+          },
+        };
       },
-      fill: {
-        opacity: 1,
+      error: (err) => {
+        console.error('Error loading vaccines', err);
       },
-      legend: {
-        position: 'top',
-        horizontalAlign: 'left',
-        offsetX: 40,
-      },
-    };
+    });
   }
 }

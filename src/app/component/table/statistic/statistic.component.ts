@@ -1,27 +1,19 @@
 import { StatisticLogService } from './../../../services/api/statistic-log.service';
-import { NgClass, NgFor } from '@angular/common';
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-// Định nghĩa kiểu dữ liệu Vaccine
-interface VaccineData {
-  vaccineId: string;
-  vaccine: string;
-  vaccineName: string;
-  numberOfDevice: number;
-  status: string;
-}
+import { VaccineDeviceStatus } from '../../../models/statisticAreaChart';
 
 @Component({
   selector: 'app-statistic',
   standalone: true,
-  imports: [FormsModule, NgFor, NgClass],
+  imports: [FormsModule, NgFor],
   templateUrl: './statistic.component.html',
-  styleUrls: ['./statistic.component.scss']
+  styleUrls: ['./statistic.component.scss'],
 })
 export class StatisticComponent {
   // Danh sách vaccine
-  vaccines: VaccineData[] = [];
+  vaccines: VaccineDeviceStatus[] = [];
 
   // Biến cho tìm kiếm và phân trang
   searchTerm: string = '';
@@ -35,10 +27,8 @@ export class StatisticComponent {
   // Hàm tải dữ liệu từ API
   private loadData(): void {
     this.statisticLogService.GetVaccineDeviceStatus().subscribe({
-      next: (response: any) => {
-        console.log('Vaccine Device Status:', response);
-        this.vaccines = this.processData(response);
-        console.log('Processed Vaccines:', this.vaccines);
+      next: (response: VaccineDeviceStatus[]) => {
+        this.vaccines = response;
       },
       error: (response: any) => {
         console.error('Error loading vaccine device status', response);
@@ -46,51 +36,21 @@ export class StatisticComponent {
     });
   }
 
-  // Xử lý dữ liệu nhóm từ API
-  private processData(response: any[]): VaccineData[] {
-    const groupedData = response.reduce((acc: any, item: any) => {
-      const vaccineId = item.Vaccine.VaccineId;
-
-      if (!acc[vaccineId]) {
-        acc[vaccineId] = {
-          vaccineId: vaccineId,
-          vaccine: vaccineId,
-          vaccineName: item.Vaccine.VaccineName,
-          numberOfDevice: 0,
-          status: item.Status,
-        };
-      }
-
-      // Tăng số lượng thiết bị
-      if (!acc[vaccineId].devices) {
-        acc[vaccineId].devices = new Set();
-      }
-      acc[vaccineId].devices.add(item.Device.DeviceId);
-      acc[vaccineId].numberOfDevice = acc[vaccineId].devices.size;
-
-      return acc;
-    }, {});
-
-    // Chuyển đối tượng thành mảng
-    return Object.values(groupedData).map((vaccine: any) => ({
-      vaccineId: vaccine.vaccineId,
-      vaccine: vaccine.vaccine,
-      vaccineName: vaccine.vaccineName,
-      numberOfDevice: vaccine.numberOfDevice,
-      status: vaccine.status,
-    }));
-  }
-
   // Lấy danh sách vaccine đã được lọc theo từ khóa tìm kiếm
-  get filteredVaccines(): VaccineData[] {
+  get filteredVaccines(): VaccineDeviceStatus[] {
     const term = this.searchTerm.toLowerCase();
-    return this.vaccines.filter(vaccine =>
-      Object.values(vaccine).some(value => value.toString().toLowerCase().includes(term))
+    if (!term) {
+      return this.vaccines;
+    }
+    return this.vaccines.filter((vaccine) =>
+      Object.values(vaccine).some((value) =>
+        value.toString().toLowerCase().includes(term)
+      )
     );
   }
 
   // Lấy danh sách vaccine cho trang hiện tại
-  get paginatedVaccines(): VaccineData[] {
+  get paginatedVaccines(): VaccineDeviceStatus[] {
     const start = (this.currentPage - 1) * this.rowsPerPage;
     const end = start + this.rowsPerPage;
     return this.filteredVaccines.slice(start, end);
@@ -118,7 +78,7 @@ export class StatisticComponent {
     switch (status) {
       case 'Collecting':
         return 'status-collecting'; // Vàng
-      case 'Collected':
+      case 'Completed':
         return 'status-collected'; // Xanh lá
       default:
         return '';
