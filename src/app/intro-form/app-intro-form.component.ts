@@ -44,7 +44,7 @@ export class AppIntroFormComponent implements OnInit {
     private router: Router,
     private showToast: ToastService,
     private swalService: SwalService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -67,22 +67,39 @@ export class AppIntroFormComponent implements OnInit {
       return;
     }
 
-    this.vaccineService.getVaccineResponse(vaccineId).subscribe({
+    this.vaccineService.getVaccineById(vaccineId).subscribe({
       next: (response: any) => {
-        this.vaccineResponse = response.Data;
-        console.log('Vaccine data:', this.vaccineResponse);
+        console.log('Vaccine data:', response);
+        this.vaccineService.getVaccineResponse(vaccineId).subscribe({
+          next: (response: any) => {
+            this.vaccineResponse = response.Data;
+            console.log('Vaccine data:', this.vaccineResponse);
 
-        // convert to date from time unix to date
-        this.vaccineResponse = response.Data.map((item: any) => {
-          return {
-            ...item,
-            created_date: new Date(Number(item.created_date) * 1000), // Chuyển timestamp UNIX thành Date
-          };
-        });
+            // convert to date from time unix to date
+            this.vaccineResponse = response.Data.map((item: any) => {
+              return {
+                ...item,
+                created_date: new Date(Number(item.created_date) * 1000), // Chuyển timestamp UNIX thành Date
+              };
+            });
 
-        // Gởi tất cả dữ liệu vaccineResponse lên /results với tên listVaccine
-        this.router.navigate(['/result'], {
-          state: { listVaccine: this.vaccineResponse },
+            // Gởi tất cả dữ liệu vaccineResponse lên /results với tên listVaccine
+            this.router.navigate(['/result'], {
+              state: { listVaccine: this.vaccineResponse },
+            });
+          },
+          error: (error) => {
+            console.error('Error fetching vaccine data:', error);
+            if (error.status === 401) {
+              // this.router.navigate(['/login']);
+              this.swalService.showMessageToHandle(
+                'Warning',
+                'Please login to continue',
+                'warning',
+                () => this.router.navigate(['/login'])
+              );
+            }
+          },
         });
       },
       error: (error) => {
@@ -95,9 +112,13 @@ export class AppIntroFormComponent implements OnInit {
             'warning',
             () => this.router.navigate(['/login'])
           );
+        }else if (error.status === 404) {
+          this.showToast.showWarningMessage('Warning', 'Vaccine ID not found');
         }
       },
     });
+
+
   }
 
   resetMessages() {
