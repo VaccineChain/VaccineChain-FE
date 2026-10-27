@@ -35,9 +35,9 @@ This repository contains the frontend source code built with Angular and TypeScr
 ## 🖥️ Application Preview
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/8c5387c3-90ce-463b-a1b4-f95640332c1a" width="56%" alt="VaccineChain frontend overview" />
+  <img src="https://github.com/user-attachments/assets/8c5387c3-90ce-463b-a1b4-f95640332c1a" width="57.5%" alt="VaccineChain frontend overview" />
   &nbsp;
-  <img src="https://github.com/user-attachments/assets/c5ac525f-dfcc-4d4a-a9a8-96e32de3c61a" width="34%" alt="VaccineChain application screen" />
+  <img src="https://github.com/user-attachments/assets/c5ac525f-dfcc-4d4a-a9a8-96e32de3c61a" width="32.5%" alt="VaccineChain application screen" />
 </p>
 
 <p align="center">
