@@ -35,15 +35,15 @@ This repository contains the frontend source code built with Angular and TypeScr
 ## 🖥️ Application Preview
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/8c5387c3-90ce-463b-a1b4-f95640332c1a" width="55%" alt="VaccineChain frontend overview" />
+  <img src="https://github.com/user-attachments/assets/8c5387c3-90ce-463b-a1b4-f95640332c1a" width="57%" alt="VaccineChain frontend overview" />
   &nbsp;
-  <img src="https://github.com/user-attachments/assets/c5ac525f-dfcc-4d4a-a9a8-96e32de3c61a" width="35%" alt="VaccineChain application screen" />
+  <img src="https://github.com/user-attachments/assets/c5ac525f-dfcc-4d4a-a9a8-96e32de3c61a" width="33%" alt="VaccineChain application screen" />
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/fbc3d676-72a5-437a-a24e-1deb23caeb56" width="48%" alt="VaccineChain application interface" />
+  <img src="https://github.com/user-attachments/assets/fbc3d676-72a5-437a-a24e-1deb23caeb56" width="60%" alt="VaccineChain application interface" />
   &nbsp;
-  <img src="https://github.com/user-attachments/assets/c1d7e569-f5bd-44ac-b1d7-0bccb80c1019" width="48%" alt="VaccineChain detailed application screen" />
+  <img src="https://github.com/user-attachments/assets/c1d7e569-f5bd-44ac-b1d7-0bccb80c1019" width="30%" alt="VaccineChain detailed application screen" />
 </p>
 
 ## 🛠️ Tech Stack
